@@ -10,31 +10,38 @@
               Login
             </div>
             <div class="card-body">
-              <form>
+              <form name='loginfrm' method='post' action='login'>
                 <div class="form-group">
                   <label for="email">이메일 주소</label>
-                  <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
+                  <input type="email" class="form-control" id="email" name="userEmail" aria-describedby="emailHelp"
                     placeholder="Enter email">
                 </div>
                 <div class="form-group">
                   <label for="password">비밀번호</label>
-                  <input type="password" class="form-control" id="password" placeholder="Password">
+                  <input type="password" class="form-control" id="password" name="userPw" placeholder="Password">
                 </div>
                 <div class="mt-1">
-                	<label><input type="checkbox" name="c_id" value="SAVE"> 아이디 저장</label>
+                  <label><input type="checkbox" name="c_id" value="SAVE"> 이메일 주소 저장</label>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">로그인하기</button>	
+			    <div class="text-primary m-2" style="font-size: 15px; background-color: #ebedf0">${msg}</div>
+                <button type="submit" class="btn btn-primary btn-block">로그인하기</button>
               </form>
             </div>
           </div>
-          <div class="btn-group btn-group-sm d-flex justify-content-center mt-2 mb-5 ml-3 mr-3" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-outline-secondary">비밀번호 찾기</button>
-            <button type="button" class="btn btn-outline-secondary">아이디 찾기</button>
-            <button type="button" class="btn btn-outline-secondary">회원가입</button>
+          <div class="btn-group btn-group-sm d-flex justify-content-center mt-2 mb-5 ml-3 mr-3" role="group"
+            aria-label="Basic example">
+            <button type="button" class="btn btn-outline-secondary"
+              onclick="location.href = '${pageContext.request.contextPath}/users/register' ">비밀번호 찾기</button>
+            <button type="button" class="btn btn-outline-secondary"
+              onclick="location.href = '${pageContext.request.contextPath}/users/register' ">아이디 찾기</button>
+            <button type="button" class="btn btn-outline-secondary"
+              onclick="location.href = '${pageContext.request.contextPath}/users/register' ">회원가입</button>
           </div>
         </div>
       </div>
     </div>
     <!-- contents end -->
+
+    <script src="./../js/utils.js"></script>
 
     <%@ include file="../footer.jsp" %>

@@ -26,5 +26,9 @@ public class Users {
 	
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
 	private LocalDateTime joinDate;
+	
+	public boolean matchPassword(String password) {
+		return this.userPw.equals(password);
+	}
 
 }

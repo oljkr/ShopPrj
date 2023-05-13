@@ -1,5 +1,7 @@
 package kr.co.aike.service;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -47,6 +49,26 @@ public class UsersServiceImpl implements UsersService {
 			mav=addMessages(1,"회원 등록","로그인하기","login");
 		}//if end
 		mav.setViewName("msgView");
+		return mav;
+	}
+	
+	@Override
+	public ModelAndView loginUser(Users users, HttpSession session) throws Exception {
+		ModelAndView mav=new ModelAndView();
+		Users findUsers = new Users();
+		findUsers=dao.loginUser(users);
+		
+		String email=findUsers.getUserEmail();
+		if(email==null){
+			mav.addObject("msg", "아이디 혹은 비밀번호가 일치하지 않습니다. 입력한 내용을 다시 확인해 주세요.");
+		}else {
+			session.setAttribute("userNo", findUsers.getUserNo());
+			session.setAttribute("userEmail", findUsers.getUserEmail());
+			session.setAttribute("roles", findUsers.getRoles());
+			mav.setViewName("index");
+			System.out.println(findUsers.getRoles());
+		}//if end
+		
 		return mav;
 	}
 	

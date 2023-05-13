@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="./users/auth.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <title>Bootstrap 4 Website Example</title>
+  <title>Sports shopping mall</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
@@ -19,6 +20,8 @@
     background: #aaa;
   }
   </style>
+  <script src="./../js/jquery.cookie.js"></script>
+  
   <link rel="stylesheet" href="./../css/style.css" />
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
 </head>
@@ -45,9 +48,19 @@
     
     <ul class='navbar-nav ms-auto'>
        <li class='nav-item m-1'>
-         <a type='button' class='btn btn-outline-light' href='${pageContext.request.contextPath}/users/login'>Sign in</a>
+         <% if(sRoles==null){ %>
+			<a type='button' class='btn btn-outline-light' href='${pageContext.request.contextPath}/users/login'>Sign in</a>
+<%		} else if(sRoles.equals("admin")){	%>
+			<a type='button' class='btn btn-outline-light' href='${pageContext.request.contextPath}/users/login'>Admin</a>
+<%		} else {	%>
+			<a type='button' class='btn btn-outline-light' href='${pageContext.request.contextPath}/users/login'>Logout</a>
+<%		}//if end	%>
        </li>
     </ul>
+   
+    
+
+
 
   </div>  
 </nav>

@@ -1,5 +1,7 @@
 package kr.co.aike.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,6 +24,14 @@ public class UsersController {
 	@GetMapping("/login")
 	public String usersLogin() {
 		return "users/login";
+	}
+
+	@PostMapping("/login")
+	public ModelAndView login(@ModelAttribute Users users, HttpSession session) throws Exception {
+		log.info("login");
+		ModelAndView mav = new ModelAndView();
+		mav = service.loginUser(users, session);
+		return mav;
 	}
 	
 	@GetMapping("/register")
