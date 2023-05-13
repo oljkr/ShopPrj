@@ -1,0 +1,30 @@
+package kr.co.aike.domain;
+
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+public class Users {
+	private Long userNo;
+	
+	private String userEmail;
+
+	private String userName;
+
+	private String userPw;
+	
+	private String address;
+
+	private String roles;
+	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
+	private LocalDateTime joinDate;
+
+}
