@@ -1,5 +1,8 @@
 package kr.co.aike.controller;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -22,18 +25,22 @@ public class UsersController {
 	private final UsersService service;
 	
 	@GetMapping("/login")
-	public String usersLogin() {
-		return "users/login";
+	public ModelAndView usersLogin(HttpSession session, HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		String temp=request.getHeader("Referer");
+		System.out.println(temp);
+		mav = service.preLoginUser(session, request);		
+		return mav;
 	}
 
 	@PostMapping("/login")
-	public ModelAndView login(@ModelAttribute Users users, HttpSession session) throws Exception {
+	public ModelAndView login(@ModelAttribute Users users, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		log.info("login");
 		ModelAndView mav = new ModelAndView();
-		mav = service.loginUser(users, session);
+		mav = service.loginUser(users, session, request, response);
 		return mav;
 	}
-	
+
 	@GetMapping("/register")
 	public String usersRegister() {
 		return "users/register";
@@ -45,6 +52,14 @@ public class UsersController {
 		ModelAndView mav = new ModelAndView();
 		mav = service.addUser(users);
 		return mav;
+	}
+	
+	@GetMapping("/logout")
+	public String usersLogout(HttpSession session, HttpServletRequest request) throws Exception {
+		service.logoutUser(session, request);
+		//return "redirect:"+request.getRequestURI()+"";
+		System.out.println("logout");
+		return "redirect:/home";
 	}
 
 }

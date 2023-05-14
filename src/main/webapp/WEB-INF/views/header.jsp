@@ -48,13 +48,39 @@
     
     <ul class='navbar-nav ms-auto'>
        <li class='nav-item m-1'>
-         <% if(sRoles==null){ %>
-			<a type='button' class='btn btn-outline-light' href='${pageContext.request.contextPath}/users/login'>Sign in</a>
-<%		} else if(sRoles.equals("admin")){	%>
-			<a type='button' class='btn btn-outline-light' href='${pageContext.request.contextPath}/users/login'>Admin</a>
-<%		} else {	%>
-			<a type='button' class='btn btn-outline-light' href='${pageContext.request.contextPath}/users/login'>Logout</a>
-<%		}//if end	%>
+       
+	<c:catch>
+	    <c:choose>
+	        <c:when test="${empty authInfo }">
+                <a type='button' class='btn btn-outline-light' href='${pageContext.request.contextPath}/users/login'>Sign in</a>
+	        </c:when>
+	        <c:otherwise>
+	            <c:choose>
+	           		<c:when test="${authInfo.roles eq 'guest' }">
+	           		<a type='button' class='btn btn-outline-light' href='${pageContext.request.contextPath}/users/login'>Sign in</a>
+	           		</c:when>
+	           		<c:otherwise>
+	           			<c:choose>
+			                <c:when test="${authInfo.roles eq 'admin' }">
+		                       <a type='buttone' class="text-white mr-2">관리자 ${authInfo.userName }님, 환영합니다.</a>
+		                       <a type='button' class='btn btn-outline-light' href='${pageContext.request.contextPath}/users/logout'>Logout</a>
+			                </c:when>
+			                <c:otherwise>
+			                   <a type='buttone' class="text-white mr-2">${authInfo.userName }님, 반갑습니다!</a>
+		                       <a type='button' class='btn btn-outline-light' href='${pageContext.request.contextPath}/users/logout'>Logout</a>
+			                </c:otherwise>
+		                </c:choose>
+	                </c:otherwise>
+	            </c:choose>
+	        </c:otherwise>
+	    </c:choose>
+	</c:catch>
+       
+       
+
+
+
+
        </li>
     </ul>
    

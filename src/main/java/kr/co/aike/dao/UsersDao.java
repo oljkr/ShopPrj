@@ -51,7 +51,7 @@ public class UsersDao {
 			sql=new StringBuilder();
 			sql.append(" SELECT id, email, name, pw, address, roles, join_date ");
 			sql.append(" FROM users ");
-			sql.append(" where email='"+users.getUserEmail()+"' ");
+			sql.append(" where email='"+users.getUserEmail()+"' and pw='"+users.getUserPw()+"' ");
 			
 			results = jdbcTemplate.queryForObject(sql.toString(), new UsersRowMapper());
 		}catch (Exception e) {

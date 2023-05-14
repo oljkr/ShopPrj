@@ -1,5 +1,7 @@
 package kr.co.aike.service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.ModelAndView;
@@ -10,5 +12,9 @@ public interface UsersService {
 	
 	public ModelAndView addUser(Users users) throws Exception;
 	
-	public ModelAndView loginUser(Users users, HttpSession session) throws Exception;
+	public ModelAndView preLoginUser(HttpSession session, HttpServletRequest request) throws Exception;
+	
+	public ModelAndView loginUser(Users users, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	
+	public ModelAndView logoutUser(HttpSession session, HttpServletRequest request) throws Exception;
 }
