@@ -22,9 +22,9 @@
   </style>
  
 
-  <script src="./js/check.js"></script>
+  <script src="./../js/check.js"></script>
   
-  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="./../css/style.css" />
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
 </head>
 <body>

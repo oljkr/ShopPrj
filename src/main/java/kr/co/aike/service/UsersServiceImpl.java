@@ -95,6 +95,22 @@ public class UsersServiceImpl implements UsersService {
 		return mav;
 	}
 	
+	//쿠키에 아이디 기억 여부 저장
+	public void rememberIdCookie(Users users, HttpServletRequest request, HttpServletResponse response) {
+		String temp=request.getParameter("c_id");
+		Cookie cookie = null;
+		if(temp!=null) {
+			if(temp.equals("SAVE")) {
+				cookie = new Cookie("c_id",users.getUserId());
+				cookie.setMaxAge(60*60*24*30);	
+			}			
+		}else {
+			cookie = new Cookie("c_id","");
+			cookie.setMaxAge(0);
+		}
+		response.addCookie(cookie);
+	}
+	
 	@Override
 	public ModelAndView preLoginUser(HttpSession session, HttpServletRequest request) throws Exception {
 		ModelAndView mav = new ModelAndView();		
@@ -122,22 +138,13 @@ public class UsersServiceImpl implements UsersService {
 		Users findUsers = new Users();
 		findUsers=dao.loginUser(users);
 		if(findUsers==null) {
+			mav = rememberId(session, request);
+			rememberIdCookie(users, request, response);
+			
 			System.out.println("it's null");
 			mav.addObject("msg", "아이디 혹은 비밀번호가 일치하지 않습니다. 입력한 내용을 다시 확인해 주세요.");
 		}else {
-			//쿠키에 아이디 기억 여부 저장
-			String temp=request.getParameter("c_id");
-			Cookie cookie = null;
-			if(temp!=null) {
-				if(temp.equals("SAVE")) {
-					cookie = new Cookie("c_id",users.getUserId());
-					cookie.setMaxAge(60*60*24*30);	
-				}			
-			}else {
-				cookie = new Cookie("c_id","");
-				cookie.setMaxAge(0);
-			}
-			response.addCookie(cookie);
+			rememberIdCookie(users, request, response);
 			
 			//세션에 회원 인가 내용 저장
 			session.setAttribute("authInfo", findUsers);
@@ -153,6 +160,13 @@ public class UsersServiceImpl implements UsersService {
 		session.removeAttribute("authInfo");
 		ModelAndView mav = new ModelAndView();
 		mav = rememberId(session, request);
+		
+		//세션에 이전 페이지 경로 저장
+		String temp=request.getHeader("Referer");
+		int indexNum = temp.indexOf("aike");
+		temp = temp.substring(indexNum+4);
+		System.out.println(temp);
+		mav.setViewName("redirect:"+ temp);
 		return mav;
 	}
 	

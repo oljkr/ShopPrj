@@ -29,7 +29,6 @@ public class UsersController {
 	public ModelAndView usersLogin(HttpSession session, HttpServletRequest request) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		String temp=request.getHeader("Referer");
-		System.out.println(temp);
 		mav = service.preLoginUser(session, request);		
 		return mav;
 	}
@@ -63,11 +62,10 @@ public class UsersController {
 	}
 	
 	@GetMapping("/logout")
-	public String usersLogout(HttpSession session, HttpServletRequest request) throws Exception {
-		service.logoutUser(session, request);
-		//return "redirect:"+request.getRequestURI()+"";
+	public ModelAndView usersLogout(HttpSession session, HttpServletRequest request) throws Exception {
+		ModelAndView mav = service.logoutUser(session, request);
 		System.out.println("logout");
-		return "redirect:/home";
+		return mav;
 	}
 
 }
