@@ -10,16 +10,18 @@ import kr.co.aike.domain.Users;
 public class UsersRowMapper implements RowMapper<Users>{
 	@Override
 	public Users mapRow(ResultSet rs, int rowNum) throws SQLException {
-		Users schedule = new Users();
+		Users users = new Users();
 		
-		schedule.setUserNo(rs.getLong("id"));
-		schedule.setUserEmail(rs.getString("email"));
-		schedule.setUserName(rs.getString("name"));
-		schedule.setUserPw(rs.getString("pw"));
-		schedule.setAddress(rs.getString("address"));
-		schedule.setRoles(rs.getString("roles"));
-		schedule.setJoinDate(rs.getTimestamp("join_date").toLocalDateTime());
+		users.setUserId(rs.getString("id"));
+		users.setUserName(rs.getString("name"));
+		users.setUserEmail(rs.getString("email"));
+		users.setUserPw(rs.getString("pw"));
+		users.setZipcode(rs.getString("zipcode"));
+		users.setAddress1(rs.getString("address1"));
+		users.setAddress2(rs.getString("address2"));
+		users.setRoles(rs.getString("roles"));
+		users.setJoinDate(rs.getTimestamp("join_date").toLocalDateTime());
 
-		return schedule;
+		return users;
 	}
 }

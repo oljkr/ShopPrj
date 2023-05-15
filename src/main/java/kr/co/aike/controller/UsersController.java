@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.aike.domain.Users;
@@ -35,10 +36,17 @@ public class UsersController {
 
 	@PostMapping("/login")
 	public ModelAndView login(@ModelAttribute Users users, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		log.info("login");
 		ModelAndView mav = new ModelAndView();
 		mav = service.loginUser(users, session, request, response);
 		return mav;
+	}
+	
+	@PostMapping("/idcheck")
+	@ResponseBody
+	public int idCheck(HttpServletRequest request) throws Exception {
+		String checkedid=request.getParameter("checkedid");
+		int idExistCnt = service.idCheck(checkedid);
+		return idExistCnt;
 	}
 
 	@GetMapping("/register")

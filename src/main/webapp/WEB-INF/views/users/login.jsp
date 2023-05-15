@@ -14,16 +14,16 @@
               <form name='loginfrm' method='post' action='login'>
                 <div class="form-group">
                   <input type="hidden" id="place" name="place" value="${place}" readonly="readonly">
-                  <label for="email">이메일 주소</label>
-                  <input type="email" class="form-control" id="email" name="userEmail" aria-describedby="emailHelp"
-                    placeholder="Enter email" value="${c_id}">
+                  <label for="userId">아이디</label>
+                  <input type="text" class="form-control" id="userId" name="userId" aria-describedby="idHelp"
+                    placeholder="Enter Id" value="${c_id}">
                 </div>
                 <div class="form-group">
-                  <label for="password">비밀번호</label>
-                  <input type="password" class="form-control" id="password" name="userPw" placeholder="Password">
+                  <label for="userPw">비밀번호</label>
+                  <input type="password" class="form-control" id="userPw" name="userPw" placeholder="Password">
                 </div>
                 <div class="mt-1">
-                  <label><input type="checkbox" name="c_id" value="SAVE" ${checked}> 이메일 주소 저장</label>
+                  <label><input type="checkbox" name="c_id" value="SAVE" ${checked}> 아이디 저장</label>
                 </div>
 			    <div class="text-primary m-2" style="font-size: 15px; background-color: #ebedf0">${msg}</div>
                 <button type="submit" class="btn btn-primary btn-block">로그인하기</button>

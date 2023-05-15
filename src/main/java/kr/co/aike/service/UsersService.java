@@ -10,6 +10,8 @@ import kr.co.aike.domain.Users;
 
 public interface UsersService {
 	
+	public int idCheck(String checkedid) throws Exception;
+	
 	public ModelAndView addUser(Users users) throws Exception;
 	
 	public ModelAndView preLoginUser(HttpSession session, HttpServletRequest request) throws Exception;

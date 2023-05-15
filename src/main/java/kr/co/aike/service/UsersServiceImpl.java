@@ -19,17 +19,32 @@ import lombok.extern.slf4j.Slf4j;
 public class UsersServiceImpl implements UsersService {
 	private final UsersDao dao;
 	
-	public ModelAndView addMessages(int code, String msg2Text,String link1Text,String link1Href) {
+	public ModelAndView addMessages(int code, String msg2Text, String link1Text, String link1Href) {
 		ModelAndView mav=new ModelAndView();
-		if(code==1) {
-		String img="<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>";
-		String msg2="<h2 class=\"mb-4\">* ~ "+msg2Text+" 성공 ~ *</h2>";			
-		String link1="<input class=\"btn btn-info rounded-pill py-3 px-5\" type='button' value='"+link1Text+"' onclick='location.href=\"./"+link1Href+"\"'>";
-		mav.addObject("msg2", msg2);
-		mav.addObject("img", img);
-		mav.addObject("link1", link1);
+		if(code==0) {
+			String img="<div class=\"mb-3\"><i class=\"bi bi-exclamation-triangle display-1 text-primary\"></i></div>";
+			String msg2="<h1 class=\"mb-4\">!! "+msg2Text+" 실패 !!</h1>";
+			String link1="<input class=\"btn btn-primary rounded-pill py-3 px-5\" type='button' value='다시시도' onclick='javascript:history.back()'>&nbsp;&nbsp;";
+			String link2="<input class=\"btn btn-info rounded-pill py-3 px-5\" type='button' value='"+link1Text+"' onclick='location.href=\"../"+link1Href+"\"'>";
+			mav.addObject("msg2", msg2);
+			mav.addObject("img", img);
+			mav.addObject("link1", link1);
+			mav.addObject("link2", link2);
+		} else if(code==1) {
+			String img="<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>";
+			String msg2="<h2 class=\"mb-4\">* ~ "+msg2Text+" 성공 ~ *</h2>";			
+			String link1="<input class=\"btn btn-primary rounded-pill py-3 px-5\" type='button' value='"+link1Text+"' onclick='location.href=\"./"+link1Href+"\"'>";
+			mav.addObject("msg2", msg2);
+			mav.addObject("img", img);
+			mav.addObject("link1", link1);
 		}
 		return mav;
+	}
+	
+	@Override
+	public int idCheck(String checkedid) throws Exception {
+		int idExistCnt=dao.idExist(checkedid);
+		return idExistCnt;
 	}
 	
 	@Override
@@ -39,14 +54,7 @@ public class UsersServiceImpl implements UsersService {
 		int cnt=dao.insertUsers(users);
 		
 		if(cnt==0){
-			String msg1="<h1 class=\"mb-4\">!! 회원 등록 실패 !!</h1>";
-			String img="<div class=\"mb-3\"><i class=\"bi bi-exclamation-triangle display-1 text-primary\"></i></div>";
-			String link1="<input class=\"btn btn-primary rounded-pill py-3 px-5\" type='button' value='다시시도' onclick='javascript:history.back()'>&nbsp;&nbsp;";
-			String link2="<input class=\"btn btn-info rounded-pill py-3 px-5\" type='button' value='목록으로' onclick='location.href=\"../home.do\"'>";
-			mav.addObject("msg1", msg1);
-			mav.addObject("img", img);
-			mav.addObject("link1", link1);
-			mav.addObject("link2", link2);
+			mav=addMessages(0,"회원 등록","메인으로","home");
 		}else {
 			mav=addMessages(1,"회원 등록","로그인하기","login");
 		}//if end
@@ -96,6 +104,11 @@ public class UsersServiceImpl implements UsersService {
 		String temp=request.getHeader("Referer");
 		int indexNum = temp.indexOf("aike");
 		temp = temp.substring(indexNum+4);
+		System.out.println(temp);
+		//회원가입 후에 로그인하기 버튼을 눌러 로그인할 시 로그인 후 메인 페이지로 이동
+		if(temp.equals("/users/register")) {
+			temp="./../home";
+		}
 		session.setAttribute("place", temp);		
 		mav.addObject("place", temp);
 		
@@ -117,7 +130,7 @@ public class UsersServiceImpl implements UsersService {
 			Cookie cookie = null;
 			if(temp!=null) {
 				if(temp.equals("SAVE")) {
-					cookie = new Cookie("c_id",users.getUserEmail());
+					cookie = new Cookie("c_id",users.getUserId());
 					cookie.setMaxAge(60*60*24*30);	
 				}			
 			}else {

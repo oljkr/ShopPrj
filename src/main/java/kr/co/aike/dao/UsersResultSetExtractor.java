@@ -17,11 +17,13 @@ public class UsersResultSetExtractor implements ResultSetExtractor<Users>{
 		while(rs.next()) {
 			if(users == null) {
 				users = new Users();
-				users.setUserNo(rs.getLong("id"));
-				users.setUserEmail(rs.getString("email"));
+				users.setUserId(rs.getString("id"));
 				users.setUserName(rs.getString("name"));
+				users.setUserEmail(rs.getString("email"));
 				users.setUserPw(rs.getString("pw"));
-				users.setAddress(rs.getString("address"));
+				users.setZipcode(rs.getString("zipcode"));
+				users.setAddress1(rs.getString("address1"));
+				users.setAddress2(rs.getString("address2"));
 				users.setRoles(rs.getString("roles"));
 				
 				users.setJoinDate(rs.getTimestamp("join_date").toLocalDateTime());
