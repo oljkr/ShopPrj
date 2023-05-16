@@ -289,20 +289,20 @@ public class UsersServiceImpl implements UsersService {
 		users = (Users)session.getAttribute("authInfo");
 		//db의 회원 데이터 삭제하기
 		int cnt=dao.unregisterUser(users);
-		//쿠키에 아이디 기억 여부 삭제
-		Cookie[] cookies = request.getCookies();
-		for(Cookie cookie : cookies) {
-		    if(cookie.getName().equals("c_id")) {
-		        cookie.setMaxAge(0);
-		        response.addCookie(cookie);
-		    }
-		}
-		//세션에서 회원 인가 내용 삭제
-		session.removeAttribute("authInfo");
-		
+
 		if(cnt==0){
 			mav=addMessages(0,"<div class=\"mb-3\"><i class=\"bi bi-exclamation-triangle display-1 text-primary\"></i></div>","","!! 회원 탈퇴 실패 !!","다시시도","javascript:history.back()","메인으로","location.href=\"../home\"");
-		}else {
+		}else if(cnt==1){
+			//쿠키에 아이디 기억 여부 삭제
+			Cookie[] cookies = request.getCookies();
+			for(Cookie cookie : cookies) {
+			    if(cookie.getName().equals("c_id")) {
+			        cookie.setMaxAge(0);
+			        response.addCookie(cookie);
+			    }
+			}
+			//세션에서 회원 인가 내용 삭제
+			session.removeAttribute("authInfo");
 			mav=addMessages(1,"<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>","","* ~ 회원 탈퇴 성공 ~ *","메인으로","location.href=\"../home\"","","");
 		}//if end
 		
