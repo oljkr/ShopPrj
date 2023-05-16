@@ -90,8 +90,8 @@
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
-                                    <a class="dropdown-item" href="#">회원정보수정</a>
-                                    <a class="dropdown-item" href="#">회원탈퇴</a>
+                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/users/modifyuser">회원정보수정</a>
+                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/users/preunregister">회원탈퇴</a>
                                   </div>
                                 </div>
                               </c:when>
@@ -107,7 +107,7 @@
                                     <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
                                     <a class="dropdown-item" href="#">회원정보수정</a>
-                                    <a class="dropdown-item" href="#">회원탈퇴</a>
+                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/users/preunregister">회원탈퇴</a>
                                   </div>
                                 </div>
                               </c:otherwise>

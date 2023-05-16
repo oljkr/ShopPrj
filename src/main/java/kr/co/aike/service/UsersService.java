@@ -25,4 +25,8 @@ public interface UsersService {
 	public void sendMail(String[] recipientList, String subject, String body);
 
 	public ModelAndView findPw(Users users) throws Exception;
+
+	public ModelAndView preUnregister() throws Exception;
+	
+	public ModelAndView unregister(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

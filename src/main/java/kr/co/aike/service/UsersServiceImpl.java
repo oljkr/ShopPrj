@@ -68,6 +68,7 @@ public class UsersServiceImpl implements UsersService {
 		return mav;
 	}
 	
+	//세션에 guest 할당 or 회원이면 존재하는 쿠키확인해서 아이디 기억 여부 파라미터에 추가
 	public ModelAndView rememberId(HttpSession session, HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
 				
@@ -85,9 +86,11 @@ public class UsersServiceImpl implements UsersService {
 			if(sRoles.equals("guest")) {
 				Cookie[] cookies = request.getCookies();
 				String c_id = "";
+				System.out.println("=====");
 				if(cookies!=null) {
 					for(int i=0;i<cookies.length;i++) {
 						Cookie cookie = cookies[i];
+						System.out.println(cookie.getName());
 						if(cookie.getName().equals("c_id")==true) {
 							c_id=cookie.getValue();
 							mav.addObject("c_id",c_id);
@@ -101,7 +104,7 @@ public class UsersServiceImpl implements UsersService {
 		return mav;
 	}
 	
-	//쿠키에 아이디 기억 여부 저장
+	//로그인할 때 쿠키에 아이디 기억 여부 저장
 	public void rememberIdCookie(Users users, HttpServletRequest request, HttpServletResponse response) {
 		String temp=request.getParameter("c_id");
 		Cookie cookie = null;
@@ -111,6 +114,7 @@ public class UsersServiceImpl implements UsersService {
 				cookie.setMaxAge(60*60*24*30);	
 			}			
 		}else {
+			//아이디 기억 여부에 체크를 하지 않았을 경우 쿠키 제거
 			cookie = new Cookie("c_id","");
 			cookie.setMaxAge(0);
 		}
@@ -150,6 +154,7 @@ public class UsersServiceImpl implements UsersService {
 			System.out.println("it's null");
 			mav.addObject("msg", "아이디 혹은 비밀번호가 일치하지 않습니다. 입력한 내용을 다시 확인해 주세요.");
 		}else {
+			//쿠키에 아이디 기억 여부 저장
 			rememberIdCookie(users, request, response);
 			
 			//세션에 회원 인가 내용 저장
@@ -268,4 +273,40 @@ public class UsersServiceImpl implements UsersService {
 		return mav;
 	}
 	
+	@Override
+	public ModelAndView preUnregister() throws Exception {
+		ModelAndView mav=new ModelAndView();
+		mav=addMessages(2,"","회원 탈퇴하시겠습니까?","","회원탈퇴하기","location.href=\"./unregister\"","메인으로","location.href=\"../home\"");
+		mav.setViewName("msgView");
+		return mav;
+	}
+	
+	@Override
+	public ModelAndView unregister(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav=new ModelAndView();
+		Users users = new Users();
+		//세션에서 회원 데이터 가져오기
+		users = (Users)session.getAttribute("authInfo");
+		//db의 회원 데이터 삭제하기
+		int cnt=dao.unregisterUser(users);
+		//쿠키에 아이디 기억 여부 삭제
+		Cookie[] cookies = request.getCookies();
+		for(Cookie cookie : cookies) {
+		    if(cookie.getName().equals("c_id")) {
+		        cookie.setMaxAge(0);
+		        response.addCookie(cookie);
+		    }
+		}
+		//세션에서 회원 인가 내용 삭제
+		session.removeAttribute("authInfo");
+		
+		if(cnt==0){
+			mav=addMessages(0,"<div class=\"mb-3\"><i class=\"bi bi-exclamation-triangle display-1 text-primary\"></i></div>","","!! 회원 탈퇴 실패 !!","다시시도","javascript:history.back()","메인으로","location.href=\"../home\"");
+		}else {
+			mav=addMessages(1,"<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>","","* ~ 회원 탈퇴 성공 ~ *","메인으로","location.href=\"../home\"","","");
+		}//if end
+		
+		mav.setViewName("msgView");
+		return mav;
+	}
 }

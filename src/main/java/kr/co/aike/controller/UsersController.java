@@ -90,5 +90,26 @@ public class UsersController {
 		mav = service.findPw(users);
 		return mav;
 	}
+	
+	@GetMapping("/preunregister")
+	public ModelAndView preUnregister() throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = service.preUnregister();
+		return mav;
+	}
+	
+	@GetMapping("/unregister")
+	public ModelAndView unregister(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = service.unregister(session, request, response);
+		return mav;
+	}
+	
+	@GetMapping("/modifyuser")
+	public ModelAndView preModifyUser(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = service.unregister(session, request, response);
+		return mav;
+	}
 
 }

@@ -93,7 +93,8 @@ public class UsersDao {
 		
 		return results;
 	}//selectUser() end
-		
+	
+	//비밀번호 변경
 	public int updateUserPw(Users findUsers, StringBuilder tempPw) {
 		int cnt=0;
 		try {
@@ -113,7 +114,7 @@ public class UsersDao {
 		Users results = null;
 		try {
 			sql=new StringBuilder();
-			sql.append(" SELECT id, name, email, pw, zipcode, address1, address2, roles, join_date ");
+			sql.append(" SELECT user_no, id, name, email, pw, zipcode, address1, address2, roles, join_date ");
 			sql.append(" FROM users ");
 			sql.append(" where id='"+users.getUserId()+"' and pw='"+users.getUserPw()+"' ");
 			
@@ -125,5 +126,19 @@ public class UsersDao {
 		
 		return results;
 	}//loginUser() end
+	
+	// 탈퇴
+	public int unregisterUser(Users users) {
+		int cnt=0;
+		try {
+			sql=new StringBuilder();
+			sql.append(" DELETE FROM users  ");
+			sql.append(" WHERE user_no = "+users.getUserNo()+" ");
+			cnt=jdbcTemplate.update(sql.toString());
+		}catch (Exception e) {
+			System.out.println("회원 정보 삭제 실패:" + e);
+		}//end
+		return cnt;		
+	}//updateUserPw() end
 	
 }
