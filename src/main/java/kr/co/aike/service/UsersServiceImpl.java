@@ -1,10 +1,14 @@
 package kr.co.aike.service;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,24 +23,26 @@ import lombok.extern.slf4j.Slf4j;
 public class UsersServiceImpl implements UsersService {
 	private final UsersDao dao;
 	
-	public ModelAndView addMessages(int code, String msg2Text, String link1Text, String link1Href) {
+	public ModelAndView addMessages(int code, String imgText, String msg1Text, String msg2Text, String link1Text, String link1Href , String link2Text, String link2Href) {
 		ModelAndView mav=new ModelAndView();
+		String msg1="<h1 class=\"mb-4\">"+msg1Text+"</h1>";
+		String img=imgText;
+		String msg2="<h1 class=\"mb-4\">"+msg2Text+"</h1>";
+		String link1="<input class=\"btn btn-primary rounded-pill py-3 px-5\" type='button' value='"+link1Text+"' onclick='"+link1Href+"'>&nbsp;&nbsp;";
+		String link2="<input class=\"btn btn-warning rounded-pill py-3 px-5\" type='button' value='"+link2Text+"' onclick='"+link2Href+"'>";
 		if(code==0) {
-			String img="<div class=\"mb-3\"><i class=\"bi bi-exclamation-triangle display-1 text-primary\"></i></div>";
-			String msg2="<h1 class=\"mb-4\">!! "+msg2Text+" 실패 !!</h1>";
-			String link1="<input class=\"btn btn-primary rounded-pill py-3 px-5\" type='button' value='다시시도' onclick='javascript:history.back()'>&nbsp;&nbsp;";
-			String link2="<input class=\"btn btn-info rounded-pill py-3 px-5\" type='button' value='"+link1Text+"' onclick='location.href=\"../"+link1Href+"\"'>";
 			mav.addObject("msg2", msg2);
 			mav.addObject("img", img);
 			mav.addObject("link1", link1);
 			mav.addObject("link2", link2);
 		} else if(code==1) {
-			String img="<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>";
-			String msg2="<h2 class=\"mb-4\">* ~ "+msg2Text+" 성공 ~ *</h2>";			
-			String link1="<input class=\"btn btn-primary rounded-pill py-3 px-5\" type='button' value='"+link1Text+"' onclick='location.href=\"./"+link1Href+"\"'>";
 			mav.addObject("msg2", msg2);
 			mav.addObject("img", img);
 			mav.addObject("link1", link1);
+		} else if(code==2) {
+			mav.addObject("msg1", msg1);
+			mav.addObject("link1", link1);
+			mav.addObject("link2", link2);
 		}
 		return mav;
 	}
@@ -54,9 +60,9 @@ public class UsersServiceImpl implements UsersService {
 		int cnt=dao.insertUsers(users);
 		
 		if(cnt==0){
-			mav=addMessages(0,"회원 등록","메인으로","home");
+			mav=addMessages(0,"<div class=\"mb-3\"><i class=\"bi bi-exclamation-triangle display-1 text-primary\"></i></div>","","!! 회원 등록 실패 !!","다시시도","javascript:history.back()","메인으로","location.href=\"../home\"");
 		}else {
-			mav=addMessages(1,"회원 등록","로그인하기","login");
+			mav=addMessages(1,"<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>","","* ~ 회원 등록 성공 ~ *","로그인하기","location.href=\"./login\"","","");
 		}//if end
 		mav.setViewName("msgView");
 		return mav;
@@ -167,6 +173,98 @@ public class UsersServiceImpl implements UsersService {
 		temp = temp.substring(indexNum+4);
 		System.out.println(temp);
 		mav.setViewName("redirect:"+ temp);
+		return mav;
+	}
+	
+	@Override
+	public ModelAndView findId(Users users) throws Exception {
+		ModelAndView mav=new ModelAndView();
+		Users findUsers = new Users();
+		findUsers=dao.selectUserForId(users);
+		if(findUsers==null) {
+			System.out.println("it's null");
+			mav.addObject("msg", "입력한 이름과 이메일에 해당하는 회원이 존재하지 않습니다. 입력한 내용을 다시 확인해 주세요.");
+		}else {
+			mav=addMessages(2,"","아이디는 "+findUsers.getUserId()+" 입니다","","로그인하기","location.href=\"./login\"","비밀번호찾기","location.href=\"./findpw\"");
+			mav.setViewName("msgView");
+		}
+		return mav;
+	}
+	
+	@Autowired
+    private JavaMailSender emailSender;
+	
+	@Override
+	public void sendMail(String[] recipientList, String subject, String body){
+	    MimeMessage message = emailSender.createMimeMessage();
+
+	    try{
+	        MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+	        
+	        //메일 수신자 설정
+	        messageHelper.setTo(recipientList);
+	        //메일 제목 설정
+	        messageHelper.setSubject("test_subject");
+	        //메일 내용 설정(HTML 적용)
+	        messageHelper.setText(body, true);
+	        //메일 전송
+	        emailSender.send(message);
+	    } catch(Exception e){
+	        log.info(e.toString());
+	    }
+	}
+	
+	@Override
+	public ModelAndView findPw(Users users) throws Exception {
+		ModelAndView mav=new ModelAndView();
+		Users findUsers = new Users();
+		findUsers=dao.selectUserForPw(users);
+		if(findUsers==null) {
+			System.out.println("it's null");
+			mav.addObject("msg", "입력한 아이디와 이메일에 해당하는 회원이 존재하지 않습니다. 입력한 내용을 다시 확인해 주세요.");
+		}else {
+			//임시 비밀번호 만들기
+				//대문자, 소문자, 숫자를 이용해서 랜덤하게 10글자를 만들기
+			String[] ch= {
+					"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
+					"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
+					"0","1","2","3","4","5","6","7","8","9"
+			}; //ch[0]~ch[61]
+			
+				//ch배열에서 랜덤하게 10글자 뽑아서 가져오기
+			StringBuilder tempPw=new StringBuilder();
+			for(int i=0; i<10; i++) {
+				int num=(int)(Math.random()*ch.length);
+				tempPw.append(ch[num]);
+			}//for end
+			System.out.println(tempPw);
+			
+			//회원의 기존 비밀번호를 임시 비밀번호로 바꾸기
+			int cnt = dao.updateUserPw(findUsers, tempPw);
+			//바뀐 임시 비밀번호가 적용된 회원 정보 다시 불러오기
+			findUsers=dao.selectUserForPw(users);
+			
+			if(cnt==1) {
+				//임시 비밀번호로 테이블 수정 되었다면, 아이디와 비밀번호를 이메일 전송하기
+				String[] recipientList = {findUsers.getUserEmail()};
+				String subject = "Sprots shopping mall 임시 비밀번호 발급 안내";
+				String body = "* 임시 비밀번호로 로그인 한 후, 회원 정보 수정에서 비밀번호를 변경하시기 바랍니다.";
+				body+="<hr>";
+				body+="<table style='border-collapse: collapse; width: 300px;'>";
+				body+=" <tr>";
+				body+="  <th style='background-color: #f2f2f2; font-weight: bold; padding: 8px; text-align: left; border-bottom: 1px solid #ddd;'>아이디</th>";
+				body+="  <td style='padding: 8px; text-align: left; border-bottom: 1px solid #ddd;'>"+findUsers.getUserId()+"</td>";
+				body+=" </tr>";
+				body+="  <tr>";
+				body+="    <th style='background-color: #f2f2f2; font-weight: bold; padding: 8px; text-align: left; border-bottom: 1px solid #ddd;'>임시비밀번호</th>";
+				body+="    <td style='padding: 8px; text-align: left; border-bottom: 1px solid #ddd;'>"+findUsers.getUserPw()+"</td>";
+				body+="  </tr>";
+				body+="</table>";
+				sendMail(recipientList, subject, body);
+			}
+			mav=addMessages(2,"","임시 비밀번호가 이메일로 전송되었습니다.","","로그인하기","location.href=\"./login\"","메인으로","location.href=\"../home\"");
+			mav.setViewName("msgView");
+		}
 		return mav;
 	}
 	

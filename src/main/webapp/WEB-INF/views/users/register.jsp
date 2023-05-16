@@ -99,11 +99,11 @@
                         <div class="container">
                           <form>
                             <div class="form-group row">
-                              <label for="id" class="col-md-2 col-form-label">아이디:</label>
-                              <div class="col-md-7">
+                              <label for="id" class="col-md-3 col-form-label">아이디:</label>
+                              <div class="col-md-5">
                                 <input type="text" id="checkedid" maxlength="10" autofocus class="form-control">
                               </div>
-                              <div class="col-md-3">
+                              <div class="col-md-4">
                                 <button type="button" id="btn_checkid" class="btn btn-primary btn-block">중복확인</button>
                               </div>
                             </div>

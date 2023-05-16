@@ -19,4 +19,10 @@ public interface UsersService {
 	public ModelAndView loginUser(Users users, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
 	public ModelAndView logoutUser(HttpSession session, HttpServletRequest request) throws Exception;
+	
+	public ModelAndView findId(Users users) throws Exception;
+	
+	public void sendMail(String[] recipientList, String subject, String body);
+
+	public ModelAndView findPw(Users users) throws Exception;
 }

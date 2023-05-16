@@ -33,9 +33,9 @@
           <div class="btn-group btn-group-sm d-flex justify-content-center mt-2 mb-5 ml-3 mr-3" role="group"
             aria-label="Basic example">
             <button type="button" class="btn btn-outline-secondary"
-              onclick="location.href = '${pageContext.request.contextPath}/users/register' ">비밀번호 찾기</button>
+              onclick="location.href = '${pageContext.request.contextPath}/users/findid' ">아이디 찾기</button>
             <button type="button" class="btn btn-outline-secondary"
-              onclick="location.href = '${pageContext.request.contextPath}/users/register' ">아이디 찾기</button>
+              onclick="location.href = '${pageContext.request.contextPath}/users/findpw' ">비밀번호 찾기</button>
             <button type="button" class="btn btn-outline-secondary"
               onclick="location.href = '${pageContext.request.contextPath}/users/register' ">회원가입</button>
           </div>

@@ -1,6 +1,5 @@
 package kr.co.aike.controller;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -65,6 +64,30 @@ public class UsersController {
 	public ModelAndView usersLogout(HttpSession session, HttpServletRequest request) throws Exception {
 		ModelAndView mav = service.logoutUser(session, request);
 		System.out.println("logout");
+		return mav;
+	}
+	
+	@GetMapping("/findid")
+	public String findIdProc() throws Exception {
+		return "users/findid";
+	}
+	
+	@PostMapping("/findid")
+	public ModelAndView findId(@ModelAttribute Users users) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = service.findId(users);
+		return mav;
+	}
+	
+	@GetMapping("/findpw")
+	public String findPwProc() throws Exception {
+		return "users/findpw";
+	}
+	
+	@PostMapping("/findpw")
+	public ModelAndView findPw(@ModelAttribute Users users, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = service.findPw(users);
 		return mav;
 	}
 
