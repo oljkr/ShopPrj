@@ -15,4 +15,3 @@
 <!-- contents end -->
 
 <%@ include file="footer.jsp" %>
-
