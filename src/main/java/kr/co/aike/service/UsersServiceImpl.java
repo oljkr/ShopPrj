@@ -28,8 +28,8 @@ public class UsersServiceImpl implements UsersService {
 		String msg1="<h1 class=\"mb-4\">"+msg1Text+"</h1>";
 		String img=imgText;
 		String msg2="<h1 class=\"mb-4\">"+msg2Text+"</h1>";
-		String link1="<input class=\"btn btn-primary rounded-pill py-3 px-5\" type='button' value='"+link1Text+"' onclick='"+link1Href+"'>&nbsp;&nbsp;";
-		String link2="<input class=\"btn btn-warning rounded-pill py-3 px-5\" type='button' value='"+link2Text+"' onclick='"+link2Href+"'>";
+		String link1="<input class=\"btn btn-dark rounded-pill py-3 px-5\" type='button' value='"+link1Text+"' onclick='"+link1Href+"'>&nbsp;&nbsp;";
+		String link2="<input class=\"btn btn-outline-dark rounded-pill py-3 px-5\" type='button' value='"+link2Text+"' onclick='"+link2Href+"'>";
 		if(code==0) {
 			mav.addObject("msg2", msg2);
 			mav.addObject("img", img);
@@ -64,7 +64,7 @@ public class UsersServiceImpl implements UsersService {
 		}else {
 			mav=addMessages(1,"<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>","","* ~ 회원 등록 성공 ~ *","로그인하기","location.href=\"./login\"","","");
 		}//if end
-		mav.setViewName("msgView");
+		mav.setViewName("users/msgView");
 		return mav;
 	}
 	
@@ -86,11 +86,9 @@ public class UsersServiceImpl implements UsersService {
 			if(sRoles.equals("guest")) {
 				Cookie[] cookies = request.getCookies();
 				String c_id = "";
-				System.out.println("=====");
 				if(cookies!=null) {
 					for(int i=0;i<cookies.length;i++) {
 						Cookie cookie = cookies[i];
-						System.out.println(cookie.getName());
 						if(cookie.getName().equals("c_id")==true) {
 							c_id=cookie.getValue();
 							mav.addObject("c_id",c_id);
@@ -131,12 +129,11 @@ public class UsersServiceImpl implements UsersService {
 		int indexNum = temp.indexOf("aike");
 		temp = temp.substring(indexNum+4);
 		System.out.println(temp);
-		//회원가입 후에 로그인하기 버튼을 눌러 로그인할 시 로그인 후 메인 페이지로 이동
+			//회원가입 후에 로그인하기 버튼을 눌러 로그인할 시 로그인 후 메인 페이지로 이동
 		if(temp.equals("/users/register")) {
 			temp="./../home";
 		}
-		session.setAttribute("place", temp);		
-		mav.addObject("place", temp);
+		session.setAttribute("place", temp);
 		
 		mav.setViewName("users/login");
 		return mav;
@@ -172,7 +169,7 @@ public class UsersServiceImpl implements UsersService {
 		ModelAndView mav = new ModelAndView();
 		mav = rememberId(session, request);
 		
-		//세션에 이전 페이지 경로 저장
+		//이전 페이지 경로로 view 저장
 		String temp=request.getHeader("Referer");
 		int indexNum = temp.indexOf("aike");
 		temp = temp.substring(indexNum+4);
@@ -191,7 +188,7 @@ public class UsersServiceImpl implements UsersService {
 			mav.addObject("msg", "입력한 이름과 이메일에 해당하는 회원이 존재하지 않습니다. 입력한 내용을 다시 확인해 주세요.");
 		}else {
 			mav=addMessages(2,"","아이디는 "+findUsers.getUserId()+" 입니다","","로그인하기","location.href=\"./login\"","비밀번호찾기","location.href=\"./findpw\"");
-			mav.setViewName("msgView");
+			mav.setViewName("users/msgView");
 		}
 		return mav;
 	}
@@ -268,7 +265,7 @@ public class UsersServiceImpl implements UsersService {
 				sendMail(recipientList, subject, body);
 			}
 			mav=addMessages(2,"","임시 비밀번호가 이메일로 전송되었습니다.","","로그인하기","location.href=\"./login\"","메인으로","location.href=\"../home\"");
-			mav.setViewName("msgView");
+			mav.setViewName("users/msgView");
 		}
 		return mav;
 	}
@@ -277,7 +274,7 @@ public class UsersServiceImpl implements UsersService {
 	public ModelAndView preUnregister() throws Exception {
 		ModelAndView mav=new ModelAndView();
 		mav=addMessages(2,"","회원 탈퇴하시겠습니까?","","회원탈퇴하기","location.href=\"./unregister\"","메인으로","location.href=\"../home\"");
-		mav.setViewName("msgView");
+		mav.setViewName("users/msgView");
 		return mav;
 	}
 	
@@ -306,7 +303,25 @@ public class UsersServiceImpl implements UsersService {
 			mav=addMessages(1,"<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>","","* ~ 회원 탈퇴 성공 ~ *","메인으로","location.href=\"../home\"","","");
 		}//if end
 		
-		mav.setViewName("msgView");
+		mav.setViewName("users/msgView");
 		return mav;
+	}
+	
+	@Override
+	public ModelAndView modifyUser(Users users, HttpSession session) throws Exception {
+		ModelAndView mav=new ModelAndView();
+		log.info(users.toString());
+		int cnt=dao.updateUser(users);
+		if(cnt==0){
+			mav=addMessages(0,"<div class=\"mb-3\"><i class=\"bi bi-exclamation-triangle display-1 text-primary\"></i></div>","","!! 회원 정보 수정 실패 !!","다시시도","javascript:history.back()","메인으로","location.href=\"../home\"");
+		}else {
+			//세션에 기존 회원 인가 내용 삭제
+			session.removeAttribute("authInfo");
+			//세션에 회원 인가 내용 저장
+			session.setAttribute("authInfo", users);
+			mav=addMessages(1,"<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>","","* ~ 회원 정보 수정 성공 ~ *","메인으로","location.href=\"../home\"","","");
+		}//if end
+		mav.setViewName("users/msgView");
+		return mav;		
 	}
 }

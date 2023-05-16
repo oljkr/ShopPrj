@@ -29,4 +29,6 @@ public interface UsersService {
 	public ModelAndView preUnregister() throws Exception;
 	
 	public ModelAndView unregister(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	
+	public ModelAndView modifyUser(Users users, HttpSession session) throws Exception;
 }

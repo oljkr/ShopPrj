@@ -106,9 +106,15 @@ public class UsersController {
 	}
 	
 	@GetMapping("/modifyuser")
-	public ModelAndView preModifyUser(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String preModifyUser(HttpSession session, HttpServletRequest request) throws Exception {
+		return "users/modifyuser";
+	}
+	
+	@PostMapping("/modifyuser")
+	public ModelAndView modifyUser(@ModelAttribute Users users, HttpSession session) throws Exception {
+		log.info("modifyUser");
 		ModelAndView mav = new ModelAndView();
-		mav = service.unregister(session, request, response);
+		mav = service.modifyUser(users, session);
 		return mav;
 	}
 

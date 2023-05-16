@@ -141,4 +141,20 @@ public class UsersDao {
 		return cnt;		
 	}//updateUserPw() end
 	
+	//회원정보 수정
+	public int updateUser(Users users) {
+		int cnt=0;
+		try {
+			sql=new StringBuilder();
+			sql.append(" UPDATE users ");
+			sql.append(" SET name = '"+users.getUserName()+"', email='"+users.getUserEmail()+"', pw='"+users.getUserPw()+"', ");
+			sql.append(" zipcode = '"+users.getZipcode()+"', address1='"+users.getAddress1()+"', address2='"+users.getAddress2()+"' ");
+			sql.append(" WHERE user_no = "+users.getUserNo()+" ");
+			cnt=jdbcTemplate.update(sql.toString());
+		}catch (Exception e) {
+			System.out.println("회원 정보 수정 실패:" + e);
+		}//end
+		return cnt;		
+	}//updateUser() end
+	
 }
