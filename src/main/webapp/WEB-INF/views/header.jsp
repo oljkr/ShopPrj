@@ -23,7 +23,6 @@
             height: 200px;
             background: #aaa;
           }
-
         </style>
 
         <script src="./js/check.js"></script>
@@ -44,38 +43,38 @@
           <div class="collapse navbar-collapse justify-content-between" id="collapsibleNavbar">
             <ul class="navbar-nav" style="margin-left:1%">
               <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-		          aria-haspopup="true" aria-expanded="false">
-		          Men
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink1">신발</a>
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
-		        </div>
-		      </li>
-		      <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-		          aria-haspopup="true" aria-expanded="false">
-		          Women
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink1">신발</a>
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
-		        </div>
-		      </li>
-		      <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-		          aria-haspopup="true" aria-expanded="false">
-		          Kids
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink1">신발</a>
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
-		        </div>
-		      </li>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  Men
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink1">신발</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  Women
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink1">신발</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  Kids
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink1">신발</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
+                </div>
+              </li>
             </ul>
 
             <ul class='navbar-nav'>
@@ -97,34 +96,32 @@
                           <c:otherwise>
                             <c:choose>
                               <c:when test="${authInfo.roles eq 'admin' }">
-                              
-                             
-                              
-                              <!-- Search form -->
 
-    <form class="form-inline my-2 my-lg-0 mr-2">
-      <div class="input-group" style="width:400px">
-        <input class="form-control mr-sm-2 form-rounded" type="search" placeholder="Search" aria-label="Search">
-        <div class="input-group-append">
-          <button class="btn btn-outline-light my-2 my-sm-0 form-rounded" type="submit">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
-    </form>
-    
-    							 <a href="#" class="text-white mr-2">
+                                <!-- Search form start -->
+                                <form class="form-inline my-2 my-lg-0 mr-2">
+                                  <div class="input-group" style="width:400px">
+                                    <input class="form-control mr-sm-2 form-rounded" type="search" placeholder="Search"
+                                      aria-label="Search">
+                                    <div class="input-group-append">
+                                      <button class="btn btn-outline-light my-2 my-sm-0 form-rounded" type="submit">
+                                        <i class="fas fa-search"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </form>
+                                <!-- Search form end-->
+
+                                <a href="#" class="text-white mr-2">
                                   <i class="fas fa-shopping-cart fa-2x"></i>
                                   <span class="badge badge-danger">0</span>
                                 </a>
-    							
+
                                 <div class="dropdown">
                                   <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
                                     id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
                                     관리자 ${authInfo.userName }님, 환영합니다.
                                   </a>
-
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
@@ -134,9 +131,7 @@
                                       href="${pageContext.request.contextPath}/users/preunregister">회원탈퇴</a>
                                   </div>
                                 </div>
-                                
-                                
-                                
+
                               </c:when>
                               <c:otherwise>
                                 <a href="#" class="text-white mr-3">
@@ -173,7 +168,7 @@
                 </div>
               </li>
             </ul>
-            
+
 
           </div>
         </nav>
