@@ -41,22 +41,22 @@ public class UsersDao {
 	}//insertUsers() end
 	
 	// 상세 조회
-		public Users selectUser(Users user) throws Exception {
-			Users results = null;
-			try {
-				sql=new StringBuilder();
-				sql.append(" SELECT id, name, email, pw, zipcode, address1, address2, roles, join_date ");
-				sql.append(" FROM users ");
-				sql.append(" where name='"+user.getUserName()+"' and email='"+user.getUserEmail()+"' ");
-				
-				results = jdbcTemplate.queryForObject(sql.toString(), new UsersRowMapper());
-			}catch (Exception e) {
-				System.out.println("회원 세부 자료읽기 실패:" +e);
-				return null;
-			}//end
+	public Users selectUser(Users user) throws Exception {
+		Users results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT id, name, email, pw, zipcode, address1, address2, roles, join_date ");
+			sql.append(" FROM users ");
+			sql.append(" where name='"+user.getUserName()+"' and email='"+user.getUserEmail()+"' ");
 			
-			return results;
-		}//selectUser() end
+			results = jdbcTemplate.queryForObject(sql.toString(), new UsersRowMapper());
+		}catch (Exception e) {
+			System.out.println("회원 세부 자료읽기 실패:" +e);
+			return null;
+		}//end
+		
+		return results;
+	}//selectUser() end
 	
 	// 상세 조회 - 아이디 찾기
 	public Users selectUserForId(Users user) throws Exception {
