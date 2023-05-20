@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.mail.internet.MimeMessage;
@@ -212,6 +213,34 @@ public class ProductsServiceImpl implements ProductsService {
 			mav=addMessages(1,"<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>","","* ~ 상품 등록 성공 ~ *","상풍 등록하기로 이동","location.href=\"./add\"","메인으로","location.href=\"../home\"");
 		}//if end
 		mav.setViewName("products/msgView");
+		return mav;
+	}
+	
+	@Override
+	public ModelAndView productDetail(Products products) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Products foundproduct = new Products();
+		
+		//상품 정보 가져오기
+		foundproduct=prdDao.selectProductPrdNo(products);
+		mav.addObject("product",foundproduct);
+		System.out.println(foundproduct.toString());
+		
+		//상품 옵션 가져오기
+		List<String> color = prdDao.selectProductColor(foundproduct);
+		List<String> size = prdDao.selectProductSize(foundproduct);
+		mav.addObject("color",color);
+		mav.addObject("size",size);
+		
+		//상품 이미지 가져오기
+			//섬네일 이미지
+		List<PrdImg> upperImages = prdImgDao.selectImagesUpper(foundproduct);
+			//본문 이미지
+		List<PrdImg> lowerImages = prdImgDao.selectImagesLower(foundproduct);
+		mav.addObject("upperImages",upperImages);
+		mav.addObject("lowerImages",lowerImages);
+		
+		mav.setViewName("products/detail");
 		return mav;
 	}
 }

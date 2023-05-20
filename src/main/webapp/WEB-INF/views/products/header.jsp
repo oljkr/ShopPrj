@@ -31,7 +31,36 @@
           .ck-editor__editable {
             min-height: 200px;
           }
-          
+
+          #scrollToTop {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #f8f9fa;
+            border-radius: 50%;
+            border: none;
+            color: #000;
+            font-size: 20px;
+            text-align: center;
+            cursor: pointer;
+            display: none;
+          }
+
+          #scrollToTop:hover {
+            background-color: #e9ecef;
+          }
+
+          .square {
+            width: 70px;
+            height: 70px;
+          }
+
+          .big-square {
+            width: 90%;
+            height: 90%;
+          }
         </style>
 
         <script src="./../js/check.js"></script>
@@ -48,15 +77,19 @@
       <body>
 
         <!-- navbar start -->
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-          <a class="navbar-brand" href="${pageContext.request.contextPath}/home">Navbar</a>
+        <nav class="navbar navbar-expand-sm navbar-light" style="background-color: white; border-bottom: 1px solid gray;">
+
+          <!-- <a class="navbar-brand" href="${pageContext.request.contextPath}/home">Navbar</a> -->
+          <a href="${pageContext.request.contextPath}/home">
+            <img src="./../storage/logo.png" width="70" alt="logo">
+          </a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-between" id="collapsibleNavbar">
             <ul class="navbar-nav" style="margin-left:1%">
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle text-dark font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
                   Men
                 </a>
@@ -67,18 +100,18 @@
                 </div>
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle text-dark font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
                   Women
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink1">신발</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list">신발</a>
                   <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
                   <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
                 </div>
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle text-dark font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
                   Kids
                 </a>
@@ -88,6 +121,19 @@
                   <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
                 </div>
               </li>
+              <!-- Search form start -->
+              <form class="form-inline my-4 my-lg-0 mx-2">
+                <div class="input-group" style="width:250px">
+                  <input class="form-control mr-sm-2 form-rounded" type="search" placeholder="Search"
+                    aria-label="Search">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-dark my-2 my-sm-0 form-rounded" type="submit">
+                      <i class="fas fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <!-- Search form end-->
             </ul>
 
             <ul class='navbar-nav'>
@@ -97,40 +143,31 @@
                   <c:catch>
                     <c:choose>
                       <c:when test="${empty authInfo }">
-                        <a type='button' class='btn btn-outline-light'
+                        <a type='button' class='btn btn-outline-dark'
                           href='${pageContext.request.contextPath}/users/login'>Login</a>
                       </c:when>
                       <c:otherwise>
                         <c:choose>
                           <c:when test="${authInfo.roles eq 'guest' }">
-                            <a type='button' class='btn btn-outline-light'
+                            <a type='button' class='btn btn-outline-dark'
                               href='${pageContext.request.contextPath}/users/login'>Login</a>
                           </c:when>
                           <c:otherwise>
                             <c:choose>
                               <c:when test="${authInfo.roles eq 'admin' }">
 
-                                <!-- Search form start -->
-                                <form class="form-inline my-2 my-lg-0 mr-2">
-                                  <div class="input-group" style="width:400px">
-                                    <input class="form-control mr-sm-2 form-rounded" type="search" placeholder="Search"
-                                      aria-label="Search">
-                                    <div class="input-group-append">
-                                      <button class="btn btn-outline-light my-2 my-sm-0 form-rounded" type="submit">
-                                        <i class="fas fa-search"></i>
-                                      </button>
-                                    </div>
-                                  </div>
-                                </form>
-                                <!-- Search form end-->
+                                
 
-                                <a href="#" class="text-white mr-2">
+
+
+
+                                <a href="#" class="text-dark mr-2">
                                   <i class="fas fa-shopping-cart fa-2x"></i>
                                   <span class="badge badge-danger">0</span>
                                 </a>
 
                                 <div class="dropdown">
-                                  <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
+                                  <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button"
                                     id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
                                     관리자 ${authInfo.userName }님, 환영합니다.

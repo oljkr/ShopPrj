@@ -35,15 +35,19 @@
       <body>
 
         <!-- navbar start -->
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-          <a class="navbar-brand" href="${pageContext.request.contextPath}/home">Navbar</a>
+        <nav class="navbar navbar-expand-sm navbar-light" style="background-color: white; border-bottom: 1px solid gray;">
+
+          <!-- <a class="navbar-brand" href="${pageContext.request.contextPath}/home">Navbar</a> -->
+          <a href="${pageContext.request.contextPath}/home">
+            <img src="./storage/logo.png" width="70" alt="logo">
+          </a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-between" id="collapsibleNavbar">
             <ul class="navbar-nav" style="margin-left:1%">
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
                   Men
                 </a>
@@ -54,18 +58,18 @@
                 </div>
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
                   Women
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink1">신발</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/detail?prdNo=1">신발</a>
                   <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
                   <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
                 </div>
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
                   Kids
                 </a>
@@ -84,13 +88,13 @@
                   <c:catch>
                     <c:choose>
                       <c:when test="${empty authInfo }">
-                        <a type='button' class='btn btn-outline-light'
+                        <a type='button' class='btn btn-outline-dark'
                           href='${pageContext.request.contextPath}/users/login'>Login</a>
                       </c:when>
                       <c:otherwise>
                         <c:choose>
                           <c:when test="${authInfo.roles eq 'guest' }">
-                            <a type='button' class='btn btn-outline-light'
+                            <a type='button' class='btn btn-outline-dark'
                               href='${pageContext.request.contextPath}/users/login'>Login</a>
                           </c:when>
                           <c:otherwise>
@@ -103,7 +107,7 @@
                                     <input class="form-control mr-sm-2 form-rounded" type="search" placeholder="Search"
                                       aria-label="Search">
                                     <div class="input-group-append">
-                                      <button class="btn btn-outline-light my-2 my-sm-0 form-rounded" type="submit">
+                                      <button class="btn btn-outline-dark my-2 my-sm-0 form-rounded" type="submit">
                                         <i class="fas fa-search"></i>
                                       </button>
                                     </div>
@@ -111,13 +115,13 @@
                                 </form>
                                 <!-- Search form end-->
 
-                                <a href="#" class="text-white mr-2">
+                                <a href="#" class="text-dark mr-2">
                                   <i class="fas fa-shopping-cart fa-2x"></i>
                                   <span class="badge badge-danger">0</span>
                                 </a>
 
                                 <div class="dropdown">
-                                  <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
+                                  <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button"
                                     id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
                                     관리자 ${authInfo.userName }님, 환영합니다.

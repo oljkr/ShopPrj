@@ -15,4 +15,5 @@ public interface ProductsService {
 	
 	public ModelAndView addProducts(Products products, HttpServletRequest request, @RequestParam("thumbnailimg") MultipartFile[] file1, @RequestParam("contentimg") MultipartFile[] file2) throws Exception;
 
+	public ModelAndView productDetail(Products products) throws Exception;
 }

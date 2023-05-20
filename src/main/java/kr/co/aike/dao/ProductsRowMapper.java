@@ -23,7 +23,7 @@ public class ProductsRowMapper implements RowMapper<Products>{
 		products.setFullDes(rs.getString("full_des"));
 		products.setStock(rs.getInt("stock"));
 		products.setPrice(rs.getInt("price"));
-		products.setReadCnt(rs.getInt("read_cnt"));
+		products.setOrderCnt(rs.getInt("order_cnt"));
 
 		return products;
 	}

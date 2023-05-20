@@ -18,6 +18,6 @@ public class Products {
 	private String fullDes;
 	private int stock;
 	private int price;
-	private int readCnt;
+	private int orderCnt;
 
 }

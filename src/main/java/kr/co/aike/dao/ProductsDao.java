@@ -1,6 +1,11 @@
 package kr.co.aike.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import kr.co.aike.domain.Products;
@@ -18,7 +23,7 @@ public class ProductsDao {
 		int cnt=0;
 		try {
 			sql=new StringBuilder();
-			sql.append(" INSERT INTO products(sort1, sort2, name, color, size, short_des, full_des, stock, price, read_cnt) ");
+			sql.append(" INSERT INTO products(sort1, sort2, name, color, size, short_des, full_des, stock, price, order_cnt) ");
 			sql.append(" VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, 0) ");
 			cnt=jdbcTemplate.update(sql.toString(), products.getSort1(), products.getSort2(), products.getName(), products.getColor(), products.getSize(), products.getShortDes(), products.getFullDes(), products.getStock(), products.getPrice());
 		}catch (Exception e) {
@@ -27,12 +32,12 @@ public class ProductsDao {
 		return cnt;
 	}//insertProducts() end
 	
-	// 상세 조회
+	// 상세 조회 - 상품명, 컬러, 사이즈
 	public Products selectProduct(Products products) throws Exception {
 		Products results = null;
 		try {
 			sql=new StringBuilder();
-			sql.append(" SELECT prd_no, sort1, sort2, name, color, size, short_des, full_des, stock, price, read_cnt ");
+			sql.append(" SELECT prd_no, sort1, sort2, name, color, size, short_des, full_des, stock, price, order_cnt ");
 			sql.append(" FROM products ");
 			sql.append(" where name='"+products.getName()+"' and color='"+products.getColor()+"' and size='"+products.getSize()+"' ");
 			
@@ -44,4 +49,75 @@ public class ProductsDao {
 		
 		return results;
 	}//selectProduct() end
+	
+	// 상세 조회 - 상품번호로 조회
+	public Products selectProductPrdNo(Products products) throws Exception {
+		Products results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT prd_no, sort1, sort2, name, color, size, short_des, full_des, stock, price, order_cnt ");
+			sql.append(" FROM products ");
+			sql.append(" where prd_no='"+products.getPrdNo()+"' ");
+			
+			results = jdbcTemplate.queryForObject(sql.toString(), new ProductsRowMapper());
+		}catch (Exception e) {
+			System.out.println("상품 세부 자료읽기 실패:" +e);
+			return null;
+		}//end
+		
+		return results;
+	}//selectProductPrdNo() end
+	
+	// 상세 조회 - 상품의 컬러 옵션 조회
+	public List<String> selectProductColor(Products products) throws Exception {
+		List<String> results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT DISTINCT color ");
+			sql.append(" FROM products ");
+			sql.append(" WHERE name='"+products.getName()+"' ");
+			
+			RowMapper<String> rowMapper=new RowMapper<String>() {
+				@Override
+				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+					String color=rs.getString("color");
+					return color;
+				}//mapRow() end
+			};//rowMapper end
+			
+			results = jdbcTemplate.query(sql.toString(), rowMapper);
+		}catch (Exception e) {
+			System.out.println("상품 컬러 옵션 자료읽기 실패:" +e);
+			return null;
+		}//end
+		
+		return results;
+	}//selectProductColor() end
+	
+	// 상세 조회 - 상품의 사이즈 옵션 조회
+	public List<String> selectProductSize(Products products) throws Exception {
+		List<String> results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT DISTINCT size ");
+			sql.append(" FROM products ");
+			sql.append(" WHERE name='"+products.getName()+"' ");
+			
+			RowMapper<String> rowMapper=new RowMapper<String>() {
+				@Override
+				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+					String size=rs.getString("size");
+					return size;
+				}//mapRow() end
+			};//rowMapper end
+			
+			results = jdbcTemplate.query(sql.toString(), rowMapper);
+		}catch (Exception e) {
+			System.out.println("상품 사이즈 옵션 자료읽기 실패:" +e);
+			return null;
+		}//end
+		
+		return results;
+	}//selectProductSize() end
+	
 }

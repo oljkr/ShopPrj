@@ -5,24 +5,18 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import kr.co.aike.domain.Users;
+import kr.co.aike.domain.PrdImg;
 
-public class PrdImgRowMapper implements RowMapper<Users>{
+public class PrdImgRowMapper implements RowMapper<PrdImg>{
 	@Override
-	public Users mapRow(ResultSet rs, int rowNum) throws SQLException {
-		Users users = new Users();
+	public PrdImg mapRow(ResultSet rs, int rowNum) throws SQLException {
+		PrdImg prdImg = new PrdImg();
 		
-		users.setUserNo(rs.getLong("user_no"));
-		users.setUserId(rs.getString("id"));
-		users.setUserName(rs.getString("name"));
-		users.setUserEmail(rs.getString("email"));
-		users.setUserPw(rs.getString("pw"));
-		users.setZipcode(rs.getString("zipcode"));
-		users.setAddress1(rs.getString("address1"));
-		users.setAddress2(rs.getString("address2"));
-		users.setRoles(rs.getString("roles"));
-		users.setJoinDate(rs.getTimestamp("join_date").toLocalDateTime());
+		prdImg.setPrdImgNo(rs.getLong("prd_img_no"));
+		prdImg.setPrdNo(rs.getLong("prd_no"));
+		prdImg.setFileName(rs.getString("file_name"));
+		prdImg.setLocation(rs.getString("location"));
 
-		return users;
+		return prdImg;
 	}
 }
