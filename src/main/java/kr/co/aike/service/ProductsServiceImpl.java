@@ -185,11 +185,7 @@ public class ProductsServiceImpl implements ProductsService {
 			if(cnt==1) {
 				//저장된 파일 db 저장
 				prdimg.setPrdNo(registerdProduct.getPrdNo());
-				if(multipartFile1.getOriginalFilename().equals("")){
-					prdimg.setFileName("none.png");
-				}else {
-					prdimg.setFileName(multipartFile1.getOriginalFilename());
-				}
+				prdimg.setFileName(multipartFile1.getOriginalFilename());
 				prdimg.setLocation("upper");
 				prdImgDao.insertProductImage(prdimg);
 				
@@ -207,14 +203,9 @@ public class ProductsServiceImpl implements ProductsService {
 			if(cnt==1) {
 				//저장된 파일 db 저장
 				prdimg.setPrdNo(registerdProduct.getPrdNo());
-				if(multipartFile2.getOriginalFilename().equals("")){
-					prdimg.setFileName("none.png");
-				}else {
-					prdimg.setFileName(multipartFile2.getOriginalFilename());
-				}
+				prdimg.setFileName(multipartFile2.getOriginalFilename());
 				prdimg.setLocation("lower");
 				prdImgDao.insertProductImage(prdimg);
-				
 			}
 			System.out.println(multipartFile2.toString());
 		}

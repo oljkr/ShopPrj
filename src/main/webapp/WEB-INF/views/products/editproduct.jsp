@@ -23,9 +23,9 @@
                       <label for="sort1" class="col-form-label col-md-3">1차 분류</label>
                       <div class="col-md-9">
                         <select class="form-control" id="sort1" name="sort1">
-                          <option value="m">Men</option>
-                          <option value="w">Women</option>
-                          <option value="k">Kids</option>
+                          <option value="m" <c:if test="${product.sort1 eq 'm'}">selected</c:if>>Men</option>
+                          <option value="w" <c:if test="${product.sort1 eq 'w'}">selected</c:if>>Women</option>
+                          <option value="k" <c:if test="${product.sort1 eq 'k'}">selected</c:if>>Kids</option>
                         </select>
                       </div>
                     </div>
@@ -35,9 +35,9 @@
                       <label for="sort2" class="col-form-label col-md-3">2차 분류</label>
                       <div class="col-md-9">
                         <select class="form-control" id="sort2" name="sort2">
-                          <option value="sho">신발</option>
-                          <option value="clo">의류</option>
-                          <option value="acc">용품</option>
+                          <option value="sho" <c:if test="${product.sort2 eq 'sho'}">selected</c:if>>신발</option>
+                          <option value="clo" <c:if test="${product.sort2 eq 'clo'}">selected</c:if>>의류</option>
+                          <option value="acc" <c:if test="${product.sort2 eq 'acc'}">selected</c:if>>용품</option>
                         </select>
                       </div>
                     </div>
