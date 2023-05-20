@@ -15,8 +15,24 @@
           <img id="imagePreview" src="./../storage/${upperImages[0].fileName}" alt="Image Preview" class="img-fluid">
         </div>
       </div>
-      <div class="col-lg-5 pr-5 mt-3">
-        <h2>${product.name}</h2>
+      <div class="col-lg-5 pr-5">
+
+        <c:catch>
+          <c:choose>
+            <c:when test="${authInfo.roles eq 'admin' }">
+
+              <div class="d-flex justify-content-end align-items-center">
+                <a href="${pageContext.request.contextPath}/products/edit" class="btn btn-outline-dark rounded-pill mr-2">상품 수정</a>
+                <a href="${pageContext.request.contextPath}/products/delete" class="btn btn-outline-danger rounded-pill">상품 삭제</a>
+              </div>
+
+            </c:when>
+          </c:choose>
+        </c:catch>
+        
+        <div class="mt-2">
+          <h2>${product.name}</h2>
+        </div>
         <h5>${product.price} 원</h5>
         <p class="mt-4">${product.shortDes}</p>
         <h4 class="mb-3">Options</h4>
@@ -113,7 +129,7 @@
         $('#imagePreview').attr('src', image);
       }, function() {
         //아래는 hover뒤에 기본으로 바뀔 이미지
-        $('#imagePreview').attr('src', './../storage/kuromi2.png');
+        $('#imagePreview').attr('src', './../storage/${upperImages[0].fileName}');
       });
       
       

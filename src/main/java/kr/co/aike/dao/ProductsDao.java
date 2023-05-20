@@ -119,5 +119,4 @@ public class ProductsDao {
 		
 		return results;
 	}//selectProductSize() end
-	
 }
