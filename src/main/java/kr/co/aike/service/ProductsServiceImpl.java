@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -161,6 +163,8 @@ public class ProductsServiceImpl implements ProductsService {
 			}
 		}
 		
+		System.out.println(request.getParameter("thumbnailimg"));
+		
 		//제일 먼저 등록된 상품을 대표 상품이라고 가정.
 		products.setColor((String) arr1.get(0));
 		products.setSize((String) arr2.get(0));
@@ -181,7 +185,11 @@ public class ProductsServiceImpl implements ProductsService {
 			if(cnt==1) {
 				//저장된 파일 db 저장
 				prdimg.setPrdNo(registerdProduct.getPrdNo());
-				prdimg.setFileName(multipartFile1.getOriginalFilename());
+				if(multipartFile1.getOriginalFilename().equals("")){
+					prdimg.setFileName("none.png");
+				}else {
+					prdimg.setFileName(multipartFile1.getOriginalFilename());
+				}
 				prdimg.setLocation("upper");
 				prdImgDao.insertProductImage(prdimg);
 				
@@ -199,7 +207,11 @@ public class ProductsServiceImpl implements ProductsService {
 			if(cnt==1) {
 				//저장된 파일 db 저장
 				prdimg.setPrdNo(registerdProduct.getPrdNo());
-				prdimg.setFileName(multipartFile1.getOriginalFilename());
+				if(multipartFile2.getOriginalFilename().equals("")){
+					prdimg.setFileName("none.png");
+				}else {
+					prdimg.setFileName(multipartFile2.getOriginalFilename());
+				}
 				prdimg.setLocation("lower");
 				prdImgDao.insertProductImage(prdimg);
 				
@@ -220,7 +232,6 @@ public class ProductsServiceImpl implements ProductsService {
 	public ModelAndView productDetail(Products products) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		Products foundproduct = new Products();
-		
 		//상품 정보 가져오기
 		foundproduct=prdDao.selectProductPrdNo(products);
 		mav.addObject("product",foundproduct);
@@ -243,4 +254,179 @@ public class ProductsServiceImpl implements ProductsService {
 		mav.setViewName("products/detail");
 		return mav;
 	}
+	
+	@Override
+	public ModelAndView preModifyProduct(@ModelAttribute Products products) throws Exception {
+		ModelAndView mav=new ModelAndView();
+		log.info(products.toString());
+		
+		Products foundproduct = new Products();
+		//상품 정보 가져오기
+		foundproduct=prdDao.selectProductPrdNo(products);
+		mav.addObject("product", foundproduct);
+		System.out.println(foundproduct.toString());
+		
+		//같은 디자인의 상품 번호 리스트 가져오기
+		List<String> numList = prdDao.selectPrdNumList(foundproduct);
+		System.out.println(numList);
+		mav.addObject("numList", numList);
+		
+		//상품 옵션 가져오기
+		List<String> color = prdDao.selectProductColor(foundproduct);
+		List<String> size = prdDao.selectProductSize(foundproduct);
+		String colorList="";
+		for(int x=0;x<color.size();++x) {
+			if(x==color.size()-1) {
+				colorList+=color.get(x);
+				break;
+			}
+			colorList+=color.get(x)+",";
+		}
+		System.out.println(colorList);
+		String sizeList="";
+		for(int x=0;x<size.size();++x) {
+			if(x==size.size()-1) {
+				sizeList+=size.get(x);
+				break;
+			}
+			sizeList+=size.get(x)+",";
+		}
+		System.out.println(sizeList);
+		mav.addObject("colorList",colorList);
+		mav.addObject("sizeList",sizeList);
+		
+		//상품 이미지 가져오기
+			//섬네일 이미지
+		List<PrdImg> upperImages = prdImgDao.selectImagesUpper(foundproduct);
+			//본문 이미지
+		List<PrdImg> lowerImages = prdImgDao.selectImagesLower(foundproduct);
+		mav.addObject("upperImages",upperImages);
+		mav.addObject("lowerImages",lowerImages);
+	
+		mav.setViewName("products/editproduct");
+		return mav;		
+	}
+	
+	@Override
+	public ModelAndView modifyProduct(Products products, HttpServletRequest request, @RequestParam("prdNum") String[] prdNumList, @RequestParam("existingUpperImgName") String[] upperImgList, @RequestParam("existingLowerImgName") String[] lowerImgList, @RequestParam("thumbnailimg") MultipartFile[] file1, @RequestParam("contentimg") MultipartFile[] file2) throws Exception {
+		ModelAndView mav=new ModelAndView();
+		System.out.println(products);
+		
+		String[] prdNum=prdNumList;
+		for(int x=0;x<prdNum.length;++x) {
+			//기존 등록된 상품 삭제
+			prdDao.deleteProduct(Long.parseLong(prdNum[x]));
+		}
+		
+		//상품 새로 등록
+		ArrayList arr1= parsing(products.getColor(), ",");
+		ArrayList arr2= parsing(products.getSize(), ",");
+		
+		int cnt=1;
+				
+		for(int y=0;y<arr1.size();++y) {
+			products.setColor((String) arr1.get(y));
+			for(int x=0;x<arr2.size();++x) {
+				products.setSize((String) arr2.get(x));
+				cnt = prdDao.insertProducts(products);
+				if(cnt==1) continue;
+				else if(cnt==0) cnt=0;
+			}
+		}
+				
+		//제일 먼저 등록된 상품을 대표 상품이라고 가정.
+		products.setColor((String) arr1.get(0));
+		products.setSize((String) arr2.get(0));
+		Products registerdProduct = prdDao.selectProduct(products);
+		System.out.println("results:"+registerdProduct);
+		
+		//이미지 등록 수정
+			//기존 이미지 파일 이름 리스트와 새로운 파일 리스트를 비교해서
+			//새로운 파일 리스트에 파일 이름이 none.png -> 기존 이미지 파일 db의 제품번호를 바꿈
+			//새로운 파일 리스트에 파일 이름이 있음 -> 기존 이미지 파일 db삭제하고 새로 등록함
+		String basePath = request.getRealPath("/storage");
+	
+		
+		//섬네일 파일 관련 코드
+		String[] previousImg=upperImgList;
+		MultipartFile[] thumbnails=file1;
+		
+		PrdImg prdimg=new PrdImg();
+		MultipartFile multipartFile1=null;
+		
+		for(int x=0;x<thumbnails.length;++x) {
+			multipartFile1 = thumbnails[x];
+			String filename = "temp";
+			if(multipartFile1.getOriginalFilename().equals("")) {
+				filename="none.png";
+			}
+			//파일 이름이 없음
+			if(filename.equals("none.png")) {
+				//기존 이미지 파일 db의 제품번호를 바꿈
+				cnt = prdImgDao.updatePrdNo(previousImg[x], registerdProduct.getPrdNo());
+				if(cnt==1) continue;
+				else if(cnt==0) cnt=0;
+			}else if(!filename.equals("none.png")) {
+			//파일 이름이 있음
+				//기존 이미지 파일 db삭제
+				cnt = prdImgDao.deleteImg(previousImg[x]);
+				if(cnt==1) continue;
+				else if(cnt==0) cnt=0;
+				//새로 등록
+				cnt=fileSave(basePath,multipartFile1);
+				if(cnt==1) {
+					//저장된 파일 db 저장
+					prdimg.setPrdNo(registerdProduct.getPrdNo());
+					if(multipartFile1.getOriginalFilename().equals("")){
+						prdimg.setFileName("none.png");
+					}else {
+						prdimg.setFileName(multipartFile1.getOriginalFilename());
+					}
+					prdimg.setLocation("upper");
+					prdImgDao.insertProductImage(prdimg);
+				}
+				System.out.println(multipartFile1.toString());
+			}
+		}
+		
+		//본문 파일 관련 코드
+		String[] previousImg2=lowerImgList;
+		System.out.println(previousImg2.toString());
+		MultipartFile[] contentImgs=file2;
+		System.out.println(contentImgs.toString());
+		
+		MultipartFile multipartFile2=null;
+		for(int x=0;x<previousImg2.length;++x) {
+			multipartFile2 = contentImgs[x];
+			System.out.println(multipartFile2.toString());
+			//파일 이름이 없음
+			if(multipartFile2.getOriginalFilename().equals("")) {
+				//기존 이미지 파일 db의 제품번호를 바꿈
+				cnt = prdImgDao.updatePrdNo(previousImg2[x], registerdProduct.getPrdNo());
+				if(cnt==1) continue;
+				else if(cnt==0) cnt=0;
+			}else if(!multipartFile2.getOriginalFilename().equals("")) {
+			//파일 이름이 있음
+				//기존 이미지 파일 db삭제
+				prdImgDao.deleteImg(previousImg2[x]);
+				//새로 등록
+				fileSave(basePath,multipartFile2);
+				//저장된 파일 db 저장
+				prdimg.setPrdNo(registerdProduct.getPrdNo());
+				prdimg.setFileName(multipartFile2.getOriginalFilename());
+				prdimg.setLocation("lower");
+				prdImgDao.insertProductImage(prdimg);
+				System.out.println(multipartFile2.toString());
+			}
+		}
+		
+		if(cnt==0){
+			mav=addMessages(0,"<div class=\"mb-3\"><i class=\"bi bi-exclamation-triangle display-1 text-primary\"></i></div>","","!! 상품 수정 실패 !!","다시시도","javascript:history.back()","메인으로","location.href=\"../home\"");
+		}else {
+			mav=addMessages(1,"<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>","","* ~ 상품 수정 성공 ~ *","메인으로","location.href=\"../home\"", "", "");
+		}//if end
+		mav.setViewName("products/msgView");
+		return mav;
+	}
+
 }

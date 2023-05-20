@@ -68,6 +68,32 @@ public class ProductsDao {
 		return results;
 	}//selectProductPrdNo() end
 	
+	// 상세 조회 - 같은 이름의 상품번호들 조회
+	public List<String> selectPrdNumList(Products products) throws Exception {
+		List<String> results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT prd_no ");
+			sql.append(" FROM products ");
+			sql.append(" WHERE name='"+products.getName()+"' ");
+			
+			RowMapper<String> rowMapper=new RowMapper<String>() {
+				@Override
+				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+					String proNo=rs.getString("prd_no");
+					return proNo;
+				}//mapRow() end
+			};//rowMapper end
+			
+			results = jdbcTemplate.query(sql.toString(), rowMapper);
+		}catch (Exception e) {
+			System.out.println("상품 번호 자료읽기 실패:" +e);
+			return null;
+		}//end
+		
+		return results;
+	}//selectPrdNumList() end
+	
 	// 상세 조회 - 상품의 컬러 옵션 조회
 	public List<String> selectProductColor(Products products) throws Exception {
 		List<String> results = null;
@@ -119,4 +145,18 @@ public class ProductsDao {
 		
 		return results;
 	}//selectProductSize() end
+	
+	// 상품번호로 상품 삭제
+	public int deleteProduct(Long prdNo) {
+		int cnt=0;
+		try {
+			sql=new StringBuilder();
+			sql.append(" DELETE FROM products  ");
+			sql.append(" WHERE prd_no = "+prdNo+" ");
+			cnt=jdbcTemplate.update(sql.toString());
+		}catch (Exception e) {
+			System.out.println("상품 삭제 실패:" + e);
+		}//end
+		return cnt;		
+	}//deleteProduct() end
 }

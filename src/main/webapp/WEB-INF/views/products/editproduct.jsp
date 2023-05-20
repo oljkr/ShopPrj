@@ -11,7 +11,11 @@
             </div>
             <div class="card-body">
               <form role="form" method="post" action="edit" enctype="multipart/form-data">
-
+              
+                <c:forEach var="prdnumList" items="${numList}" varStatus="status">
+                  <input type="hidden" name="prdNum" value="${prdnumList}">
+                </c:forEach>
+              
 
                 <div class="row">
                   <div class="form-group col-md-6">
@@ -44,7 +48,7 @@
                   <div class="row">
                     <label for="name" class="col-md-2">상품명</label>
                     <div class="col-md-9">
-                      <input type="text" class="form-control" id="name" name="name" />
+                      <input type="text" class="form-control" id="name" name="name" value="${product.name}" />
                     </div>
                   </div>
                 </div>
@@ -53,7 +57,7 @@
                   <div class="row">
                     <label for="color" class="col-md-2">컬러</label>
                     <div class="col-md-9">
-                      <input type="text" class="form-control" id="color" name="color" />
+                      <input type="text" class="form-control" id="color" name="color" value="${colorList}" />
                       <small class="form-text text-muted">예) Black,White,Blue,Red</small>
                     </div>
                   </div>
@@ -63,7 +67,7 @@
                   <div class="row">
                     <label for="size" class="col-md-2">사이즈</label>
                     <div class="col-md-9">
-                      <input type="text" class="form-control" id="size" name="size" />
+                      <input type="text" class="form-control" id="size" name="size" value="${sizeList}" />
                       <small class="form-text text-muted">예) 240,245,250,255</small>
                     </div>
                   </div>
@@ -75,7 +79,7 @@
                     <div class="row">
                       <label for="price" class="col-form-label col-md-3">상품가격</label>
                       <div class="col-md-9">
-                        <input type="text" class="form-control" id="price" name="price" />
+                        <input type="text" class="form-control" id="price" name="price" value="${product.price}" />
                       </div>
                     </div>
                   </div>
@@ -83,14 +87,16 @@
                     <div class="row">
                       <label for="stock" class="col-form-label col-md-3">상품수량</label>
                       <div class="col-md-9">
-                        <input type="text" class="form-control" id="stock" name="stock" />
+                        <input type="text" class="form-control" id="stock" name="stock" value="${product.stock}" />
                       </div>
                     </div>
                   </div>
                 </div>
-
-
-
+				
+				
+				<c:forEach var="thumbnailimagelist" items="${upperImages}" varStatus="status">
+				  <input type="hidden" id="custId" name="existingUpperImgName" value="${thumbnailimagelist.prdImgNo}">
+		        </c:forEach>
 
                 <div class="form-group col-md-12">
                   <div class="row">
@@ -99,7 +105,7 @@
                       <div class="custom-file">
                         <input type="file" class="custom-file-input" id="productImg1" name="thumbnailimg"
                           onchange="updateFileName(this)">
-                        <label class="custom-file-label" for="productImg1">Choose file</label>
+                        <label class="custom-file-label" for="productImg1">${upperImages[0].fileName}</label>
                       </div>
                     </div>
                   </div>
@@ -112,7 +118,7 @@
                       <div class="custom-file">
                         <input type="file" class="custom-file-input" id="productImg2" name="thumbnailimg"
                           onchange="updateFileName(this)">
-                        <label class="custom-file-label" for="productImg2">Choose file</label>
+                        <label class="custom-file-label" for="productImg2">${upperImages[1].fileName}</label>
                       </div>
                     </div>
                   </div>
@@ -125,7 +131,7 @@
                       <div class="custom-file">
                         <input type="file" class="custom-file-input" id="productImg3" name="thumbnailimg"
                           onchange="updateFileName(this)">
-                        <label class="custom-file-label" for="productImg3">Choose file</label>
+                        <label class="custom-file-label" for="productImg3">${upperImages[2].fileName}</label>
                       </div>
                     </div>
                   </div>
@@ -138,7 +144,7 @@
                       <div class="custom-file">
                         <input type="file" class="custom-file-input" id="productImg4" name="thumbnailimg"
                           onchange="updateFileName(this)">
-                        <label class="custom-file-label" for="productImg4">Choose file</label>
+                        <label class="custom-file-label" for="productImg4">${upperImages[3].fileName}</label>
                       </div>
                     </div>
                   </div>
@@ -146,9 +152,11 @@
 
                 <div class="form-group">
                   <label for="shortDes">간단 상품소개</label>
-                  <textarea class="form-control" rows="5" cols="50" id="shortDes" name="shortDes"></textarea>
+                  <textarea class="form-control" rows="5" cols="50" id="shortDes"
+                    name="shortDes">${product.shortDes}</textarea>
                 </div>
 
+                  <input type="hidden" id="custId" name="existingLowerImgName" value="${lowerImages[0].fileName}">
 
                 <div class="form-group col-md-12">
                   <div class="row">
@@ -157,7 +165,7 @@
                       <div class="custom-file">
                         <input type="file" class="custom-file-input" id="productImg5" name="contentimg"
                           onchange="updateFileName(this)">
-                        <label class="custom-file-label" for="productImg5">Choose file</label>
+                        <label class="custom-file-label" for="productImg5">${lowerImages[0].fileName}</label>
                       </div>
                     </div>
                   </div>
@@ -165,14 +173,17 @@
 
                 <div class="form-group">
                   <label for="fullDes">본문 상품소개</label>
-                  <textarea class="form-control" rows="5" cols="50" id="fullDes" name="fullDes" ></textarea>
+                  <textarea class="form-control" rows="5" cols="50" id="fullDes"
+                    name="fullDes">${product.fullDes}</textarea>
                 </div>
 
 
                 <div class="form-group row">
                   <div class="col-md-12 text-right">
-                    <button type="submit" id="addproduct_Btn" class="btn btn-primary rounded-pill mr-2 py-2 px-5">등록</button>
-                    <a href="${pageContext.request.contextPath}/home" class="btn btn-outline-secondary rounded-pill py-2 px-5">취소</a>
+                    <button type="submit" id="addproduct_Btn"
+                      class="btn btn-primary rounded-pill mr-2 py-2 px-5">등록</button>
+                    <a href="${pageContext.request.contextPath}/home"
+                      class="btn btn-outline-secondary rounded-pill py-2 px-5">취소</a>
                   </div>
                 </div>
 

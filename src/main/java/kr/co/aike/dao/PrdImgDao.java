@@ -65,4 +65,34 @@ public class PrdImgDao {
 		
 		return results;
 	}//selectImagesLower() end
+	
+	//제품 번호 변경
+	public int updatePrdNo(String prdImgNo, Long prdNo) {
+		int cnt=0;
+		try {
+			sql=new StringBuilder();
+			sql.append(" UPDATE prd_img ");
+			sql.append(" SET prd_no = '"+prdNo+"' ");
+			sql.append(" WHERE prd_img_no = '"+prdImgNo+"' ");
+			cnt=jdbcTemplate.update(sql.toString());
+		}catch (Exception e) {
+			System.out.println("이미지 정보의 제품 번호 바꾸기 실패:" + e);
+		}//end
+		return cnt;		
+	}//updatePrdNo() end
+	
+	//이미지번호로 기존 파일 정보 삭제
+	public int deleteImg(String prdImgNo) {
+		int cnt=0;
+		try {
+			sql=new StringBuilder();
+			sql.append(" DELETE FROM prd_img ");
+			sql.append(" WHERE prd_img_no = '"+prdImgNo+"' ");
+			cnt=jdbcTemplate.update(sql.toString());
+		}catch (Exception e) {
+			System.out.println("이미지 정보 삭제 실패:" + e);
+		}//end
+		return cnt;		
+	}//deleteImg() end
+	
 }

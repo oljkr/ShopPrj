@@ -22,7 +22,7 @@
             <c:when test="${authInfo.roles eq 'admin' }">
 
               <div class="d-flex justify-content-end align-items-center">
-                <a href="${pageContext.request.contextPath}/products/edit" class="btn btn-outline-dark rounded-pill mr-2">상품 수정</a>
+                <a href="${pageContext.request.contextPath}/products/edit?prdNo=${product.prdNo}" class="btn btn-outline-dark rounded-pill mr-2">상품 수정</a>
                 <a href="${pageContext.request.contextPath}/products/delete" class="btn btn-outline-danger rounded-pill">상품 삭제</a>
               </div>
 

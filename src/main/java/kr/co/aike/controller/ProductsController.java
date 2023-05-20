@@ -53,14 +53,16 @@ public class ProductsController {
 	}
 	
 	@GetMapping("/edit")
-	public String preEditProduct() throws Exception {
-		return "products/editproduct";
+	public ModelAndView preEditProduct(@ModelAttribute Products products) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = service.preModifyProduct(products);
+		return mav;
 	}
 	
 	@PostMapping("/edit")
-	public ModelAndView EditProduct(@ModelAttribute Products products, HttpServletRequest request, @RequestParam("thumbnailimg") MultipartFile[] file1, @RequestParam("contentimg") MultipartFile[] file2) throws Exception {
+	public ModelAndView EditProduct(@ModelAttribute Products products, HttpServletRequest request, @RequestParam("prdNum") String[] prdNumList,  @RequestParam("existingUpperImgName") String[] upperImgList, @RequestParam("existingLowerImgName") String[] lowerImgList, @RequestParam("thumbnailimg") MultipartFile[] file1, @RequestParam("contentimg") MultipartFile[] file2) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		mav = service.addProducts(products, request, file1, file2);
+		mav = service.modifyProduct(products, request, prdNumList, upperImgList, lowerImgList, file1, file2);
 		return mav;
 	}
 	
@@ -70,4 +72,5 @@ public class ProductsController {
 		mav = service.productDetail(products);
 		return mav;
 	}
+
 }
