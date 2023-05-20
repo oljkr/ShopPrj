@@ -95,7 +95,7 @@
 				
 				
 				<c:forEach var="thumbnailimagelist" items="${upperImages}" varStatus="status">
-				  <input type="hidden" id="custId" name="existingUpperImgName" value="${thumbnailimagelist.prdImgNo}">
+				  <input type="hidden" id="custId" name="existingUpperImgNo" value="${thumbnailimagelist.prdImgNo}">
 		        </c:forEach>
 
                 <div class="form-group col-md-12">
@@ -156,7 +156,7 @@
                     name="shortDes">${product.shortDes}</textarea>
                 </div>
 
-                  <input type="hidden" id="custId" name="existingLowerImgName" value="${lowerImages[0].fileName}">
+                  <input type="hidden" id="custId" name="existingLowerImgNo" value="${lowerImages[0].prdImgNo}">
 
                 <div class="form-group col-md-12">
                   <div class="row">

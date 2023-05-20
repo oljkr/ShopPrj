@@ -308,7 +308,7 @@ public class ProductsServiceImpl implements ProductsService {
 	}
 	
 	@Override
-	public ModelAndView modifyProduct(Products products, HttpServletRequest request, @RequestParam("prdNum") String[] prdNumList, @RequestParam("existingUpperImgName") String[] upperImgList, @RequestParam("existingLowerImgName") String[] lowerImgList, @RequestParam("thumbnailimg") MultipartFile[] file1, @RequestParam("contentimg") MultipartFile[] file2) throws Exception {
+	public ModelAndView modifyProduct(Products products, HttpServletRequest request, @RequestParam("prdNum") String[] prdNumList, @RequestParam("existingUpperImgNo") String[] upperImgNoList, @RequestParam("existingLowerImgNo") String[] lowerImgNoList, @RequestParam("thumbnailimg") MultipartFile[] file1, @RequestParam("contentimg") MultipartFile[] file2) throws Exception {
 		ModelAndView mav=new ModelAndView();
 		System.out.println(products);
 		
@@ -341,82 +341,70 @@ public class ProductsServiceImpl implements ProductsService {
 		System.out.println("results:"+registerdProduct);
 		
 		//이미지 등록 수정
-			//기존 이미지 파일 이름 리스트와 새로운 파일 리스트를 비교해서
-			//새로운 파일 리스트에 파일 이름이 none.png -> 기존 이미지 파일 db의 제품번호를 바꿈
-			//새로운 파일 리스트에 파일 이름이 있음 -> 기존 이미지 파일 db삭제하고 새로 등록함
+			//첨부한 파일 리스트를 확인해서
+			//새로운 파일 리스트에 파일 있음 -> 기존 이미지 파일 db삭제하고 새로 등록함
+			//새로운 파일 리스트에 파일 없음 -> 기존 이미지 파일 db의 제품번호를 바꿈
 		String basePath = request.getRealPath("/storage");
 	
 		
 		//섬네일 파일 관련 코드
-		String[] previousImg=upperImgList;
-		MultipartFile[] thumbnails=file1;
+		String[] previousImg=upperImgNoList;
+		MultipartFile[] fileList=file1;
 		
 		PrdImg prdimg=new PrdImg();
-		MultipartFile multipartFile1=null;
+		MultipartFile multipartFile=null;
 		
-		for(int x=0;x<thumbnails.length;++x) {
-			multipartFile1 = thumbnails[x];
-			String filename = "temp";
-			if(multipartFile1.getOriginalFilename().equals("")) {
-				filename="none.png";
-			}
-			//파일 이름이 없음
-			if(filename.equals("none.png")) {
-				//기존 이미지 파일 db의 제품번호를 바꿈
-				cnt = prdImgDao.updatePrdNo(previousImg[x], registerdProduct.getPrdNo());
-				if(cnt==1) continue;
-				else if(cnt==0) cnt=0;
-			}else if(!filename.equals("none.png")) {
-			//파일 이름이 있음
-				//기존 이미지 파일 db삭제
-				cnt = prdImgDao.deleteImg(previousImg[x]);
-				if(cnt==1) continue;
-				else if(cnt==0) cnt=0;
-				//새로 등록
-				cnt=fileSave(basePath,multipartFile1);
-				if(cnt==1) {
-					//저장된 파일 db 저장
-					prdimg.setPrdNo(registerdProduct.getPrdNo());
-					if(multipartFile1.getOriginalFilename().equals("")){
-						prdimg.setFileName("none.png");
-					}else {
-						prdimg.setFileName(multipartFile1.getOriginalFilename());
-					}
-					prdimg.setLocation("upper");
-					prdImgDao.insertProductImage(prdimg);
+		for(int x=0;x<fileList.length;++x) {
+			multipartFile = fileList[x];
+			if(!multipartFile.isEmpty()) {
+				//기존 이미지 파일 삭제
+				System.out.println(basePath);
+					//파일명 가져오기
+				String filename = prdImgDao.getImgFileName(previousImg[x]);
+				String pathname = basePath+"\\"+filename;
+				File file = new File(pathname);
+				if(file.exists()) {
+					if (file.delete()) {
+	                    System.out.println("파일이 삭제 되었습니다~");
+	                } else {
+	                    System.out.println("파일 삭제 실패!!");
+	                }
 				}
-				System.out.println(multipartFile1.toString());
+				
+				//기존 이미지 파일 db삭제
+				prdImgDao.deleteImg(previousImg[x]);
+				prdimg.setPrdNo(registerdProduct.getPrdNo());
+				prdimg.setFileName(multipartFile.getOriginalFilename());
+				prdimg.setLocation("upper");
+				prdImgDao.insertProductImage(prdimg);
+				
+				//새로운 첨부 파일 저장
+				cnt=fileSave(basePath,multipartFile);
+			}else {
+				//기존 이미지 파일 db의 제품번호를 바꿈
+				prdImgDao.updatePrdNo(previousImg[x], registerdProduct.getPrdNo());
 			}
 		}
 		
 		//본문 파일 관련 코드
-		String[] previousImg2=lowerImgList;
-		System.out.println(previousImg2.toString());
-		MultipartFile[] contentImgs=file2;
-		System.out.println(contentImgs.toString());
+		previousImg=lowerImgNoList;
+		fileList=file2;
 		
-		MultipartFile multipartFile2=null;
-		for(int x=0;x<previousImg2.length;++x) {
-			multipartFile2 = contentImgs[x];
-			System.out.println(multipartFile2.toString());
-			//파일 이름이 없음
-			if(multipartFile2.getOriginalFilename().equals("")) {
-				//기존 이미지 파일 db의 제품번호를 바꿈
-				cnt = prdImgDao.updatePrdNo(previousImg2[x], registerdProduct.getPrdNo());
-				if(cnt==1) continue;
-				else if(cnt==0) cnt=0;
-			}else if(!multipartFile2.getOriginalFilename().equals("")) {
-			//파일 이름이 있음
+		for(int x=0;x<fileList.length;++x) {
+			multipartFile = fileList[x];
+			if(!multipartFile.isEmpty()) {
+				//파일 저장
+				cnt=fileSave(basePath,multipartFile);
+				
 				//기존 이미지 파일 db삭제
-				prdImgDao.deleteImg(previousImg2[x]);
-				//새로 등록
-				fileSave(basePath,multipartFile2);
-				//저장된 파일 db 저장
+				prdImgDao.deleteImg(previousImg[x]);
 				prdimg.setPrdNo(registerdProduct.getPrdNo());
-				prdimg.setFileName(multipartFile2.getOriginalFilename());
+				prdimg.setFileName(multipartFile.getOriginalFilename());
 				prdimg.setLocation("lower");
 				prdImgDao.insertProductImage(prdimg);
-				System.out.println(multipartFile2.toString());
+			}else {
+				//기존 이미지 파일 db의 제품번호를 바꿈
+				prdImgDao.updatePrdNo(previousImg[x], registerdProduct.getPrdNo());
 			}
 		}
 		

@@ -66,6 +66,20 @@ public class PrdImgDao {
 		return results;
 	}//selectImagesLower() end
 	
+	//이미지 번호로 이미지 파일 이름 조회
+	public String getImgFileName(String prdImgNo) {
+		String filename=null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" select file_name from prd_img ");
+			sql.append(" where prd_img_no="+prdImgNo+" ");
+			filename=jdbcTemplate.queryForObject(sql.toString(), String.class);		
+		}catch (Exception e) {
+			System.out.println("이미지 파일 이름 조회 실패:" + e);
+		}//end
+		return filename;
+	}//getImgFileName() end
+	
 	//제품 번호 변경
 	public int updatePrdNo(String prdImgNo, Long prdNo) {
 		int cnt=0;
