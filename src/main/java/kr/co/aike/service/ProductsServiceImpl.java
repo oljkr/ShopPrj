@@ -142,6 +142,28 @@ public class ProductsServiceImpl implements ProductsService {
 		
 	}
 	
+	public int saveImg(Products registerdProduct, String basePath, MultipartFile[] multipartFiles,String location) throws Exception {
+		int cnt=0;
+		
+		PrdImg prdimg=new PrdImg();
+		int filecnt=0;
+		MultipartFile multipartFile=null;
+		for(int x=0;x<multipartFiles.length;++x) {
+			multipartFile = multipartFiles[x];
+			cnt=fileSave(basePath,multipartFile);
+			if(cnt==1) {
+				//저장된 파일 db 저장
+				prdimg.setPrdNo(registerdProduct.getPrdNo());
+				prdimg.setFileName(multipartFile.getOriginalFilename());
+				prdimg.setLocation(location);
+				prdImgDao.insertProductImage(prdimg);
+				
+			}
+			System.out.println(multipartFile.toString());
+		}
+		return cnt;
+	}
+	
 	@Override
 	public ModelAndView addProducts(Products products, HttpServletRequest request, @RequestParam("thumbnailimg") MultipartFile[] file1, @RequestParam("contentimg") MultipartFile[] file2) throws Exception {
 		ModelAndView mav=new ModelAndView();
@@ -173,42 +195,10 @@ public class ProductsServiceImpl implements ProductsService {
 		//이미지 등록
 		String basePath = request.getRealPath("/storage");
 		
-		//섬네일 파일 관련 코드 <input type='file' name='thumbnailimg'>
-		MultipartFile[] thumbnails=file1;
-		
-		PrdImg prdimg=new PrdImg();
-		int filecnt=0;
-		MultipartFile multipartFile1=null;
-		for(int x=0;x<thumbnails.length;++x) {
-			multipartFile1 = thumbnails[x];
-			cnt=fileSave(basePath,multipartFile1);
-			if(cnt==1) {
-				//저장된 파일 db 저장
-				prdimg.setPrdNo(registerdProduct.getPrdNo());
-				prdimg.setFileName(multipartFile1.getOriginalFilename());
-				prdimg.setLocation("upper");
-				prdImgDao.insertProductImage(prdimg);
-				
-			}
-			System.out.println(multipartFile1.toString());
-		}
-		
-		//본문 파일 관련 코드 <input type='file' name='contentimg'>
-		MultipartFile[] contentImgs=file2;
-		
-		MultipartFile multipartFile2=null;
-		for(int x=0;x<contentImgs.length;++x) {
-			multipartFile2 = contentImgs[x];
-			cnt=fileSave(basePath,multipartFile2);
-			if(cnt==1) {
-				//저장된 파일 db 저장
-				prdimg.setPrdNo(registerdProduct.getPrdNo());
-				prdimg.setFileName(multipartFile2.getOriginalFilename());
-				prdimg.setLocation("lower");
-				prdImgDao.insertProductImage(prdimg);
-			}
-			System.out.println(multipartFile2.toString());
-		}
+		//섬네일 파일 이미지 저장 및 등록
+		cnt = saveImg(registerdProduct, basePath, file1, "upper");
+		//본문 파일 이미지 저장 및 등록
+		cnt = saveImg(registerdProduct, basePath, file2, "lower");
 		
 		if(cnt==0){
 			mav=addMessages(0,"<div class=\"mb-3\"><i class=\"bi bi-exclamation-triangle display-1 text-primary\"></i></div>","","!! 상품 등록 실패 !!","다시시도","javascript:history.back()","메인으로","location.href=\"../home\"");
@@ -219,20 +209,12 @@ public class ProductsServiceImpl implements ProductsService {
 		return mav;
 	}
 	
-	@Override
-	public ModelAndView productDetail(Products products) throws Exception {
+	public ModelAndView getProductInfo(Products products) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		Products foundproduct = new Products();
 		//상품 정보 가져오기
-		foundproduct=prdDao.selectProductPrdNo(products);
+		Products foundproduct=prdDao.selectProductPrdNo(products);
 		mav.addObject("product",foundproduct);
 		System.out.println(foundproduct.toString());
-		
-		//상품 옵션 가져오기
-		List<String> color = prdDao.selectProductColor(foundproduct);
-		List<String> size = prdDao.selectProductSize(foundproduct);
-		mav.addObject("color",color);
-		mav.addObject("size",size);
 		
 		//상품 이미지 가져오기
 			//섬네일 이미지
@@ -242,6 +224,21 @@ public class ProductsServiceImpl implements ProductsService {
 		mav.addObject("upperImages",upperImages);
 		mav.addObject("lowerImages",lowerImages);
 		
+		return mav;
+	}
+	
+	@Override
+	public ModelAndView productDetail(Products products) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = getProductInfo(products);
+		
+		//상품 옵션 가져오기
+		Products foundproduct=prdDao.selectProductPrdNo(products);
+		List<String> color = prdDao.selectProductColor(foundproduct);
+		List<String> size = prdDao.selectProductSize(foundproduct);
+		mav.addObject("color",color);
+		mav.addObject("size",size);
+		
 		mav.setViewName("products/detail");
 		return mav;
 	}
@@ -249,13 +246,10 @@ public class ProductsServiceImpl implements ProductsService {
 	@Override
 	public ModelAndView preModifyProduct(@ModelAttribute Products products) throws Exception {
 		ModelAndView mav=new ModelAndView();
-		log.info(products.toString());
 		
-		Products foundproduct = new Products();
-		//상품 정보 가져오기
-		foundproduct=prdDao.selectProductPrdNo(products);
-		mav.addObject("product", foundproduct);
-		System.out.println(foundproduct.toString());
+		mav = getProductInfo(products);
+		
+		Products foundproduct = prdDao.selectProductPrdNo(products);
 		
 		//같은 디자인의 상품 번호 리스트 가져오기
 		List<String> numList = prdDao.selectPrdNumList(foundproduct);
@@ -286,16 +280,57 @@ public class ProductsServiceImpl implements ProductsService {
 		mav.addObject("colorList",colorList);
 		mav.addObject("sizeList",sizeList);
 		
-		//상품 이미지 가져오기
-			//섬네일 이미지
-		List<PrdImg> upperImages = prdImgDao.selectImagesUpper(foundproduct);
-			//본문 이미지
-		List<PrdImg> lowerImages = prdImgDao.selectImagesLower(foundproduct);
-		mav.addObject("upperImages",upperImages);
-		mav.addObject("lowerImages",lowerImages);
-	
 		mav.setViewName("products/editproduct");
 		return mav;		
+	}
+	
+	public void deleteImages(String basePath, String filename, String imgNo) {
+		String pathname = basePath+"\\"+filename;
+		File file = new File(pathname);
+		if(file.exists()) {
+			if (file.delete()) {
+                System.out.println("파일이 삭제 되었습니다~");
+            } else {
+                System.out.println("파일 삭제 실패!!");
+            }
+		}
+		
+		//기존 이미지 파일 db삭제
+		prdImgDao.deleteImg(imgNo);
+		
+	}
+	
+	public int modifyImages(Products registerdProduct, String[] imgNoList, MultipartFile[] fileList, String basePath, String location) throws Exception {
+		int cnt=0;
+		String[] previousImg=imgNoList;
+		
+		PrdImg prdimg=new PrdImg();
+		MultipartFile multipartFile=null;
+		
+		for(int x=0;x<fileList.length;++x) {
+			multipartFile = fileList[x];
+			if(!multipartFile.isEmpty()) {
+				//기존 이미지 파일 삭제
+				System.out.println(basePath);
+					//파일명 가져오기
+				String filename = prdImgDao.getImgFileName(previousImg[x]);
+				deleteImages(basePath, filename, previousImg[x]);
+				
+				//새로운 이미지 파일 db 저장
+				prdimg.setPrdNo(registerdProduct.getPrdNo());
+				prdimg.setFileName(multipartFile.getOriginalFilename());
+				prdimg.setLocation(location);
+				prdImgDao.insertProductImage(prdimg);
+				
+				//새로운 첨부 파일 저장
+				cnt=fileSave(basePath,multipartFile);
+			}else {
+				//기존 이미지 파일 db의 제품번호를 바꿈
+				prdImgDao.updatePrdNo(previousImg[x], registerdProduct.getPrdNo());
+			}
+		}
+		
+		return cnt;
 	}
 	
 	@Override
@@ -337,71 +372,10 @@ public class ProductsServiceImpl implements ProductsService {
 			//새로운 파일 리스트에 파일 없음 -> 기존 이미지 파일 db의 제품번호를 바꿈
 		String basePath = request.getRealPath("/storage");
 	
-		
 		//섬네일 파일 관련 코드
-		String[] previousImg=upperImgNoList;
-		MultipartFile[] fileList=file1;
-		
-		PrdImg prdimg=new PrdImg();
-		MultipartFile multipartFile=null;
-		
-		for(int x=0;x<fileList.length;++x) {
-			multipartFile = fileList[x];
-			if(!multipartFile.isEmpty()) {
-				//기존 이미지 파일 삭제
-				System.out.println(basePath);
-					//파일명 가져오기
-				String filename = prdImgDao.getImgFileName(previousImg[x]);
-				String pathname = basePath+"\\"+filename;
-				File file = new File(pathname);
-				if(file.exists()) {
-					if (file.delete()) {
-	                    System.out.println("파일이 삭제 되었습니다~");
-	                } else {
-	                    System.out.println("파일 삭제 실패!!");
-	                }
-				}
-				
-				//기존 이미지 파일 db삭제
-				prdImgDao.deleteImg(previousImg[x]);
-				
-				//새로운 이미지 파일 db 저장
-				prdimg.setPrdNo(registerdProduct.getPrdNo());
-				prdimg.setFileName(multipartFile.getOriginalFilename());
-				prdimg.setLocation("upper");
-				prdImgDao.insertProductImage(prdimg);
-				
-				//새로운 첨부 파일 저장
-				cnt=fileSave(basePath,multipartFile);
-			}else {
-				//기존 이미지 파일 db의 제품번호를 바꿈
-				prdImgDao.updatePrdNo(previousImg[x], registerdProduct.getPrdNo());
-			}
-		}
-		
+		cnt = modifyImages(registerdProduct, upperImgNoList, file1, basePath, "upper");
 		//본문 파일 관련 코드
-		previousImg=lowerImgNoList;
-		fileList=file2;
-		
-		for(int x=0;x<fileList.length;++x) {
-			multipartFile = fileList[x];
-			if(!multipartFile.isEmpty()) {
-				//파일 저장
-				cnt=fileSave(basePath,multipartFile);
-				
-				//기존 이미지 파일 db삭제
-				prdImgDao.deleteImg(previousImg[x]);
-				
-				//새로운 이미지 파일 db 저장
-				prdimg.setPrdNo(registerdProduct.getPrdNo());
-				prdimg.setFileName(multipartFile.getOriginalFilename());
-				prdimg.setLocation("lower");
-				prdImgDao.insertProductImage(prdimg);
-			}else {
-				//기존 이미지 파일 db의 제품번호를 바꿈
-				prdImgDao.updatePrdNo(previousImg[x], registerdProduct.getPrdNo());
-			}
-		}
+		cnt = modifyImages(registerdProduct, lowerImgNoList, file2, basePath, "lower");
 		
 		if(cnt==0){
 			mav=addMessages(0,"<div class=\"mb-3\"><i class=\"bi bi-exclamation-triangle display-1 text-primary\"></i></div>","","!! 상품 수정 실패 !!","다시시도","javascript:history.back()","메인으로","location.href=\"../home\"");
@@ -441,34 +415,12 @@ public class ProductsServiceImpl implements ProductsService {
 			//섬네일 이미지
 		for(int x=0;x<upperImages.size();++x) {
 			prdImg = upperImages.get(x);
-			String pathname = basePath+"\\"+prdImg.getFileName();
-			System.out.println(pathname);
-			File file = new File(pathname);
-			if(file.exists()) {
-				if (file.delete()) {
-	                System.out.println("파일이 삭제 되었습니다~");
-	            } else {
-	                System.out.println("파일 삭제 실패!!");
-	            }
-			}
-			//기존 이미지 파일 db삭제
-			prdImgDao.deleteImg(String.valueOf(prdImg.getPrdImgNo()));
+			deleteImages(basePath, prdImg.getFileName(), String.valueOf(prdImg.getPrdImgNo()));
 		}
 			//본문 이미지
 		for(int x=0;x<lowerImages.size();++x) {
 			prdImg = lowerImages.get(x);
-			String pathname = basePath+"\\"+prdImg.getFileName();
-			System.out.println(pathname);
-			File file = new File(pathname);
-			if(file.exists()) {
-				if (file.delete()) {
-	                System.out.println("파일이 삭제 되었습니다~");
-	            } else {
-	                System.out.println("파일 삭제 실패!!");
-	            }
-			}
-			//기존 이미지 파일 db삭제
-			prdImgDao.deleteImg(String.valueOf(prdImg.getPrdImgNo()));
+			deleteImages(basePath, prdImg.getFileName(), String.valueOf(prdImg.getPrdImgNo()));
 		}		
 		
 		//상품명과 같은 상품의 상품번호를 다 가져옴
