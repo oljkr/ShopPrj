@@ -52,9 +52,9 @@
                   Men
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink1">신발</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=m&sort2=sho">신발</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=m&sort2=clo">의류</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=m&sort2=acc">용품</a>
                 </div>
               </li>
               <li class="nav-item dropdown">
@@ -63,9 +63,9 @@
                   Women
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/detail?prdNo=1">신발</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=w&sort2=sho">신발</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=w&sort2=clo">의류</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=w&sort2=acc">용품</a>
                 </div>
               </li>
               <li class="nav-item dropdown">

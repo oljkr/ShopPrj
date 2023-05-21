@@ -86,5 +86,12 @@ public class ProductsController {
 		mav = service.deleteProduct(products,request);
 		return mav;
 	}
+	
+	@GetMapping("/list")
+	public ModelAndView productList(@ModelAttribute Products products) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = service.list(products);
+		return mav;
+	}
 
 }

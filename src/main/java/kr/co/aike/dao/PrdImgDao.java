@@ -109,4 +109,22 @@ public class PrdImgDao {
 		return cnt;		
 	}//deleteImg() end
 	
+	// 상품 번호로 대표 이미지 조회(upper 중 이미지 번호 최솟값 선택)
+	public PrdImg selectListImgPrdNo(Products products) throws Exception {
+		PrdImg results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT min(prd_img_no) as prd_img_no, prd_no, file_name, location ");
+			sql.append(" FROM prd_img ");
+			sql.append(" where location = 'upper' and prd_no="+products.getPrdNo()+" group by prd_no order by prd_img_no ");
+			
+			results = jdbcTemplate.queryForObject(sql.toString(), new PrdImgRowMapper());
+		}catch (Exception e) {
+			System.out.println("상품 대표 이미지 자료읽기 실패:" +e);
+			return null;
+		}//end
+		
+		return results;
+	}//selectListImgPrdNo() end
+	
 }

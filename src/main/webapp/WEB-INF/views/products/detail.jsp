@@ -71,7 +71,7 @@
           <div id="description" class="mt-4">
           <div id="contentImages" class="mb-5">
             <c:forEach var="contentimagelist" items="${lowerImages}" varStatus="status">
-              <img src="./../storage/${contentimagelist.fileName}">
+              <img src="./../storage/${contentimagelist.fileName}" style="max-width: 100%;">
             </c:forEach>
           </div>
             ${product.fullDes}

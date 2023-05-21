@@ -186,4 +186,90 @@ public class ProductsDao {
 		}//end
 		return cnt;		
 	}//deleteProduct() end
+	
+	//목록 조회 - 전체 갯수 조회
+	public int totalRowCount() {
+		int cnt=0;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT COUNT(*) FROM products ");
+			cnt=jdbcTemplate.queryForObject(sql.toString(), Integer.class);		
+		}catch (Exception e) {
+			System.out.println("전체 상품 갯수 조회 실패:" + e);
+		}//end
+		return cnt;
+	}//totalRowCount() end
+	
+	//목록 조회 - 상품 분류에 따른 전체 갯수 조회
+	public int totalRowCountAsSort(Products products) {
+		int cnt=0;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT COUNT(distinct name) FROM products ");
+			sql.append(" where sort1='"+products.getSort1()+"' and sort2='"+products.getSort2()+"' ");
+			cnt=jdbcTemplate.queryForObject(sql.toString(), Integer.class);		
+		}catch (Exception e) {
+			System.out.println("카테고리의 전체 상품 갯수 조회 실패:" + e);
+		}//end
+		return cnt;
+	}//totalRowCountAsSort() end
+	
+	
+	//목록 조회 - 전체 상품 페이징 조회
+	public List<Products> list(int start, int end) {
+		List<Products> list=null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT * ");
+			sql.append(" FROM ( SELECT *, @ROWNUM :=@ROWNUM+1 AS ROWNUM ");
+			sql.append("           FROM ( SELECT prd_no, sort1, sort2, name, color, size, short_des, full_des, stock, price, order_cnt ");
+			sql.append("                      FROM ( SELECT AA.prd_no, AA.sort1, AA.sort2, AA.name, AA.color, AA.size, AA.short_des, AA.full_des, AA.stock, AA.price, AA.order_cnt ");
+			sql.append("                                 FROM products AA ) BB, (SELECT @ROWNUM := 0) TMP ");
+			sql.append("          ORDER BY prd_no DESC ) CC ) DD ");
+			sql.append(" WHERE "+start+"<=ROWNUM AND ROWNUM<="+end+" ");
+			
+			list=jdbcTemplate.query(sql.toString(), new ProductsRowMapper());
+		}catch (Exception e) {
+			System.out.println("전체 상품 페이징실패:" +e);
+		}//end
+		return list;
+	}//list() end
+	
+//	//목록 조회 - 카테고리 상품 페이징 조회
+//	public List<Products> listAsSort(Products products, int start, int end) {
+//		List<Products> list=null;
+//		try {
+//			sql=new StringBuilder();
+//			sql.append(" SELECT * ");
+//			sql.append(" FROM ( SELECT *, @ROWNUM :=@ROWNUM+1 AS ROWNUM ");
+//			sql.append("           FROM ( SELECT prd_no, sort1, sort2, name, color, size, short_des, full_des, stock, price, order_cnt ");
+//			sql.append("                      FROM ( SELECT min(AA.prd_no) as prd_no, AA.sort1, AA.sort2, AA.name, AA.color, AA.size, AA.short_des, AA.full_des, AA.stock, AA.price, AA.order_cnt ");
+//			sql.append("                                 FROM products AA where sort1='"+products.getSort1()+"' and sort2='"+products.getSort2()+"' group by name) BB, (SELECT @ROWNUM := 0) TMP ");
+//			sql.append("          ORDER BY prd_no DESC ) CC ) DD ");
+//			sql.append(" WHERE "+start+"<=ROWNUM AND ROWNUM<="+end+" ");
+//			
+//			list=jdbcTemplate.query(sql.toString(), new ProductsRowMapper());
+//		}catch (Exception e) {
+//			System.out.println("카테고리 상품 페이징실패:" +e);
+//		}//end
+//		return list;
+//	}//list() end
+	
+	//목록 조회 - 카테고리 상품 페이징 조회
+	public List<Products> listAsSort(Products products, int start, int numPerPage) {
+		List<Products> list=null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT ROW_NUMBER() OVER (ORDER BY BB.prd_no DESC) as rownum, ");
+			sql.append(" BB.prd_no, BB.sort1, BB.sort2, BB.name, BB.color, BB.size, BB.short_des, BB.full_des, BB.stock, BB.price, BB.order_cnt ");
+			sql.append(" FROM (SELECT min(AA.prd_no) as prd_no, AA.sort1, AA.sort2, AA.name, AA.color, AA.size, AA.short_des, AA.full_des, AA.stock, AA.price, AA.order_cnt ");
+			sql.append("                                 FROM products AA where sort1='"+products.getSort1()+"' and sort2='"+products.getSort2()+"' group by name) BB ");
+			sql.append(" ORDER BY BB.prd_no DESC LIMIT "+start+","+numPerPage+" ");
+			
+			list=jdbcTemplate.query(sql.toString(), new ProductsRowMapper());
+		}catch (Exception e) {
+			System.out.println("카테고리 상품 페이징실패:" +e);
+		}//end
+		return list;
+	}//list() end
 }

@@ -61,6 +61,22 @@
             width: 90%;
             height: 90%;
           }
+
+          .product {
+            margin-bottom: 20px;
+          }
+          .product img {
+            width: 100%;
+            height: auto;
+          }
+          .product-name {
+            font-weight: bold;
+            margin-top: 10px;
+          }
+          .product-price {
+            color: #888;
+          }
+          
         </style>
 
         <script src="./../js/check.js"></script>

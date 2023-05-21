@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -289,9 +290,9 @@ public class ProductsServiceImpl implements ProductsService {
 		File file = new File(pathname);
 		if(file.exists()) {
 			if (file.delete()) {
-                System.out.println("파일이 삭제 되었습니다~");
+                System.out.println(filename+" 파일이 삭제 되었습니다~");
             } else {
-                System.out.println("파일 삭제 실패!!");
+                System.out.println(filename+" 파일 삭제 실패!!");
             }
 		}
 		
@@ -436,6 +437,110 @@ public class ProductsServiceImpl implements ProductsService {
 			mav=addMessages(1,"<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>","","* ~ 상품 삭제 성공 ~ *","메인으로","location.href=\"../home\"", "", "");
 		}//if end
 		mav.setViewName("products/msgView");
+		return mav;
+	}
+	
+	public String headPhraseSort1(Products products) {
+		ModelAndView mav=new ModelAndView();
+		String temp1=products.getSort1();
+		String headPhrase="";
+		if(temp1.equals("m")) {
+			headPhrase+="남성";
+			headPhrase+=headPhraseSort2(products);
+		}else if(temp1.equals("w")) {
+			headPhrase+="여성";
+			headPhrase+=headPhraseSort2(products);
+		}else if(temp1.equals("k")) {
+			headPhrase+="키즈";
+			headPhrase+=headPhraseSort2(products);
+		}
+		
+		return headPhrase;
+	}
+	
+	public String headPhraseSort2(Products products) {
+		String temp2=products.getSort2();
+		
+		if(temp2.equals("sho")) {
+			return "신발";
+		}else if(temp2.equals("clo")) {
+			return "의류";
+		}else if(temp2.equals("acc")) {
+			return "용품";
+		}
+		return null;
+	}
+	
+	public ModelAndView pagingAsSort(Products products,String pageNum) throws Exception {
+		ModelAndView mav=new ModelAndView();
+		
+		int totalRowCount=prdDao.totalRowCountAsSort(products); //총 상품 갯수 - 37개라고 가정
+				
+		//페이징
+		int numPerPage = 6; //한 페이지당 레코드 갯수
+		int pagePerBlock = 10; //페이지 리스트
+		
+		//String pageNum=req.getParameter("pageNum");
+		if(pageNum==null) {
+			pageNum="1";
+		}
+		
+		//현재 페이지가 2페이지라고 하면, //12페이지라고 하면,
+		int currentPage =Integer.parseInt(pageNum);		// 2	//12
+		int startRow    =(currentPage-1)*numPerPage;  // 6 = (2-1)*5+1	//56=(12-1)*5+1
+		int endRow      =currentPage*numPerPage;		// 10 = 2*5		//60=12*5
+		
+		//페이지 수
+		double totcnt =(double)totalRowCount/numPerPage; // 7.4=37줄/5개씩
+		int totalPage =(int)Math.ceil(totcnt);			 // 8 실제로 8페이지 끝....
+		
+		//현재 페이지가 2페이지라고 하면, 
+		double d_page =(double)currentPage/pagePerBlock; //1.2 = 12/10		//1.2 = 12/10
+		int Pages     =(int)Math.ceil(d_page)-1; // 0 = 1-1					//1 = 2-1
+		int startPage =Pages*pagePerBlock+1;		 // 1 = 0*10+1			//11 = 1*10+1
+		int endPage   =startPage+pagePerBlock-1; // 10 =  0 + 10 - 1		//20 = 11+10-1
+		
+		List<Products> list=null;
+		List<PrdImg> imgList=new ArrayList<PrdImg>();
+		PrdImg temp=null;
+		if(totalRowCount>0) {
+			list=prdDao.listAsSort(products, startRow, numPerPage);
+			for(int x=0;x<list.size();++x) {
+				System.out.println(list.get(x).toString());
+				temp = prdImgDao.selectListImgPrdNo(list.get(x));
+				System.out.println(temp);
+				imgList.add(temp);
+			}
+		}else {
+			list=Collections.EMPTY_LIST;
+		}//if end
+
+		mav.addObject("pageNum", currentPage);
+		mav.addObject("count", totalRowCount);
+		mav.addObject("totalPage", totalPage);
+		mav.addObject("startPage", startPage);
+		mav.addObject("endPage", endPage);
+		mav.addObject("list", list);
+		mav.addObject("imgList", imgList);
+		
+		return mav;
+		
+	}
+	
+	@Override
+	public ModelAndView list(@ModelAttribute Products products) throws Exception {
+		ModelAndView mav=new ModelAndView();
+		System.out.println(products.toString());
+		mav = pagingAsSort(products, "1");
+		//분류 문구 설정
+		String headPhrase = headPhraseSort1(products);
+			//해당 카테고리의 제품들 모두 검색하고 갯수 리턴
+		int productCount = prdDao.totalRowCountAsSort(products);
+		headPhrase+="("+productCount+")";
+		mav.addObject("productCount",productCount);
+		mav.addObject("headPhrase",headPhrase);
+		
+		mav.setViewName("products/list");
 		return mav;
 	}
 

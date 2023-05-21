@@ -26,5 +26,7 @@ public interface ProductsService {
 	public ModelAndView preDeleteProduct(Products products) throws Exception;
 
 	public ModelAndView deleteProduct(Products products, HttpServletRequest request) throws Exception;
+
+	public ModelAndView list(Products products) throws Exception;
 	
 }
