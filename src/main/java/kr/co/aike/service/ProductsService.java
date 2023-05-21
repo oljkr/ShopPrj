@@ -22,5 +22,9 @@ public interface ProductsService {
 
 	public ModelAndView modifyProduct(Products products, HttpServletRequest request, String[] prdNumList, String[] upperImgList, String[] lowerImgList, MultipartFile[] file1,
 			MultipartFile[] file2) throws Exception;
+
+	public ModelAndView preDeleteProduct(Products products) throws Exception;
+
+	public ModelAndView deleteProduct(Products products, HttpServletRequest request) throws Exception;
 	
 }

@@ -60,7 +60,7 @@ public class ProductsController {
 	}
 	
 	@PostMapping("/edit")
-	public ModelAndView EditProduct(@ModelAttribute Products products, HttpServletRequest request, @RequestParam("prdNum") String[] prdNumList,  @RequestParam("existingUpperImgNo") String[] upperImgNoList, @RequestParam("existingLowerImgNo") String[] lowerImgNoList, @RequestParam("thumbnailimg") MultipartFile[] file1, @RequestParam("contentimg") MultipartFile[] file2) throws Exception {
+	public ModelAndView editProduct(@ModelAttribute Products products, HttpServletRequest request, @RequestParam("prdNum") String[] prdNumList,  @RequestParam("existingUpperImgNo") String[] upperImgNoList, @RequestParam("existingLowerImgNo") String[] lowerImgNoList, @RequestParam("thumbnailimg") MultipartFile[] file1, @RequestParam("contentimg") MultipartFile[] file2) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		mav = service.modifyProduct(products, request, prdNumList, upperImgNoList, lowerImgNoList, file1, file2);
 		return mav;
@@ -70,6 +70,20 @@ public class ProductsController {
 	public ModelAndView productDetail(@ModelAttribute Products products) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		mav = service.productDetail(products);
+		return mav;
+	}
+	
+	@GetMapping("/predelete")
+	public ModelAndView preDeleteProduct(@ModelAttribute Products products) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = service.preDeleteProduct(products);
+		return mav;
+	}
+	
+	@GetMapping("/delete")
+	public ModelAndView deleteProduct(@ModelAttribute Products products, HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = service.deleteProduct(products,request);
 		return mav;
 	}
 

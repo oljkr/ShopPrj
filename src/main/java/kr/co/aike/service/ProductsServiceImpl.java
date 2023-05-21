@@ -364,6 +364,8 @@ public class ProductsServiceImpl implements ProductsService {
 				
 				//기존 이미지 파일 db삭제
 				prdImgDao.deleteImg(previousImg[x]);
+				
+				//새로운 이미지 파일 db 저장
 				prdimg.setPrdNo(registerdProduct.getPrdNo());
 				prdimg.setFileName(multipartFile.getOriginalFilename());
 				prdimg.setLocation("upper");
@@ -389,6 +391,8 @@ public class ProductsServiceImpl implements ProductsService {
 				
 				//기존 이미지 파일 db삭제
 				prdImgDao.deleteImg(previousImg[x]);
+				
+				//새로운 이미지 파일 db 저장
 				prdimg.setPrdNo(registerdProduct.getPrdNo());
 				prdimg.setFileName(multipartFile.getOriginalFilename());
 				prdimg.setLocation("lower");
@@ -403,6 +407,81 @@ public class ProductsServiceImpl implements ProductsService {
 			mav=addMessages(0,"<div class=\"mb-3\"><i class=\"bi bi-exclamation-triangle display-1 text-primary\"></i></div>","","!! 상품 수정 실패 !!","다시시도","javascript:history.back()","메인으로","location.href=\"../home\"");
 		}else {
 			mav=addMessages(1,"<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>","","* ~ 상품 수정 성공 ~ *","메인으로","location.href=\"../home\"", "", "");
+		}//if end
+		mav.setViewName("products/msgView");
+		return mav;
+	}
+	
+	@Override
+	public ModelAndView preDeleteProduct(@ModelAttribute Products products) throws Exception {
+		ModelAndView mav=new ModelAndView();
+		Long prdNo = products.getPrdNo();
+		mav=addMessages(2,"","상품을 삭제하시겠습니까?","","상품 삭제하기","location.href=\"./delete?prdNo="+prdNo+"\"","메인으로","location.href=\"../home\"");
+		mav.setViewName("products/msgView");
+		return mav;
+	}
+	
+	@Override
+	public ModelAndView deleteProduct(@ModelAttribute Products products, HttpServletRequest request) throws Exception {
+		ModelAndView mav=new ModelAndView();
+		int cnt=0;
+		
+		System.out.println(products.toString());
+		
+		//상품 이미지 가져오기
+			//섬네일 이미지
+		List<PrdImg> upperImages = prdImgDao.selectImagesUpper(products);
+			//본문 이미지
+		List<PrdImg> lowerImages = prdImgDao.selectImagesLower(products);
+		
+		String basePath = request.getRealPath("/storage");
+		
+		//상품 이미지 삭제
+		PrdImg prdImg = null;
+			//섬네일 이미지
+		for(int x=0;x<upperImages.size();++x) {
+			prdImg = upperImages.get(x);
+			String pathname = basePath+"\\"+prdImg.getFileName();
+			System.out.println(pathname);
+			File file = new File(pathname);
+			if(file.exists()) {
+				if (file.delete()) {
+	                System.out.println("파일이 삭제 되었습니다~");
+	            } else {
+	                System.out.println("파일 삭제 실패!!");
+	            }
+			}
+			//기존 이미지 파일 db삭제
+			prdImgDao.deleteImg(String.valueOf(prdImg.getPrdImgNo()));
+		}
+			//본문 이미지
+		for(int x=0;x<lowerImages.size();++x) {
+			prdImg = lowerImages.get(x);
+			String pathname = basePath+"\\"+prdImg.getFileName();
+			System.out.println(pathname);
+			File file = new File(pathname);
+			if(file.exists()) {
+				if (file.delete()) {
+	                System.out.println("파일이 삭제 되었습니다~");
+	            } else {
+	                System.out.println("파일 삭제 실패!!");
+	            }
+			}
+			//기존 이미지 파일 db삭제
+			prdImgDao.deleteImg(String.valueOf(prdImg.getPrdImgNo()));
+		}		
+		
+		//상품명과 같은 상품의 상품번호를 다 가져옴
+		List<Long> prdNoList = prdDao.selectPrdNumListAsNum(products.getPrdNo());
+		//상품번호 조회한 것으로 상품 정보 다 삭제
+		for(int x=0;x<prdNoList.size();++x) {
+			cnt = prdDao.deleteProduct(prdNoList.get(x));
+		}
+		
+		if(cnt==0){
+			mav=addMessages(0,"<div class=\"mb-3\"><i class=\"bi bi-exclamation-triangle display-1 text-primary\"></i></div>","","!! 상품 삭제 실패 !!","다시시도","javascript:history.back()","메인으로","location.href=\"../home\"");
+		}else {
+			mav=addMessages(1,"<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>","","* ~ 상품 삭제 성공 ~ *","메인으로","location.href=\"../home\"", "", "");
 		}//if end
 		mav.setViewName("products/msgView");
 		return mav;

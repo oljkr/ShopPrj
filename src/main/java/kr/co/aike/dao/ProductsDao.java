@@ -94,6 +94,33 @@ public class ProductsDao {
 		return results;
 	}//selectPrdNumList() end
 	
+	// 상세 조회 - 상품번호로 찾은 상품과 같은 이름의 상품번호들 조회
+	public List<Long> selectPrdNumListAsNum(Long prdNo) throws Exception {
+		List<Long> results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT prd_no ");
+			sql.append(" FROM products ");
+			sql.append(" where name = ( ");
+			sql.append(" 				select name from products where prd_no = "+prdNo+" ) ");
+			
+			RowMapper<Long> rowMapper=new RowMapper<Long>() {
+				@Override
+				public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
+					Long proNo=rs.getLong("prd_no");
+					return proNo;
+				}//mapRow() end
+			};//rowMapper end
+			
+			results = jdbcTemplate.query(sql.toString(), rowMapper);
+		}catch (Exception e) {
+			System.out.println("상품 번호 자료읽기 실패:" +e);
+			return null;
+		}//end
+		
+		return results;
+	}//selectPrdNumListAsNum() end
+	
 	// 상세 조회 - 상품의 컬러 옵션 조회
 	public List<String> selectProductColor(Products products) throws Exception {
 		List<String> results = null;
