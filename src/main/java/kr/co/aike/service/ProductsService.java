@@ -1,5 +1,9 @@
 package kr.co.aike.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -28,5 +32,7 @@ public interface ProductsService {
 	public ModelAndView deleteProduct(Products products, HttpServletRequest request) throws Exception;
 
 	public ModelAndView list(Products products) throws Exception;
+
+	public HashMap<String, List<?>> addList(@RequestParam Map<String, Object> map) throws Exception;
 	
 }

@@ -6,8 +6,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.mail.internet.MimeMessage;
@@ -542,6 +544,38 @@ public class ProductsServiceImpl implements ProductsService {
 		
 		mav.setViewName("products/list");
 		return mav;
+	}
+	
+	@Override
+	public HashMap<String, List<?>> addList(@RequestParam Map<String, Object> map) throws Exception {
+		List<Products> list = new ArrayList();
+		List<PrdImg> imgList=new ArrayList<PrdImg>();
+		
+		System.out.println((String)map.get("cnt"));
+        System.out.println((String)map.get("sort1"));
+        System.out.println((String)map.get("sort2"));
+        
+        int cnt=Integer.valueOf((String) map.get("cnt"))-1; //Object여서 형 변환
+        Products products = new Products();
+        products.setSort1((String)map.get("sort1"));
+        products.setSort2((String)map.get("sort2"));
+        
+        int numPerPage = 6; //한 페이지당 레코드 갯수
+		list=prdDao.listAsSort(products, cnt, numPerPage);
+		PrdImg temp=null;
+		for(int x=0;x<list.size();++x) {
+			System.out.println(list.get(x).toString());
+			temp = prdImgDao.selectListImgPrdNo(list.get(x));
+			System.out.println(temp);
+			imgList.add(temp);
+		}			
+		System.out.println(list.toString());
+		System.out.println(imgList.toString());
+		
+		HashMap<String, List<?>> responseMap = new HashMap<>();
+		responseMap.put("product", list);
+		responseMap.put("img", imgList);
+		return responseMap;
 	}
 
 }

@@ -3,6 +3,10 @@ package kr.co.aike.controller;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -92,6 +96,14 @@ public class ProductsController {
 		ModelAndView mav = new ModelAndView();
 		mav = service.list(products);
 		return mav;
+	}
+	
+	@ResponseBody
+	@PostMapping("/getlist")
+	public HashMap<String, List<?>> addList(@RequestParam Map<String, Object> map) throws Exception {
+		HashMap<String, List<?>> list = new HashMap();
+		list = service.addList(map);
+		return list;
 	}
 
 }
