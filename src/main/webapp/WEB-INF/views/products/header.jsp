@@ -76,7 +76,20 @@
           .product-price {
             color: #888;
           }
-          
+
+          .search-box {
+            display: none;
+            position: absolute;
+            top: 56px; /* Adjust the top position as needed */
+            left: 0;
+            width: 100%;
+            height: 200px; /* Adjust the height as needed */
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            padding: 10px;
+            z-index: 999;
+          }
+
         </style>
 
         <script src="./../js/check.js"></script>
@@ -140,7 +153,7 @@
               <!-- Search form start -->
               <form class="form-inline my-4 my-lg-0 mx-2">
                 <div class="input-group" style="width:250px">
-                  <input class="form-control mr-sm-2 form-rounded" type="search" placeholder="Search"
+                  <input id="search-input" class="form-control mr-sm-2 form-rounded" type="search" placeholder="Search"
                     aria-label="Search">
                   <div class="input-group-append">
                     <button class="btn btn-outline-dark my-2 my-sm-0 form-rounded" type="submit">
@@ -171,10 +184,6 @@
                           <c:otherwise>
                             <c:choose>
                               <c:when test="${authInfo.roles eq 'admin' }">
-
-                                
-
-
 
 
                                 <a href="#" class="text-dark mr-2">
@@ -240,3 +249,28 @@
         </nav>
 
         <!-- navbar end -->
+
+        <!-- Search box start -->
+        <div id="search-box" class="search-box">
+          <!-- Content of the search box -->
+          <p>Search results go here...</p>
+        </div>
+        <!-- Search box end -->
+
+        <script>
+          // Function to show/hide the search box based on the input value
+          function toggleSearchBox() {
+            var searchInput = document.getElementById('search-input');
+            var searchBox = document.getElementById('search-box');
+
+            if (searchInput.value.trim() !== '') {
+              searchBox.style.display = 'block';
+            } else {
+              searchBox.style.display = 'none';
+            }
+          }
+
+          // Add event listener to the search input
+          var searchInput = document.getElementById('search-input');
+          searchInput.addEventListener('keyup', toggleSearchBox);
+        </script>
