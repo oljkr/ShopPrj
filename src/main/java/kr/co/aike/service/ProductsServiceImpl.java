@@ -577,5 +577,30 @@ public class ProductsServiceImpl implements ProductsService {
 		responseMap.put("img", imgList);
 		return responseMap;
 	}
+	
+	@Override
+	public HashMap<String, List<?>> searchProduct(@RequestParam Map<String, Object> map) throws Exception {
+		List<Products> list = new ArrayList();
+		List<PrdImg> imgList=new ArrayList<PrdImg>();
+		
+		System.out.println((String)map.get("searchword"));
+		
+		String searchWord = (String)map.get("searchword");
+		list=prdDao.searchProduct(searchWord);
+		PrdImg temp=null;
+		for(int x=0;x<list.size();++x) {
+			System.out.println(list.get(x).toString());
+			temp = prdImgDao.selectListImgPrdNo(list.get(x));
+			System.out.println(temp);
+			imgList.add(temp);
+		}			
+		System.out.println(list.toString());
+		System.out.println(imgList.toString());
+	
+		HashMap<String, List<?>> responseMap = new HashMap<>();
+		responseMap.put("product", list);
+		responseMap.put("img", imgList);
+		return responseMap;
+	}
 
 }

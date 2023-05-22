@@ -34,5 +34,7 @@ public interface ProductsService {
 	public ModelAndView list(Products products) throws Exception;
 
 	public HashMap<String, List<?>> addList(@RequestParam Map<String, Object> map) throws Exception;
+
+	public HashMap<String, List<?>> searchProduct(Map<String, Object> map) throws Exception;
 	
 }

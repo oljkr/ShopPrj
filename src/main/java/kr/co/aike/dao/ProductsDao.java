@@ -272,4 +272,23 @@ public class ProductsDao {
 		}//end
 		return list;
 	}//list() end
+	
+	// 상세 조회 - 같은 이름의 상품번호들 조회(주문순으로 정렬해서 상위 5개 데이터만 가져옴)
+	public List<Products> searchProduct(String searchWord) throws Exception {
+		List<Products> results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT prd_no, sort1, sort2, name, color, size, short_des, full_des, stock, price, order_cnt ");
+			sql.append(" FROM products ");
+			sql.append(" WHERE name LIKE '%"+searchWord+"%' ");
+			sql.append(" group by name order by order_cnt desc LIMIT 5 ");
+			
+			results = jdbcTemplate.query(sql.toString(), new ProductsRowMapper());
+		}catch (Exception e) {
+			System.out.println("검색어로 상품 자료읽기 실패:" +e);
+			return null;
+		}//end
+		
+		return results;
+	}//searchProduct() end
 }

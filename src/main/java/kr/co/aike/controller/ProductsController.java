@@ -105,5 +105,13 @@ public class ProductsController {
 		list = service.addList(map);
 		return list;
 	}
+	
+	@ResponseBody
+	@PostMapping("/searchproduct")
+	public HashMap<String, List<?>> searchProduct(@RequestParam Map<String, Object> map) throws Exception {
+		HashMap<String, List<?>> list = new HashMap();
+		list = service.searchProduct(map);
+		return list;
+	}
 
 }

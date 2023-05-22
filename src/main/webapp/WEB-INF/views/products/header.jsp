@@ -84,10 +84,27 @@
             left: 0;
             width: 100%;
             height: 200px; /* Adjust the height as needed */
-            background-color: #f1f1f1;
+            background-color: #080707;
             border: 1px solid #ccc;
             padding: 10px;
             z-index: 999;
+            
+          }
+
+          .search-result {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 15%; /* Adjust the width as needed */
+            margin: 10px;
+            
+          }
+
+          .search-result img {
+            width: 100%;
+            max-height: 150px; /* Adjust the max-height as needed */
+            object-fit: cover; /*이건 적용 안 되는 듯...ㅠ*/
+            margin-bottom: 10px;
           }
 
         </style>
@@ -251,26 +268,158 @@
         <!-- navbar end -->
 
         <!-- Search box start -->
-        <div id="search-box" class="search-box">
-          <!-- Content of the search box -->
-          <p>Search results go here...</p>
+        <div id="search-box">
+          <div id="search-results" class="d-flex flex-wrap justify-content-center"></div>
         </div>
         <!-- Search box end -->
 
         <script>
-          // Function to show/hide the search box based on the input value
-          function toggleSearchBox() {
-            var searchInput = document.getElementById('search-input');
-            var searchBox = document.getElementById('search-box');
+          // // Function to show/hide the search box based on the input value
+          // function toggleSearchBox() {
+          //   var searchInput = document.getElementById('search-input');
+          //   var searchBox = document.getElementById('search-box');
 
-            if (searchInput.value.trim() !== '') {
-              searchBox.style.display = 'block';
-            } else {
-              searchBox.style.display = 'none';
-            }
-          }
+          //   $.ajax({
+          //   url: "searchproduct"
+          //   , type: "post"
+          //   , data: { "searchword": searchInput.value.trim() }
+          //   , dataType: "json"
+          //   , error: function (request, status, error) {
+          //     alert("에러:" + error);
+          //     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+          //   }//error callback함수
+          //   , success: hello//success callback함수
+          // });
 
-          // Add event listener to the search input
-          var searchInput = document.getElementById('search-input');
-          searchInput.addEventListener('keyup', toggleSearchBox);
+          //   if (searchInput.value.trim() !== '') {
+          //     searchBox.style.display = 'block';
+          //   } else {
+          //     searchBox.style.display = 'none';
+          //   }
+
+          //   function hello(data){
+          //     var productList = data.product;
+          //     for(var i=0; i< productList.length; i++) {
+          //       alert(productList[i].introduce+" "+productList[i].name + " " + productList[i].price);
+          //       //temp += list[i].price + " " + list[i].name + " " + list[i].introduce + " ";						
+          //     }
+          //   }
+          // }
+
+          // // Add event listener to the search input
+          // var searchInput = document.getElementById('search-input');
+          // searchInput.addEventListener('keyup', toggleSearchBox);
+//===============================================================================
+
+function displaySearchResults() {
+    var searchInput = document.getElementById('search-input');
+    var searchResultsDiv = document.getElementById('search-results');
+    var searchTerm = searchInput.value.trim();
+  
+    // Clear previous search results
+    searchResultsDiv.innerHTML = '';
+  
+    // Perform search and display results
+    if (searchTerm !== '') {
+
+      $.ajax({
+        url: "searchproduct"
+        , type: "post"
+        , data: { "searchword": searchTerm }
+        , dataType: "json"
+        , error: function (request, status, error) {
+          alert("에러:" + error);
+          alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+        }//error callback함수
+        , success: showSearchResults//success callback함수
+      });
+
+      function showSearchResults(data){
+        $("#search-results").empty(); //검색할 때마다 추가되지 않게 결과 창 비움
+        var searchResults = data.product;
+        var searchResultsImg = data.img;
+        // for(var i=0; i< productList.length; i++) {
+        //   alert(productList[i].prdNo+" "+productList[i].name + " " + productList[i].price);		
+        // }
+
+        // // Simulated search results
+        // var searchResults = [
+        //   { imageSrc: 'product1.jpg', productName: 'Product 1', productPrice: '$19.99' },
+        //   { imageSrc: 'product2.jpg', productName: 'Product 2', productPrice: '$24.99' },
+        //   { imageSrc: 'product3.jpg', productName: 'Product 3', productPrice: '$29.99' },
+        //   { imageSrc: 'product4.jpg', productName: 'Product 4', productPrice: '$34.99' },
+        //   { imageSrc: 'product5.jpg', productName: 'Product 5', productPrice: '$39.99' }
+        // ];
+    
+        // Create and append search result items to the search results div
+        var temp=0;
+        searchResults.forEach(function (result) {
+          var resultItem = document.createElement('div');
+          resultItem.className = 'search-result';
+    
+          var image = document.createElement('img');
+          image.src = "./../storage/"+searchResultsImg[temp].fileName;
+          image.alt = result.productName;
+
+          // Attach a link to the image
+          var link = document.createElement('a');
+          link.href = '${pageContext.request.contextPath}/products/detail?prdNo=' + result.prdNo
+    
+          var productName = document.createElement('p');
+          productName.textContent = result.name;
+    
+          var productPrice = document.createElement('p');
+          productPrice.textContent = result.price+" 원";
+    
+          link.appendChild(image);
+          resultItem.appendChild(link);
+          resultItem.appendChild(productName);
+          resultItem.appendChild(productPrice);
+          searchResultsDiv.appendChild(resultItem);
+
+          temp++;
+        });
+      }
+
+      // // Simulated search results
+      // var searchResults = [
+      //   { imageSrc: 'product1.jpg', productName: 'Product 1', productPrice: '$19.99' },
+      //   { imageSrc: 'product2.jpg', productName: 'Product 2', productPrice: '$24.99' },
+      //   { imageSrc: 'product3.jpg', productName: 'Product 3', productPrice: '$29.99' },
+      //   { imageSrc: 'product4.jpg', productName: 'Product 4', productPrice: '$34.99' },
+      //   { imageSrc: 'product5.jpg', productName: 'Product 5', productPrice: '$39.99' }
+      // ];
+  
+      // // Create and append search result items to the search results div
+      // searchResults.forEach(function (result) {
+      //   var resultItem = document.createElement('div');
+      //   resultItem.className = 'search-result';
+  
+      //   var image = document.createElement('img');
+      //   image.src = result.imageSrc;
+      //   image.alt = result.productName;
+  
+      //   var productName = document.createElement('p');
+      //   productName.textContent = result.productName;
+  
+      //   var productPrice = document.createElement('p');
+      //   productPrice.textContent = result.productPrice;
+  
+      //   resultItem.appendChild(image);
+      //   resultItem.appendChild(productName);
+      //   resultItem.appendChild(productPrice);
+      //   searchResultsDiv.appendChild(resultItem);
+      // });
+  
+      // Display the search results
+      searchResultsDiv.style.display = 'block';
+    } else {
+      // Hide the search results
+      searchResultsDiv.style.display = 'none';
+    }
+  }
+  
+  // Add event listener to the search input
+  var searchInput = document.getElementById('search-input');
+  searchInput.addEventListener('keyup', displaySearchResults);
         </script>
