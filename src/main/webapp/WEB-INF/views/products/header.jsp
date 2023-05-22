@@ -65,48 +65,61 @@
           .product {
             margin-bottom: 20px;
           }
+
           .product img {
             width: 100%;
             height: auto;
           }
+
           .product-name {
             font-weight: bold;
             margin-top: 10px;
           }
+
           .product-price {
             color: #888;
           }
 
-          .search-box {
+          #justwrap {
+            position: relative;
+          }
+
+          #search-box {
             display: none;
             position: absolute;
-            top: 56px; /* Adjust the top position as needed */
+            /* Adjust the top position as needed */
             left: 0;
             width: 100%;
-            height: 200px; /* Adjust the height as needed */
-            background-color: #080707;
-            border: 1px solid #ccc;
+            height: 300px;
+            /* Adjust the height as needed */
+
+            /* background-color: #080707;
+            border: 1px solid #ccc; */
+            
             padding: 10px;
             z-index: 999;
-            
+
           }
 
           .search-result {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 15%; /* Adjust the width as needed */
+            width: 15%;
+            /* Adjust the width as needed */
             margin: 10px;
-            
+            position: absolute;
+            z-index: 999;
           }
 
           .search-result img {
             width: 100%;
-            max-height: 150px; /* Adjust the max-height as needed */
-            object-fit: cover; /*이건 적용 안 되는 듯...ㅠ*/
+            max-height: 150px;
+            /* Adjust the max-height as needed */
+            object-fit: cover;
+            /*이건 적용 안 되는 듯...ㅠ*/
             margin-bottom: 10px;
           }
-
         </style>
 
         <script src="./../js/check.js"></script>
@@ -114,16 +127,17 @@
         <link rel="stylesheet" href="./../css/style.css" />
         <link rel="stylesheet" as="style" crossorigin
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
-          
-          <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
-	  	  <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
+
+        <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+        <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
 
       </head>
 
       <body>
 
         <!-- navbar start -->
-        <nav class="navbar navbar-expand-sm navbar-light" style="background-color: white; border-bottom: 1px solid gray;">
+        <nav class="navbar navbar-expand-sm navbar-light"
+          style="background-color: white; border-bottom: 1px solid gray;">
 
           <!-- <a class="navbar-brand" href="${pageContext.request.contextPath}/home">Navbar</a> -->
           <a href="${pageContext.request.contextPath}/home">
@@ -135,8 +149,8 @@
           <div class="collapse navbar-collapse justify-content-between" id="collapsibleNavbar">
             <ul class="navbar-nav" style="margin-left:1%">
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-dark font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle text-dark font-weight-bold" href="#" id="navbarDropdown"
+                  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Men
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -146,8 +160,8 @@
                 </div>
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-dark font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle text-dark font-weight-bold" href="#" id="navbarDropdown"
+                  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Women
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -157,8 +171,8 @@
                 </div>
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-dark font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle text-dark font-weight-bold" href="#" id="navbarDropdown"
+                  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Kids
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -268,158 +282,92 @@
         <!-- navbar end -->
 
         <!-- Search box start -->
-        <div id="search-box">
-          <div id="search-results" class="d-flex flex-wrap justify-content-center"></div>
+        <div id="justwrap">
+          <div id="search-box" class="d-flex flex-wrap justify-content-center">
+            <div id="search-results"></div>
+          </div>
         </div>
         <!-- Search box end -->
 
         <script>
-          // // Function to show/hide the search box based on the input value
-          // function toggleSearchBox() {
-          //   var searchInput = document.getElementById('search-input');
-          //   var searchBox = document.getElementById('search-box');
 
-          //   $.ajax({
-          //   url: "searchproduct"
-          //   , type: "post"
-          //   , data: { "searchword": searchInput.value.trim() }
-          //   , dataType: "json"
-          //   , error: function (request, status, error) {
-          //     alert("에러:" + error);
-          //     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-          //   }//error callback함수
-          //   , success: hello//success callback함수
-          // });
+          function displaySearchResults() {
+            var searchBox = document.getElementById('search-box');
 
-          //   if (searchInput.value.trim() !== '') {
-          //     searchBox.style.display = 'block';
-          //   } else {
-          //     searchBox.style.display = 'none';
-          //   }
 
-          //   function hello(data){
-          //     var productList = data.product;
-          //     for(var i=0; i< productList.length; i++) {
-          //       alert(productList[i].introduce+" "+productList[i].name + " " + productList[i].price);
-          //       //temp += list[i].price + " " + list[i].name + " " + list[i].introduce + " ";						
-          //     }
-          //   }
-          // }
+            var searchInput = document.getElementById('search-input');
+            var searchResultsDiv = document.getElementById('search-results');
+            var searchTerm = searchInput.value.trim();
 
-          // // Add event listener to the search input
-          // var searchInput = document.getElementById('search-input');
-          // searchInput.addEventListener('keyup', toggleSearchBox);
-//===============================================================================
+            // Clear previous search results
+            searchResultsDiv.innerHTML = '';
 
-function displaySearchResults() {
-    var searchInput = document.getElementById('search-input');
-    var searchResultsDiv = document.getElementById('search-results');
-    var searchTerm = searchInput.value.trim();
-  
-    // Clear previous search results
-    searchResultsDiv.innerHTML = '';
-  
-    // Perform search and display results
-    if (searchTerm !== '') {
+            // Perform search and display results
+            if (searchTerm !== '') {
 
-      $.ajax({
-        url: "searchproduct"
-        , type: "post"
-        , data: { "searchword": searchTerm }
-        , dataType: "json"
-        , error: function (request, status, error) {
-          alert("에러:" + error);
-          alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-        }//error callback함수
-        , success: showSearchResults//success callback함수
-      });
+              $.ajax({
+                url: "searchproduct"
+                , type: "post"
+                , data: { "searchword": searchTerm }
+                , dataType: "json"
+                , error: function (request, status, error) {
+                  alert("에러:" + error);
+                  alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }//error callback함수
+                , success: showSearchResults//success callback함수
+              });
 
-      function showSearchResults(data){
-        $("#search-results").empty(); //검색할 때마다 추가되지 않게 결과 창 비움
-        var searchResults = data.product;
-        var searchResultsImg = data.img;
-        // for(var i=0; i< productList.length; i++) {
-        //   alert(productList[i].prdNo+" "+productList[i].name + " " + productList[i].price);		
-        // }
+              function showSearchResults(data) {
+                $("#search-results").empty(); //검색할 때마다 추가되지 않게 결과 창 비움
+                var searchResults = data.product;
+                var searchResultsImg = data.img;
 
-        // // Simulated search results
-        // var searchResults = [
-        //   { imageSrc: 'product1.jpg', productName: 'Product 1', productPrice: '$19.99' },
-        //   { imageSrc: 'product2.jpg', productName: 'Product 2', productPrice: '$24.99' },
-        //   { imageSrc: 'product3.jpg', productName: 'Product 3', productPrice: '$29.99' },
-        //   { imageSrc: 'product4.jpg', productName: 'Product 4', productPrice: '$34.99' },
-        //   { imageSrc: 'product5.jpg', productName: 'Product 5', productPrice: '$39.99' }
-        // ];
-    
-        // Create and append search result items to the search results div
-        var temp=0;
-        searchResults.forEach(function (result) {
-          var resultItem = document.createElement('div');
-          resultItem.className = 'search-result';
-    
-          var image = document.createElement('img');
-          image.src = "./../storage/"+searchResultsImg[temp].fileName;
-          image.alt = result.productName;
+                // Create and append search result items to the search results div
+                var temp = 0;
+                searchResults.forEach(function (result) {
+                  var resultItem = document.createElement('div');
+                  resultItem.className = 'search-result';
 
-          // Attach a link to the image
-          var link = document.createElement('a');
-          link.href = '${pageContext.request.contextPath}/products/detail?prdNo=' + result.prdNo
-    
-          var productName = document.createElement('p');
-          productName.textContent = result.name;
-    
-          var productPrice = document.createElement('p');
-          productPrice.textContent = result.price+" 원";
-    
-          link.appendChild(image);
-          resultItem.appendChild(link);
-          resultItem.appendChild(productName);
-          resultItem.appendChild(productPrice);
-          searchResultsDiv.appendChild(resultItem);
+                  var image = document.createElement('img');
+                  image.src = "./../storage/" + searchResultsImg[temp].fileName;
+                  image.alt = result.productName;
 
-          temp++;
-        });
-      }
+                  // Attach a link to the image
+                  var link = document.createElement('a');
+                  link.href = '${pageContext.request.contextPath}/products/detail?prdNo=' + result.prdNo
 
-      // // Simulated search results
-      // var searchResults = [
-      //   { imageSrc: 'product1.jpg', productName: 'Product 1', productPrice: '$19.99' },
-      //   { imageSrc: 'product2.jpg', productName: 'Product 2', productPrice: '$24.99' },
-      //   { imageSrc: 'product3.jpg', productName: 'Product 3', productPrice: '$29.99' },
-      //   { imageSrc: 'product4.jpg', productName: 'Product 4', productPrice: '$34.99' },
-      //   { imageSrc: 'product5.jpg', productName: 'Product 5', productPrice: '$39.99' }
-      // ];
-  
-      // // Create and append search result items to the search results div
-      // searchResults.forEach(function (result) {
-      //   var resultItem = document.createElement('div');
-      //   resultItem.className = 'search-result';
-  
-      //   var image = document.createElement('img');
-      //   image.src = result.imageSrc;
-      //   image.alt = result.productName;
-  
-      //   var productName = document.createElement('p');
-      //   productName.textContent = result.productName;
-  
-      //   var productPrice = document.createElement('p');
-      //   productPrice.textContent = result.productPrice;
-  
-      //   resultItem.appendChild(image);
-      //   resultItem.appendChild(productName);
-      //   resultItem.appendChild(productPrice);
-      //   searchResultsDiv.appendChild(resultItem);
-      // });
-  
-      // Display the search results
-      searchResultsDiv.style.display = 'block';
-    } else {
-      // Hide the search results
-      searchResultsDiv.style.display = 'none';
-    }
-  }
-  
-  // Add event listener to the search input
-  var searchInput = document.getElementById('search-input');
-  searchInput.addEventListener('keyup', displaySearchResults);
+                  var productName = document.createElement('p');
+                  productName.textContent = result.name;
+
+                  var productPrice = document.createElement('p');
+                  productPrice.textContent = result.price + " 원";
+
+                  link.appendChild(image);
+                  resultItem.appendChild(link);
+                  resultItem.appendChild(productName);
+                  resultItem.appendChild(productPrice);
+                  searchResultsDiv.appendChild(resultItem);
+
+                  temp++;
+
+                  var leftt=temp*15-3;                  
+              
+                  resultItem.style.left = leftt+"%";
+                });
+              }
+
+              // Display the search results
+              searchResultsDiv.style.display = 'flex';
+              searchResultsDiv.style.height = '200px';
+              searchBox.style.backgroundColor='#ffffff';
+              searchBox.style.border='1px solid #ccc';
+            } else {
+              // Hide the search results
+              searchResultsDiv.style.display = 'none';
+            }
+          }
+
+          // Add event listener to the search input
+          var searchInput = document.getElementById('search-input');
+          searchInput.addEventListener('keyup', displaySearchResults);
         </script>
