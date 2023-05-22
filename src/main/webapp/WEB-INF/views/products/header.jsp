@@ -120,6 +120,12 @@
             /*이건 적용 안 되는 듯...ㅠ*/
             margin-bottom: 10px;
           }
+
+
+          /* Custom styling for modal content */
+          .modal-content {
+            border-radius: 0;
+          }
         </style>
 
         <script src="./../js/check.js"></script>
@@ -202,24 +208,48 @@
 
                   <c:catch>
                     <c:choose>
-                      <c:when test="${empty authInfo }">
+                      <c:when test="${empty authInfo && empty cookie.cartCnt.value}">
+                      	<a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
+                          <i class="fas fa-shopping-cart fa-2x"></i>
+                          <span class="badge badge-danger" id="cartIconNumber">0</span>
+                        </a>
+                        <a type='button' class='btn btn-outline-dark'
+                          href='${pageContext.request.contextPath}/users/login'>Login</a>
+                      </c:when>
+                      <c:when test="${empty authInfo && not empty cookie.cartCnt.value}">
+                      	<a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
+                          <i class="fas fa-shopping-cart fa-2x"></i>
+                          <span class="badge badge-danger" id="cartIconNumber">${cookie.cartCnt.value}</span>
+                        </a>
                         <a type='button' class='btn btn-outline-dark'
                           href='${pageContext.request.contextPath}/users/login'>Login</a>
                       </c:when>
                       <c:otherwise>
                         <c:choose>
-                          <c:when test="${authInfo.roles eq 'guest' }">
+                          <c:when test="${authInfo.roles eq 'guest' && empty cookie.cartCnt.value}">
+                            <a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
+                              <i class="fas fa-shopping-cart fa-2x"></i>
+                              <span class="badge badge-danger" id="cartIconNumber">0</span>
+                            </a>
+                            <a type='button' class='btn btn-outline-dark'
+                              href='${pageContext.request.contextPath}/users/login'>Login</a>
+                          </c:when>
+                          <c:when test="${authInfo.roles eq 'guest' && not empty cookie.cartCnt.value}">
+                            <a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
+                              <i class="fas fa-shopping-cart fa-2x"></i>
+                              <span class="badge badge-danger" id="cartIconNumber">${cookie.cartCnt.value}</span>
+                            </a>
                             <a type='button' class='btn btn-outline-dark'
                               href='${pageContext.request.contextPath}/users/login'>Login</a>
                           </c:when>
                           <c:otherwise>
                             <c:choose>
-                              <c:when test="${authInfo.roles eq 'admin' }">
+                              <c:when test="${authInfo.roles eq 'admin' && empty cookie.cartCnt.value}">
 
 
-                                <a href="#" class="text-dark mr-2">
+                                <a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
                                   <i class="fas fa-shopping-cart fa-2x"></i>
-                                  <span class="badge badge-danger">0</span>
+                                  <span class="badge badge-danger" id="cartIconNumber">8</span>
                                 </a>
 
                                 <div class="dropdown">
@@ -239,13 +269,60 @@
                                 </div>
 
                               </c:when>
-                              <c:otherwise>
-                                <a href="#" class="text-white mr-3">
-                                  <i class="fas fa-search fa-lg"></i>
+                              <c:when test="${authInfo.roles eq 'admin' && not empty cookie.cartCnt.value}">
+
+
+                                <a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
+                                  <i class="fas fa-shopping-cart fa-2x"></i>
+                                  <span class="badge badge-danger" id="cartIconNumber">${cookie.cartCnt.value}</span>
                                 </a>
-                                <a href="#" class="text-white mr-2">
-                                  <i class="fas fa-shopping-cart fa-lg"></i>
-                                  <span class="badge badge-danger">3</span>
+
+                                <div class="dropdown">
+                                  <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button"
+                                    id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    관리자 ${authInfo.userName }님, 환영합니다.
+                                  </a>
+                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item"
+                                      href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
+                                    <a class="dropdown-item"
+                                      href="${pageContext.request.contextPath}/users/modifyuser">회원정보수정</a>
+                                    <a class="dropdown-item"
+                                      href="${pageContext.request.contextPath}/users/preunregister">회원탈퇴</a>
+                                  </div>
+                                </div>
+
+                              </c:when>
+                              <c:when test="${authInfo.roles eq 'member' && empty cookie.cartCnt.value}">
+
+
+                                <a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
+                                  <i class="fas fa-shopping-cart fa-2x"></i>
+                                  <span class="badge badge-danger" id="cartIconNumber">0</span>
+                                </a>
+                                <div class="dropdown">
+                                  <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
+                                    id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    ${authInfo.userName }님, 반갑습니다!
+                                  </a>
+
+                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item"
+                                      href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
+                                    <a class="dropdown-item"
+                                      href="${pageContext.request.contextPath}/users/modifyuser">회원정보수정</a>
+                                    <a class="dropdown-item"
+                                      href="${pageContext.request.contextPath}/users/preunregister">회원탈퇴</a>
+                                  </div>
+                                </div>
+
+                              </c:when>
+                              <c:otherwise>
+                                <a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
+                                  <i class="fas fa-shopping-cart fa-2x"></i>
+                                  <span class="badge badge-danger" id="cartIconNumber">${cookie.cartCnt.value}</span>
                                 </a>
                                 <div class="dropdown">
                                   <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
