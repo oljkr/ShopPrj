@@ -90,7 +90,7 @@
             /* Adjust the top position as needed */
             left: 0;
             width: 100%;
-            height: 300px;
+            /* height: 300px; */
             /* Adjust the height as needed */
 
             /* background-color: #080707;
@@ -358,7 +358,7 @@
 
               // Display the search results
               searchResultsDiv.style.display = 'flex';
-              searchResultsDiv.style.height = '200px';
+              searchResultsDiv.style.height = '300px';
               searchBox.style.backgroundColor='#ffffff';
               searchBox.style.border='1px solid #ccc';
             } else {
