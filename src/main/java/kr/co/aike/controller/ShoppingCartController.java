@@ -52,4 +52,5 @@ public class ShoppingCartController {
 		mav = service.getCartList(request);
 		return mav;
 	}
+	
 }

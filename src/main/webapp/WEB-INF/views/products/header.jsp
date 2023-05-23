@@ -128,9 +128,48 @@
           }
 
           .product-image {
-      max-width: 100px;
-      max-height: 100px;
-    }
+            max-width: 100px;
+            max-height: 100px;
+          }
+
+          /* Center the box horizontally and vertically */
+          .total-amount-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          /* Style the box */
+          .total-amount-box {
+            width: 80%;
+            height: 100px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            /* background-color: #f8f8f8; */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          }
+          .total-amount-box p {
+            margin-bottom: 0;
+            font-size: 18px;
+            color: #333;
+          }
+
+          .total-amount-box div {
+            margin-bottom: 0;
+            font-size: 18px;
+            color: #333;
+          }
+
+          /* Style the colored text */
+          .colored-text {
+            font-size: 19px;
+            color: rgb(231, 80, 80);
+          }
         </style>
 
         <script src="./../js/check.js"></script>

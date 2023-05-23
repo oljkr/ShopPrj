@@ -253,7 +253,7 @@
     }
   
     function goToLink() {
-      window.location.href = '${pageContext.request.contextPath}/cart/get'; // Replace with your desired link
+      window.location.href = '${pageContext.request.contextPath}/cart/getlist'; // Replace with your desired link
     }
   </script>
 
