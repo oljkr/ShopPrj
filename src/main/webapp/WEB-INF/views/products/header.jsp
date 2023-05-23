@@ -126,6 +126,11 @@
           .modal-content {
             border-radius: 0;
           }
+
+          .product-image {
+      max-width: 100px;
+      max-height: 100px;
+    }
         </style>
 
         <script src="./../js/check.js"></script>
@@ -209,7 +214,7 @@
                   <c:catch>
                     <c:choose>
                       <c:when test="${empty authInfo && empty cookie.cartCnt.value}">
-                      	<a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
+                      	<a href="${pageContext.request.contextPath}/cart/getlist" class="text-dark mr-2">
                           <i class="fas fa-shopping-cart fa-2x"></i>
                           <span class="badge badge-danger" id="cartIconNumber">0</span>
                         </a>
@@ -217,7 +222,7 @@
                           href='${pageContext.request.contextPath}/users/login'>Login</a>
                       </c:when>
                       <c:when test="${empty authInfo && not empty cookie.cartCnt.value}">
-                      	<a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
+                      	<a href="${pageContext.request.contextPath}/cart/getlist" class="text-dark mr-2">
                           <i class="fas fa-shopping-cart fa-2x"></i>
                           <span class="badge badge-danger" id="cartIconNumber">${cookie.cartCnt.value}</span>
                         </a>
@@ -227,7 +232,7 @@
                       <c:otherwise>
                         <c:choose>
                           <c:when test="${authInfo.roles eq 'guest' && empty cookie.cartCnt.value}">
-                            <a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
+                            <a href="${pageContext.request.contextPath}/cart/getlist" class="text-dark mr-2">
                               <i class="fas fa-shopping-cart fa-2x"></i>
                               <span class="badge badge-danger" id="cartIconNumber">0</span>
                             </a>
@@ -235,7 +240,7 @@
                               href='${pageContext.request.contextPath}/users/login'>Login</a>
                           </c:when>
                           <c:when test="${authInfo.roles eq 'guest' && not empty cookie.cartCnt.value}">
-                            <a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
+                            <a href="${pageContext.request.contextPath}/cart/getlist" class="text-dark mr-2">
                               <i class="fas fa-shopping-cart fa-2x"></i>
                               <span class="badge badge-danger" id="cartIconNumber">${cookie.cartCnt.value}</span>
                             </a>
@@ -302,7 +307,7 @@
                                   <span class="badge badge-danger" id="cartIconNumber">0</span>
                                 </a>
                                 <div class="dropdown">
-                                  <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
+                                  <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button"
                                     id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
                                     ${authInfo.userName }님, 반갑습니다!
@@ -325,7 +330,7 @@
                                   <span class="badge badge-danger" id="cartIconNumber">${cookie.cartCnt.value}</span>
                                 </a>
                                 <div class="dropdown">
-                                  <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
+                                  <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button"
                                     id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
                                     ${authInfo.userName }님, 반갑습니다!

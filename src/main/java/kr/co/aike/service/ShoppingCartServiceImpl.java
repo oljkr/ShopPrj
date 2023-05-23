@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.Cookie;
@@ -12,11 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.co.aike.domain.CartItem;
+import kr.co.aike.domain.Products;
 import kr.co.aike.domain.ShoppingCart;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,5 +79,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(decodedCartJson, ShoppingCart.class);
     }
+    
+    public ModelAndView getCartList(HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		ShoppingCart shoppingCart = getOrCreateShoppingCart(request);
+		List<CartItem> cartItems = shoppingCart.getItems();
+		mav.addObject("cartItems", cartItems);
+		mav.setViewName("products/cartlist");
+		return mav;
+	}
     
 }
