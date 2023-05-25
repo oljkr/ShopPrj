@@ -37,14 +37,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	
 	@Override
 	public void addToCart(CartItem item, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//옵션 불러와서 제품 번호 검색
     	Products products = new Products();
     	products.setName(item.getPrdName());
     	products.setColor(item.getColor());
     	products.setSize(item.getSize());
     	products = prdDao.selectProduct(products);
     	
-    	item.setPrdNo(products.getPrdNo());   	
-    	System.out.println(item.toString());
+    	item.setPrdNo(products.getPrdNo());
     	//장바구니 쿠키 등록
         ShoppingCart cart = getOrCreateShoppingCart(request);
         cart.addItem(item);
@@ -66,9 +66,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	@Override
 	public void removeCartItem(@RequestBody CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException {
         ShoppingCart cart = getOrCreateShoppingCart(request);
-        System.out.println("remove:"+item);
         cart.removeItem(item);
-        System.out.println("cart"+cart);
         saveShoppingCart(cart, response);
         
       //장바구니 목록 개수 쿠키 등록

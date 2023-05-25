@@ -79,7 +79,9 @@
           <div class="col-md-6 text-md-center">
             <a href="${pageContext.request.contextPath}/home"
                       class="btn btn-outline-dark rounded-pill py-3 px-5">계속 쇼핑하기</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button type="submit" class="btn btn-dark rounded-pill py-3 px-5" style="width: 190px;">구매하기</button>
+            <a href="${pageContext.request.contextPath}/order/add"
+                      class="btn btn-dark rounded-pill py-3 px-5" style="width: 190px;">구매하기</a>
+            <!-- <button type="submit" class="btn btn-dark rounded-pill py-3 px-5" style="width: 190px;">구매하기</button> -->
           </div>
         </div>
 
@@ -90,11 +92,9 @@
         var thisquantity = document.getElementById('thisquantity'+cnt);
         var beforequantity = parseInt(thisquantity.innerText);
         var afterquantity = beforequantity+1;
-        alert("after"+afterquantity);
 
         var getprdNo = document.getElementById('prdNo'+cnt);
         var prdNoText = getprdNo.innerText;
-        alert(prdNoText);
 
         var formData = [];
         formData.push({ name: "prdNo", value: prdNoText });
@@ -111,7 +111,6 @@
           type: 'POST',
           data: jsonData,
           success: function(data) {
-            alert("hello");
             location.reload();
             // Handle success response
           },
@@ -125,11 +124,13 @@
         var thisquantity = document.getElementById('thisquantity'+cnt);
         var beforequantity = parseInt(thisquantity.innerText);
         var afterquantity = beforequantity-1;
-        alert("after"+afterquantity);
+        if(afterquantity==0){
+          alert("현재 해당 제품의 설정된 주문수량은 1개입니다. 장바구니에서 목록을 제거하실 때는 Remove 버튼을 눌러주세요.")
+          return;
+        }
 
         var getprdNo = document.getElementById('prdNo'+cnt);
         var prdNoText = getprdNo.innerText;
-        alert(prdNoText);
 
         var formData = [];
         formData.push({ name: "prdNo", value: prdNoText });
@@ -146,7 +147,6 @@
           type: 'POST',
           data: jsonData,
           success: function(data) {
-            alert("hello");
             location.reload();
             // Handle success response
           },
@@ -159,7 +159,6 @@
       function removeProduct(cnt) {
         var getprdNo = document.getElementById('prdNo'+cnt);
         var prdNoText = getprdNo.innerText;
-        alert(prdNoText);
 
         var formData = [];
         formData.push({ name: "prdNo", value: prdNoText });
@@ -175,7 +174,6 @@
           type: 'POST',
           data: jsonData,
           success: function(data) {
-            alert("hello");
             location.reload();
             modifyCartIconNumber();
             // Handle success response

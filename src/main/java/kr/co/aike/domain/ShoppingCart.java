@@ -52,8 +52,6 @@ public class ShoppingCart {
         Iterator<CartItem> iterator = items.iterator();
         while (iterator.hasNext()) {
             CartItem cartItem = iterator.next();
-            System.out.println("items"+cartItem.getPrdNo());
-        	System.out.println("item"+item.getPrdNo());
         	Long cartItemPrdNo=cartItem.getPrdNo();
         	Long itemPrdNo=item.getPrdNo();
             if (cartItemPrdNo.equals(itemPrdNo)) {

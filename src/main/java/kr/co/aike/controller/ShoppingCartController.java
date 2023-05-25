@@ -36,7 +36,6 @@ public class ShoppingCartController {
 	@ResponseBody
     @PostMapping("/add")
     public void addToCart(CartItem item, HttpServletRequest request , HttpServletResponse response) throws Exception {
-    	System.out.println(item.toString());
     	service.addToCart(item, request, response);
     }
 
@@ -61,8 +60,13 @@ public class ShoppingCartController {
 
     @PostMapping("/remove")
     public void removeCartItem(CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException {
-    	System.out.println(item.toString());
     	service.removeCartItem(item, request, response);
     }
-    
+//
+//    @PostMapping("/clear")
+//    public void clearCart(HttpServletResponse response) {
+//        ShoppingCart cart = new ShoppingCart();
+//        saveShoppingCart(cart, response);
+//    }
+//
 }
