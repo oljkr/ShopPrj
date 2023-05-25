@@ -33,7 +33,7 @@
                         <td class="align-middle text-center">
                           <div class="d-inline-block">
                             <div class="text-center">
-                              <button type="button" class="btn btn-outline-dark btn-sm btn-number" onclick="decrementQuantity()">-</button>
+                              <button type="button" class="btn btn-outline-dark btn-sm btn-number" onclick="checkIndex(${vs.count});decrementQuantity(${vs.count})">-</button>
                               &nbsp;&nbsp;&nbsp;&nbsp;<span id="thisquantity${vs.count}">${cartItem.quantity}</span>&nbsp;&nbsp;&nbsp;&nbsp;
                               <button type="button" class="btn btn-outline-dark btn-sm btn-number" onclick="checkIndex(${vs.count});incrementQuantity(${vs.count})">+</button>
                             </div>
@@ -90,6 +90,7 @@
       function checkIndex(thisindex){
         index=thisindex;
       }
+
       function incrementQuantity(cnt){
         var thisquantity = document.getElementById('thisquantity'+cnt);
         var beforequantity = parseInt(thisquantity.innerText);
@@ -113,7 +114,42 @@
           cache: false,
           url: "${pageContext.request.contextPath}/cart/update",
           type: 'POST',
-    data: jsonData,
+          data: jsonData,
+          success: function(data) {
+            alert("hello");
+            location.reload();
+            // Handle success response
+          },
+          error: function(xhr, status) {
+            alert(xhr + " : " + status);
+          }
+        });
+      }
+
+      function decrementQuantity(cnt){
+        var thisquantity = document.getElementById('thisquantity'+cnt);
+        var beforequantity = parseInt(thisquantity.innerText);
+        var afterquantity = beforequantity-1;
+        alert("after"+afterquantity);
+
+        var getprdNo = document.getElementById('prdNo'+index);
+        var prdNoText = getprdNo.innerText;
+        alert(prdNoText);
+
+        var formData = [];
+        formData.push({ name: "prdNo", value: prdNoText });
+        formData.push({ name: "quantity", value: afterquantity });
+
+        var jsonData = {};
+        $.each(formData, function(index, field) {
+          jsonData[field.name] = field.value;
+        });
+
+        $.ajax({
+          cache: false,
+          url: "${pageContext.request.contextPath}/cart/update",
+          type: 'POST',
+          data: jsonData,
           success: function(data) {
             alert("hello");
             location.reload();
