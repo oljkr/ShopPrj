@@ -39,6 +39,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         saveShoppingCart(cart, response);
     }
 	
+	public void updateCartItem(CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        ShoppingCart cart = getOrCreateShoppingCart(request);
+        System.out.println("update:"+item);
+        cart.updateItem(item);
+        System.out.println("cart"+cart);
+        saveShoppingCart(cart, response);
+    }
+	
     public ShoppingCart getOrCreateShoppingCart(HttpServletRequest request) throws IOException {
         ShoppingCart cart;
         Cookie[] cookies = request.getCookies();
@@ -62,6 +70,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         String cartJson = serializeCart(cart);
         Cookie cartCookie = new Cookie(CART_COOKIE_NAME, cartJson);
         cartCookie.setMaxAge(3600); // Cookie expiration time in seconds (e.g., 1 hour)
+        System.out.println(cartJson);
         response.addCookie(cartCookie);
     }
 

@@ -19,4 +19,6 @@ public interface ShoppingCartService {
 
 	ModelAndView getCartList(HttpServletRequest request) throws Exception;
 
+	void updateCartItem(CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException;
+
 }

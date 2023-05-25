@@ -35,7 +35,9 @@ public class ShoppingCart {
     // Update the quantity of an item in the cart
     public void updateItem(CartItem item) {
         for (CartItem cartItem : items) {
-            if (cartItem.getPrdNo() == item.getPrdNo()) {
+        	Long cartItemPrdNo=cartItem.getPrdNo();
+        	Long itemPrdNo=item.getPrdNo();
+            if (cartItemPrdNo.equals(itemPrdNo)) {
                 // Update the quantity of the matching item
                 cartItem.setQuantity(item.getQuantity());
                 return;

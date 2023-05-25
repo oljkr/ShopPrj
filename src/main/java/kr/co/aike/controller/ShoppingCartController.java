@@ -52,5 +52,11 @@ public class ShoppingCartController {
 		mav = service.getCartList(request);
 		return mav;
 	}
-	
+
+	@ResponseBody
+    @PostMapping("/update")
+    public void updateCartItem(CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println(item.toString());
+		service.updateCartItem(item, request, response);
+    }
 }
