@@ -83,6 +83,13 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
+
+		<!-- jackson library -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.12.4</version>
+		</dependency>
 		
 		<!-- 사용자 추가 라이브러리(의존성) 끝 -->
 	</dependencies>

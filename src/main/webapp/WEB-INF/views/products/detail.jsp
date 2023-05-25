@@ -35,30 +35,38 @@
         </div>
         <h5>${product.price} 원</h5>
         <p class="mt-4">${product.shortDes}</p>
-        <h4 class="mb-3">Options</h4>
-        <div class="form-group">
-          <label for="color">Color:</label>
-          <select class="form-control" id="color">
-            <c:forEach var="coloroption" items="${color}" varStatus="status">
-	            <option value="${coloroption}">${coloroption}</option>
-            </c:forEach>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="size">Size:</label>
-          <select class="form-control" id="size">
-          	<c:forEach var="sizeoption" items="${size}" varStatus="status">
-	            <option value="${sizeoption}">${sizeoption}</option>
-            </c:forEach>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="quantity">Quantity:</label>
-          <input type="number" class="form-control" id="quantity" min="1" value="1">
-        </div>
-        <div class="px-3">
-          <button class="btn btn-outline-dark rounded-pill btn-block py-3">Add to Cart</button>
-        </div>
+
+        <form name='cartfrm' id="cartfrm" method='post'>
+          <input type="hidden" name="prdNo" value="${product.prdNo}">
+          <input type="hidden" name="prdName" value="${product.name}">
+          <input type="hidden" name="prdImgFileName" value="${upperImages[0].fileName}">
+          <input type="hidden" name="price" value="${product.price}">
+
+          <h4 class="mb-3">Options</h4>
+          <div class="form-group">
+            <label for="color">Color:</label>
+            <select class="form-control" id="color" name="color">
+              <c:forEach var="coloroption" items="${color}" varStatus="status">
+                <option value="${coloroption}">${coloroption}</option>
+              </c:forEach>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="size">Size:</label>
+            <select class="form-control" id="size" name="size">
+              <c:forEach var="sizeoption" items="${size}" varStatus="status">
+                <option value="${sizeoption}">${sizeoption}</option>
+              </c:forEach>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="quantity">Quantity:</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="1">
+          </div>
+          <div class="px-3">
+            <button class="btn btn-outline-dark rounded-pill btn-block py-3" onclick="addCart();openModal(); return false;">Add to Cart</button>
+          </div>
+        </form>
       </div>
     </div>
     <div class="row mt-5">
@@ -88,6 +96,28 @@
   <button id="scrollToTop" class="btn btn-light" title="Scroll to Top">
     <i class="fa fa-arrow-up"></i>
   </button>
+
+
+  <!-- Modal window HTML -->
+<div id="modal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">장바구니 담기</h5>
+        <button type="button" class="close" onclick="closeModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body d-flex align-items-center">
+        <p class="m-auto">장바구니에 상품이 정상적으로 담겼습니다.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark rounded-pill" onclick="closeModal()">쇼핑 계속하기</button>
+        <button type="button" class="btn btn-outline-primary rounded-pill" onclick="goToLink()">장바구니 이동</button>
+      </div>
+    </div>
+  </div>
+</div>
   
   <script>
     $(document).ready(function() {
@@ -98,7 +128,7 @@
           scrollTop: $("#description").offset().top
         }, 800);
       });
-      
+   // Scroll to review section when description button is clicked
       $("#reviewsBtn").click(function(e) {
           e.preventDefault();
           $('html, body').animate({
@@ -135,6 +165,48 @@
       
     });
 
+  </script>
+  <script>
+    function addCart(){
+        var formData = $("#cartfrm").serialize();
+
+        $.ajax({
+            cache : false,
+            url : "${pageContext.request.contextPath}/cart/add",
+            type : 'POST', 
+            data : formData, 
+            success : function(data) {
+                modifyCartIconNumber();
+            }, // success 
+    
+            error : function(xhr, status) {
+                alert(xhr + " : " + status);
+            }
+        }); // $.ajax */
+    }
+
+    function modifyCartIconNumber(){
+          document.getElementById("cartIconNumber");
+          const divNode = document.getElementById("cartIconNumber");
+          var cartData = JSON.parse($.cookie("cartCnt"));
+          divNode.innerHTML = cartData;
+        }
+
+	</script>
+  <script>
+    function openModal() {
+      var modal = document.getElementById('modal');
+      modal.style.display = 'block';
+    }
+  
+    function closeModal() {
+      var modal = document.getElementById('modal');
+      modal.style.display = 'none';
+    }
+  
+    function goToLink() {
+      window.location.href = '${pageContext.request.contextPath}/cart/getlist'; // Replace with your desired link
+    }
   </script>
 
 
