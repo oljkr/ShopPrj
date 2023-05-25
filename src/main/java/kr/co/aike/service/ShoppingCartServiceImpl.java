@@ -32,13 +32,20 @@ import lombok.extern.slf4j.Slf4j;
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 	
 	private static final String CART_COOKIE_NAME = "cart";
+	private static final String CARTCNT_COOKIE_NAME = "cartCnt";
 	
 	@Override
 	public void addToCart(CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException {
     	System.out.println(item.toString());
+    	//장바구니 쿠키 등록
         ShoppingCart cart = getOrCreateShoppingCart(request);
         cart.addItem(item);
         saveShoppingCart(cart, response);
+        
+        //장바구니 목록 개수 쿠키 등록
+        int cnt = cart.getItems().size();
+        String cartCnt = String.valueOf(cnt);
+        saveShoppingCartCnt(cartCnt, response);
     }
 	
 	@Override
@@ -55,6 +62,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cart.removeItem(item);
         System.out.println("cart"+cart);
         saveShoppingCart(cart, response);
+        
+        //장바구니 목록 개수 쿠키 등록
+        int cnt = cart.getItems().size();
+        String cartCnt = String.valueOf(cnt);
+        saveShoppingCartCnt(cartCnt, response);
     }
 	
     public ShoppingCart getOrCreateShoppingCart(HttpServletRequest request) throws IOException {
@@ -80,8 +92,33 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         String cartJson = serializeCart(cart);
         Cookie cartCookie = new Cookie(CART_COOKIE_NAME, cartJson);
         cartCookie.setMaxAge(3600); // Cookie expiration time in seconds (e.g., 1 hour)
-        System.out.println(cartJson);
+        cartCookie.setPath("/"); // Set the cookie path to the root path ("/")
         response.addCookie(cartCookie);
+    }
+    
+    public String getOrCreateShoppingCartCnt(HttpServletRequest request) throws IOException {
+    	String cartCnt="";
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            Optional<Cookie> cartCntCookie = Arrays.stream(cookies)
+                    .filter(cookie -> cookie.getName().equals(CARTCNT_COOKIE_NAME))
+                    .findFirst();
+            if (cartCntCookie.isPresent()) {
+                cartCnt = cartCntCookie.get().getValue();
+            } else {
+            	cartCnt = "";
+            }
+        } else {
+        	cartCnt = "";
+        }
+        return cartCnt;
+    }
+    
+    private void saveShoppingCartCnt(String cartCnt, HttpServletResponse response) throws JsonProcessingException, UnsupportedEncodingException {
+        Cookie cartCntCookie = new Cookie(CARTCNT_COOKIE_NAME, cartCnt);
+        cartCntCookie.setMaxAge(3600); // Cookie expiration time in seconds (e.g., 1 hour)
+        cartCntCookie.setPath("/"); // Set the cookie path to the root path ("/")
+        response.addCookie(cartCntCookie);
     }
 
 

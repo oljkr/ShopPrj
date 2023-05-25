@@ -177,6 +177,7 @@
           success: function(data) {
             alert("hello");
             location.reload();
+            modifyCartIconNumber();
             // Handle success response
           },
           error: function(xhr, status) {
@@ -184,6 +185,13 @@
           }
         });
       }
+
+      function modifyCartIconNumber(){
+          document.getElementById("cartIconNumber");
+          const divNode = document.getElementById("cartIconNumber");
+          var cartData = JSON.parse($.cookie("cartCnt"));
+          divNode.innerHTML = cartData;
+        }
     </script>
 
     <%@ include file="../footer.jsp" %>

@@ -176,69 +176,21 @@
             type : 'POST', 
             data : formData, 
             success : function(data) {
-                checkCartCookie();
-                getSetCartCnt();
-                modalCart(data);
+                modifyCartIconNumber();
             }, // success 
     
             error : function(xhr, status) {
                 alert(xhr + " : " + status);
             }
         }); // $.ajax */
-
-        function modalCart(){
-          openModal();
-        }
     }
 
-    function getSetCartCnt(){
-      $.ajax({
-            cache : false,
-            url : "${pageContext.request.contextPath}/cart/get",
-            type : 'get', 
-            success : responseProc,
-            error : function(xhr, status) {
-                alert(xhr + " : " + status);
-            }
-        }); // $.ajax */
-
-        function responseProc(data){
-          var len1=data.length;
-          checkCartCookie();
-          setCartCookie(data.items.length, 30);  // Sets the 'cartCnt' cookie value to 10, expiring in 30 days
-          modifyCartIconNumber(data);
-        }
-
-        function modifyCartIconNumber(data){
-          // document.getElementById("cartIconNumber");
+    function modifyCartIconNumber(){
+          document.getElementById("cartIconNumber");
           const divNode = document.getElementById("cartIconNumber");
-          var cartCookie = document.cookie.match(/(^|;) ?cartCnt=([^;]*)(;|$)/);
-          var cartCnt = cartCookie[2];
-          divNode.innerHTML = cartCnt;
+          var cartData = JSON.parse($.cookie("cartCnt"));
+          divNode.innerHTML = cartData;
         }
-    }
-
-    function checkCartCookie(){
-      // Check if the 'cartCnt' cookie exists
-      var cartCookie = document.cookie.match(/(^|;) ?cartCnt=([^;]*)(;|$)/);
-
-      if (cartCookie) {
-        // Cookie exists, get the value
-        var cartCnt = cartCookie[2];
-      } else {
-        // Cookie does not exist, create a new one
-        var cartCnt = 0; // Set initial value
-        document.cookie = "cartCnt=" + cartCnt + "; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/";
-      }
-    }
-
-    function setCartCookie(value, expirationDays) {
-      var date = new Date();
-      date.setTime(date.getTime() + (expirationDays * 24 * 60 * 60 * 1000));
-      var expires = "expires=" + date.toUTCString();
-      document.cookie = "cartCnt=" + value + "; " + expires + "; path=/";
-    }
-    
 
 	</script>
   <script>
