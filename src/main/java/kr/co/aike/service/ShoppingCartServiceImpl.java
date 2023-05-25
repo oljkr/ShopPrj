@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import kr.co.aike.dao.ProductsDao;
 import kr.co.aike.domain.CartItem;
 import kr.co.aike.domain.Products;
 import kr.co.aike.domain.ShoppingCart;
@@ -30,12 +31,19 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
-	
+	private final ProductsDao prdDao;
 	private static final String CART_COOKIE_NAME = "cart";
 	private static final String CARTCNT_COOKIE_NAME = "cartCnt";
 	
 	@Override
-	public void addToCart(CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void addToCart(CartItem item, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	Products products = new Products();
+    	products.setName(item.getPrdName());
+    	products.setColor(item.getColor());
+    	products.setSize(item.getSize());
+    	products = prdDao.selectProduct(products);
+    	
+    	item.setPrdNo(products.getPrdNo());   	
     	System.out.println(item.toString());
     	//장바구니 쿠키 등록
         ShoppingCart cart = getOrCreateShoppingCart(request);
@@ -63,7 +71,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         System.out.println("cart"+cart);
         saveShoppingCart(cart, response);
         
-        //장바구니 목록 개수 쿠키 등록
+      //장바구니 목록 개수 쿠키 등록
         int cnt = cart.getItems().size();
         String cartCnt = String.valueOf(cnt);
         saveShoppingCartCnt(cartCnt, response);

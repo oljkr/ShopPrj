@@ -22,7 +22,9 @@ public class ShoppingCart {
 	// Add an item to the cart or update its quantity if it already exists
     public void addItem(CartItem item) {
         for (CartItem cartItem : items) {
-            if (cartItem.getPrdNo() == item.getPrdNo()) {
+        	Long cartItemPrdNo=cartItem.getPrdNo();
+        	Long itemPrdNo=item.getPrdNo();
+            if (cartItemPrdNo.equals(itemPrdNo)) {
                 // Item already exists in the cart, update its quantity
                 cartItem.setQuantity(cartItem.getQuantity() + item.getQuantity());
                 return;

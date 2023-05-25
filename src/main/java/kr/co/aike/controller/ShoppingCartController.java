@@ -35,7 +35,7 @@ public class ShoppingCartController {
 
 	@ResponseBody
     @PostMapping("/add")
-    public void addToCart(CartItem item, HttpServletRequest request , HttpServletResponse response) throws IOException {
+    public void addToCart(CartItem item, HttpServletRequest request , HttpServletResponse response) throws Exception {
     	System.out.println(item.toString());
     	service.addToCart(item, request, response);
     }

@@ -13,7 +13,7 @@ import kr.co.aike.domain.ShoppingCart;
 
 public interface ShoppingCartService {
 
-	void addToCart(CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException;
+	void addToCart(CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException, Exception;
 
 	ShoppingCart getOrCreateShoppingCart(HttpServletRequest request) throws IOException;
 
