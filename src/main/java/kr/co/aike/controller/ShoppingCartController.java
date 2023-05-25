@@ -56,8 +56,13 @@ public class ShoppingCartController {
 	@ResponseBody
     @PostMapping("/update")
     public void updateCartItem(CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException {
-		System.out.println(item.toString());
 		service.updateCartItem(item, request, response);
     }
-	
+
+    @PostMapping("/remove")
+    public void removeCartItem(CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    	System.out.println(item.toString());
+    	service.removeCartItem(item, request, response);
+    }
+    
 }

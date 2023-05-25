@@ -33,9 +33,9 @@
                         <td class="align-middle text-center">
                           <div class="d-inline-block">
                             <div class="text-center">
-                              <button type="button" class="btn btn-outline-dark btn-sm btn-number" onclick="checkIndex(${vs.count});decrementQuantity(${vs.count})">-</button>
+                              <button type="button" class="btn btn-outline-dark btn-sm btn-number" onclick="decrementQuantity(${vs.count})">-</button>
                               &nbsp;&nbsp;&nbsp;&nbsp;<span id="thisquantity${vs.count}">${cartItem.quantity}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                              <button type="button" class="btn btn-outline-dark btn-sm btn-number" onclick="checkIndex(${vs.count});incrementQuantity(${vs.count})">+</button>
+                              <button type="button" class="btn btn-outline-dark btn-sm btn-number" onclick="incrementQuantity(${vs.count})">+</button>
                             </div>
                           </div>
                         </td>
@@ -44,7 +44,7 @@
                         <c:set var="sum" value="${sum + onetotal}" />
                         <td class="align-middle">
                           <button type="button" class="btn btn-danger btn-sm remove-button"
-                            onclick="removeProduct(this)">Remove</button>
+                            onclick="removeProduct(${vs.count})">Remove</button>
                         </td>
                       </tr>         
 
@@ -86,18 +86,13 @@
     </div>
 
     <script>
-      var index=0;
-      function checkIndex(thisindex){
-        index=thisindex;
-      }
-
       function incrementQuantity(cnt){
         var thisquantity = document.getElementById('thisquantity'+cnt);
         var beforequantity = parseInt(thisquantity.innerText);
         var afterquantity = beforequantity+1;
         alert("after"+afterquantity);
 
-        var getprdNo = document.getElementById('prdNo'+index);
+        var getprdNo = document.getElementById('prdNo'+cnt);
         var prdNoText = getprdNo.innerText;
         alert(prdNoText);
 
@@ -132,7 +127,7 @@
         var afterquantity = beforequantity-1;
         alert("after"+afterquantity);
 
-        var getprdNo = document.getElementById('prdNo'+index);
+        var getprdNo = document.getElementById('prdNo'+cnt);
         var prdNoText = getprdNo.innerText;
         alert(prdNoText);
 
@@ -160,22 +155,34 @@
           }
         });
       }
-    </script>
-    
-    <script>
-      function removeProduct(button) {
-        var row = button.parentNode.parentNode;
-        var price = row.querySelector('td:nth-child(3)').innerText;
-        var totalAmountElement = document.getElementById('total-amount');
-        var currentAmount = parseFloat(totalAmountElement.innerText.slice(1));
-        var productPrice = parseFloat(price.slice(1));
 
-        // Update the total amount by subtracting the product price
-        var newAmount = currentAmount - productPrice;
-        totalAmountElement.innerText = '$' + newAmount.toFixed(2);
+      function removeProduct(cnt) {
+        var getprdNo = document.getElementById('prdNo'+cnt);
+        var prdNoText = getprdNo.innerText;
+        alert(prdNoText);
 
-        // Remove the row from the table
-        row.remove();
+        var formData = [];
+        formData.push({ name: "prdNo", value: prdNoText });
+
+        var jsonData = {};
+        $.each(formData, function(index, field) {
+          jsonData[field.name] = field.value;
+        });
+
+        $.ajax({
+          cache: false,
+          url: "${pageContext.request.contextPath}/cart/remove",
+          type: 'POST',
+          data: jsonData,
+          success: function(data) {
+            alert("hello");
+            location.reload();
+            // Handle success response
+          },
+          error: function(xhr, status) {
+            alert(xhr + " : " + status);
+          }
+        });
       }
     </script>
 

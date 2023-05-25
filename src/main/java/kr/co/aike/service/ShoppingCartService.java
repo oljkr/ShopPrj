@@ -21,4 +21,6 @@ public interface ShoppingCartService {
 
 	void updateCartItem(CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException;
 
+	void removeCartItem(CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException;
+
 }

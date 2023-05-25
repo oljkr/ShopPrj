@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,6 +33,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	
 	private static final String CART_COOKIE_NAME = "cart";
 	
+	@Override
 	public void addToCart(CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException {
     	System.out.println(item.toString());
         ShoppingCart cart = getOrCreateShoppingCart(request);
@@ -39,10 +41,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         saveShoppingCart(cart, response);
     }
 	
+	@Override
 	public void updateCartItem(CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException {
         ShoppingCart cart = getOrCreateShoppingCart(request);
-        System.out.println("update:"+item);
         cart.updateItem(item);
+        saveShoppingCart(cart, response);
+    }
+	
+	@Override
+	public void removeCartItem(@RequestBody CartItem item, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        ShoppingCart cart = getOrCreateShoppingCart(request);
+        System.out.println("remove:"+item);
+        cart.removeItem(item);
         System.out.println("cart"+cart);
         saveShoppingCart(cart, response);
     }
