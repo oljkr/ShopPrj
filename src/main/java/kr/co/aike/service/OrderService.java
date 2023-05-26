@@ -15,5 +15,11 @@ public interface OrderService {
 	ModelAndView getCartList(HttpServletRequest request) throws Exception;
 
 	ModelAndView addOrder(ShipInfo shipInfo, HttpServletRequest request, HttpServletResponse response) throws IOException, Exception;
+	
+	ModelAndView guestGet(HttpServletRequest request) throws Exception;
+	
+	ModelAndView getList(HttpServletRequest request) throws Exception;
+
+	ModelAndView getDetail(HttpServletRequest request) throws Exception;
 
 }

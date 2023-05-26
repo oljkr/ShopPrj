@@ -28,7 +28,7 @@ public class ShipInfoDao {
 		return cnt;
 	}//insertShipInfo() end
 	
-	// 상세 조회 - 상품명, 컬러, 사이즈
+	// 상세 조회
 	public ShipInfo selectShipInfo(ShipInfo shipInfo) throws Exception {
 		ShipInfo results = null;
 		try {
@@ -45,5 +45,23 @@ public class ShipInfoDao {
 		
 		return results;
 	}//selectShipInfo() end
+	
+	// 상세 조회 - 배송 정보 번호로
+	public ShipInfo selectShipInfoAsNo(ShipInfo shipInfo) throws Exception {
+		ShipInfo results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT ship_info_no, zipcode, address1, address2, name, phone ");
+			sql.append(" FROM ship_info ");
+			sql.append(" where ship_info_no='"+shipInfo.getShipInfoNo()+"' ");
+			
+			results = jdbcTemplate.queryForObject(sql.toString(), new ShipInfoRowMapper());
+		}catch (Exception e) {
+			System.out.println("배송 정보 세부 자료읽기 실패:" +e);
+			return null;
+		}//end
+		
+		return results;
+	}//selectShipInfoAsNo() end
 
 }

@@ -40,5 +40,27 @@ public class OrderController {
 		mav = service.addOrder(shipInfo, request, response);
 		return mav;
 	}
+	
+	@GetMapping("/guest")
+	public ModelAndView guestGet(HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = service.guestGet(request);
+		return mav;
+	}
+	
+	@PostMapping("/getlist")
+	public ModelAndView getList(HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = service.getList(request);
+		return mav;
+	}
+	
+	@PostMapping("/getdetail")
+	public ModelAndView getDetail(HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = service.getDetail(request);
+		return mav;
+	}
+	
 
 }

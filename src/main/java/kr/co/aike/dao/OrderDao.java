@@ -2,6 +2,7 @@ package kr.co.aike.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import kr.co.aike.domain.BuyerInfo;
 import kr.co.aike.domain.Order;
 import kr.co.aike.domain.OrderSheet;
+import kr.co.aike.domain.Products;
 import kr.co.aike.domain.SheetOrderConn;
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +35,7 @@ public class OrderDao {
 		return cnt;
 	}//insertBuyerInfo() end
 	
-	// 상세 조회 - 상품명, 컬러, 사이즈
+	// 구매자 정보 상세 조회
 	public BuyerInfo selectBuyerInfo(BuyerInfo buyerInfo) throws Exception {
 		BuyerInfo results = null;
 		try {
@@ -66,6 +68,37 @@ public class OrderDao {
 		return results;
 	}//selectBuyerInfo() end
 	
+	// 구매자 정보 상세 조회 - 구매자 번호로
+	public BuyerInfo selectBuyerInfoAsNo(BuyerInfo buyerInfo) throws Exception {
+		BuyerInfo results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT buyer_info_no, name, email, phone, buyer_no, buy_time ");
+			sql.append(" FROM buyer_info ");
+			sql.append(" where buyer_info_no='"+buyerInfo.getBuyerInfoNo()+"' ");
+			
+			RowMapper<BuyerInfo> rowMapper=new RowMapper<BuyerInfo>() {
+				@Override
+				public BuyerInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+					BuyerInfo buyerInfo = new BuyerInfo();
+					buyerInfo.setBuyerInfoNo(rs.getLong("buyer_info_no"));
+					buyerInfo.setName(rs.getString("name"));
+					buyerInfo.setEmail(rs.getString("email"));
+					buyerInfo.setPhone(rs.getString("phone"));
+					buyerInfo.setBuyerNo(rs.getString("buyer_no"));
+					buyerInfo.setBuyTime(rs.getTimestamp("buy_time").toLocalDateTime());
+					return buyerInfo;
+				}//mapRow() end
+			};//rowMapper end
+			
+			results = jdbcTemplate.queryForObject(sql.toString(), rowMapper);
+		}catch (Exception e) {
+			System.out.println("구매자 정보 세부 자료읽기 실패:" +e);
+			return null;
+		}//end
+		return results;
+	}//selectBuyerInfoAsNo() end
+	
 	// 주문 등록 처리
 	public int insertOrder(Order order) throws Exception {
 		int cnt=0;
@@ -80,7 +113,7 @@ public class OrderDao {
 		return cnt;
 	}//insertOrder() end
 	
-	// 상세 조회 - 상품명, 컬러, 사이즈
+	// 주문 상세 조회
 	public Order selectOrder(Order order) throws Exception {
 		Order results = null;
 		try {
@@ -97,6 +130,23 @@ public class OrderDao {
 		return results;
 	}//selectOrder() end
 	
+	// 주문 상세 조회 - 주문 번호로
+	public Order selectOrderAsNo(Order order) throws Exception {
+		Order results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT order_no, prd_no, quantity, ship_info_no, payment_method, status, pay_time ");
+			sql.append(" FROM aike.order ");
+			sql.append(" where order_no='"+order.getOrderNo()+"' ");
+			
+			results = jdbcTemplate.queryForObject(sql.toString(), new OrderRowMapper());
+		}catch (Exception e) {
+			System.out.println("주문 세부 자료읽기 실패:" +e);
+			return null;
+		}//end
+		return results;
+	}//selectOrderAsNo() end
+	
 
 	//주문서 등록 처리
 	public int insertOrderSheet(OrderSheet orderSheet) throws Exception {
@@ -112,7 +162,7 @@ public class OrderDao {
 		return cnt;
 	}//insertOrderSheet() end
 	
-	//주문서 상세 조회
+	//주문서 상세 조회 - 구매자 정보로
 	public OrderSheet selectOrderSheet(OrderSheet orderSheet) throws Exception {
 		OrderSheet results = null;
 		try {
@@ -139,6 +189,33 @@ public class OrderDao {
 		return results;
 	}//selectOrderSheet() end
 	
+	//주문서 상세 조회 - 주문서 정보로
+	public OrderSheet selectOrderSheetAsNo(OrderSheet orderSheet) throws Exception {
+		OrderSheet results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT order_sheet_no, buyer_info_no ");
+			sql.append(" FROM order_sheet ");
+			sql.append(" where order_sheet_no='"+orderSheet.getOrderSheetNo()+"' ");
+			
+			RowMapper<OrderSheet> rowMapper=new RowMapper<OrderSheet>() {
+				@Override
+				public OrderSheet mapRow(ResultSet rs, int rowNum) throws SQLException {
+					OrderSheet orderSheet = new OrderSheet();
+					orderSheet.setOrderSheetNo(rs.getLong("order_sheet_no"));
+					orderSheet.setBuyerInfoNo(rs.getLong("buyer_info_no"));
+					return orderSheet;
+				}//mapRow() end
+			};//rowMapper end
+			
+			results = jdbcTemplate.queryForObject(sql.toString(), rowMapper);
+		}catch (Exception e) {
+			System.out.println("주문서 세부 자료읽기 실패:" +e);
+			return null;
+		}//end
+		return results;
+	}//selectOrderSheetAsNo() end
+	
 	//주문서-주문 연결 등록 처리
 	public int insertOrderSheetConn(SheetOrderConn sheetOrderConn) throws Exception {
 		int cnt=0;
@@ -152,5 +229,31 @@ public class OrderDao {
 		}//end
 		return cnt;
 	}//insertOrderSheetConn() end
+	
+	//주문 번호 목록 조회 - 주문서 번호로
+	public List<Long> selectOrderSheetConn(SheetOrderConn sheetOrderConn) throws Exception {
+		List<Long> results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT order_no ");
+			sql.append(" FROM sheet_order_conn ");
+			sql.append(" WHERE order_sheet_no='"+sheetOrderConn.getOrderSheetNo()+"' ");
+			
+			RowMapper<Long> rowMapper=new RowMapper<Long>() {
+				@Override
+				public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
+					Long proNo=rs.getLong("order_no");
+					return proNo;
+				}//mapRow() end
+			};//rowMapper end
+			
+			results = jdbcTemplate.query(sql.toString(), rowMapper);
+		}catch (Exception e) {
+			System.out.println("주문서 번호 자료읽기 실패:" +e);
+			return null;
+		}//end
+		
+		return results;
+	}//selectOrderSheetConn() end
 
 }

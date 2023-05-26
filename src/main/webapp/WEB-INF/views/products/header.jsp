@@ -293,7 +293,7 @@
                           <a class="dropdown-item"
                             href="${pageContext.request.contextPath}/users/login">로그인</a>
                           <a class="dropdown-item"
-                            href="${pageContext.request.contextPath}/users/modifyuser">주문조회</a>
+                            href="${pageContext.request.contextPath}/order/guest">주문조회</a>
                         </div>
                       </div>
 
@@ -317,7 +317,7 @@
                           <a class="dropdown-item"
                             href="${pageContext.request.contextPath}/users/login">로그인</a>
                           <a class="dropdown-item"
-                            href="${pageContext.request.contextPath}/users/modifyuser">주문조회</a>
+                            href="${pageContext.request.contextPath}/order/guest">주문조회</a>
                         </div>
                       </div>
 
@@ -328,7 +328,7 @@
                         </a>
 
 
-                        
+
                       </c:when>
                       <c:otherwise>
                         <c:choose>

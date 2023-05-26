@@ -11,12 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.aike.dao.OrderDao;
+import kr.co.aike.dao.ProductsDao;
 import kr.co.aike.dao.ShipInfoDao;
 import kr.co.aike.dao.UsersDao;
 import kr.co.aike.domain.BuyerInfo;
 import kr.co.aike.domain.CartItem;
 import kr.co.aike.domain.Order;
 import kr.co.aike.domain.OrderSheet;
+import kr.co.aike.domain.Products;
 import kr.co.aike.domain.SheetOrderConn;
 import kr.co.aike.domain.ShipInfo;
 import kr.co.aike.domain.ShoppingCart;
@@ -30,6 +32,7 @@ public class OrderServiceImpl implements OrderService {
 	private final ShoppingCartService cartService;
 	private final ShipInfoDao shipInfoDao;
 	private final OrderDao orderDao;
+	private final ProductsDao prdDao;
 	
 	public ModelAndView addMessages(int code, String imgText, String msg1Text, String msg2Text, String msg3Text, String link1Text, String link1Href , String link2Text, String link2Href) {
 		ModelAndView mav=new ModelAndView();
@@ -169,6 +172,78 @@ public class OrderServiceImpl implements OrderService {
 		return mav;
 	}
 	
+	@Override
+	public ModelAndView guestGet(HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("order/guest");
+		return mav;
+	}
+	
+	@Override
+	public ModelAndView getList(HttpServletRequest request) throws Exception {
+		log.info("getList");
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("order/list");
+		return mav;
+	}
+	
+	@Override
+	public ModelAndView getDetail(HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Long orderSheetNo=Long.parseLong(request.getParameter("orderSheetNo"));
+		//주문서 정보 가져오기
+		OrderSheet orderSheet = new OrderSheet();
+		orderSheet.setOrderSheetNo(orderSheetNo);
+		orderSheet = orderDao.selectOrderSheetAsNo(orderSheet);
+		System.out.println(orderSheet.toString());
+		mav.addObject("orderSheetNo", orderSheetNo);
+		
+		//구매자 정보 가져오기
+		BuyerInfo buyerInfo = new BuyerInfo();
+		buyerInfo.setBuyerInfoNo(orderSheet.getBuyerInfoNo()); 
+		buyerInfo = orderDao.selectBuyerInfoAsNo(buyerInfo);
+		mav.addObject("buyerInfo", buyerInfo);
+		System.out.println(buyerInfo.toString());		
+		
+		//주문 목록 가져오기
+		SheetOrderConn sheetOrderConn = new SheetOrderConn();
+		sheetOrderConn.setOrderSheetNo(orderSheetNo);
+		List<Long> orderNoList = new ArrayList<Long>();
+		orderNoList = orderDao.selectOrderSheetConn(sheetOrderConn);
+		System.out.println(orderNoList.toString());
+		
+		//주문 번호로 상품 정보 가져오기
+		List<Order> orderList = new ArrayList<Order>();
+		Order tempOrder = new Order(); 
+		for(int x=0;x<orderNoList.size();++x) {
+			tempOrder.setOrderNo(orderNoList.get(x));
+			tempOrder = orderDao.selectOrderAsNo(tempOrder);
+			orderList.add(tempOrder);
+		}
+		mav.addObject("orderList", orderList);
+		
+		//상품명 가져오기
+		List<Products> productsList = new ArrayList<Products>();
+		Products tempProducts = new Products();
+		Long prdNo = (long) 0;
+		for(int x=0;x<orderList.size();++x) {
+			prdNo = orderList.get(x).getPrdNo();
+			tempProducts.setPrdNo(prdNo);
+			tempProducts = prdDao.selectProductPrdNo(tempProducts);
+			productsList.add(tempProducts);
+		}
+		mav.addObject("productsList", productsList);
+		
+		//각 상품에 대한 배송 정보 가져오기
+		ShipInfo shipInfo = new ShipInfo();
+		Long shipInfoNo = orderList.get(0).getShipInfoNo();
+		shipInfo.setShipInfoNo(shipInfoNo);
+		shipInfo = shipInfoDao.selectShipInfoAsNo(shipInfo);
+		mav.addObject("shipInfo", shipInfo);
+		
+		mav.setViewName("order/detail");
+		return mav;
+	}
 	
 
 }
