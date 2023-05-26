@@ -121,6 +121,8 @@ public class OrderDao {
 			sql.append(" SELECT order_no, prd_no, quantity, ship_info_no, payment_method, status, pay_time ");
 			sql.append(" FROM aike.order ");
 			sql.append(" where prd_no='"+order.getPrdNo()+"' and quantity='"+order.getQuantity()+"' and ship_info_no='"+order.getShipInfoNo()+"' and status='상품준비중' ");
+			sql.append(" ORDER BY order_no DESC ");
+			sql.append(" LIMIT 1 ");
 			
 			results = jdbcTemplate.queryForObject(sql.toString(), new OrderRowMapper());
 		}catch (Exception e) {

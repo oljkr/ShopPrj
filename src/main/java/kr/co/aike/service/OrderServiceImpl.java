@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.aike.dao.OrderDao;
@@ -22,6 +23,7 @@ import kr.co.aike.domain.Products;
 import kr.co.aike.domain.SheetOrderConn;
 import kr.co.aike.domain.ShipInfo;
 import kr.co.aike.domain.ShoppingCart;
+import kr.co.aike.domain.Users;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,6 +35,7 @@ public class OrderServiceImpl implements OrderService {
 	private final ShipInfoDao shipInfoDao;
 	private final OrderDao orderDao;
 	private final ProductsDao prdDao;
+	private final UsersDao usersdao;
 	
 	public ModelAndView addMessages(int code, String imgText, String msg1Text, String msg2Text, String msg3Text, String link1Text, String link1Href , String link2Text, String link2Href) {
 		ModelAndView mav=new ModelAndView();
@@ -64,12 +67,29 @@ public class OrderServiceImpl implements OrderService {
 		return mav;
 	}
 	
+	@Override
 	public ModelAndView getCartList(HttpServletRequest request) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		ShoppingCart shoppingCart = cartService.getOrCreateShoppingCart(request);
 		List<CartItem> cartItems = shoppingCart.getItems();
 		mav.addObject("cartItems", cartItems);
 		mav.setViewName("order/addorder");
+		return mav;
+	}
+	
+	@Override
+	public ModelAndView getCartListAndUser(@ModelAttribute Users users, HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		ShoppingCart shoppingCart = cartService.getOrCreateShoppingCart(request);
+		List<CartItem> cartItems = shoppingCart.getItems();
+		mav.addObject("cartItems", cartItems);
+		
+		Users findusers = new Users();
+		findusers = usersdao.selectUserAsNo(users);
+		System.out.println(findusers.toString());
+		mav.addObject("user", findusers);
+		
+		mav.setViewName("order/adduserorder");
 		return mav;
 	}
 
@@ -89,7 +109,6 @@ public class OrderServiceImpl implements OrderService {
 		System.out.println("temp2"+temp2); //로그인 하지 않을 시 null 나옴
 		if(temp2 != null && !temp2.equals("")) {
 			String temp3 = request.getParameter("userNo");
-//			Long userNo= Long.parseLong(temp3);
 			buyerInfo.setBuyerNo(temp3);
 		}else {
 			//회원정보에 게스트 등록

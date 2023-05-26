@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.aike.domain.Order;
+import kr.co.aike.domain.Products;
 import kr.co.aike.domain.ShipInfo;
 import kr.co.aike.domain.Users;
 import kr.co.aike.service.OrderService;
@@ -33,6 +34,13 @@ public class OrderController {
 		return mav;
 	}
 	
+	@GetMapping("/useradd")
+	public ModelAndView preUserOrder(@ModelAttribute Users users, HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = service.getCartListAndUser(users, request);
+		return mav;
+	}
+	
 	@PostMapping("/add")
 	public ModelAndView addOrder(@ModelAttribute ShipInfo shipInfo, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		log.info("addOrder");
@@ -48,7 +56,7 @@ public class OrderController {
 		return mav;
 	}
 	
-	@PostMapping("/getlist")
+	@GetMapping("/getlist")
 	public ModelAndView getList(HttpServletRequest request) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		mav = service.getList(request);

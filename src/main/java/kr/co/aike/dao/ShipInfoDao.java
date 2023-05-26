@@ -36,6 +36,8 @@ public class ShipInfoDao {
 			sql.append(" SELECT ship_info_no, zipcode, address1, address2, name, phone ");
 			sql.append(" FROM ship_info ");
 			sql.append(" where zipcode='"+shipInfo.getZipcode()+"' and address1='"+shipInfo.getAddress1()+"' and address2='"+shipInfo.getAddress2()+"' and name='"+shipInfo.getName()+"' and phone='"+shipInfo.getPhone()+"' ");
+			sql.append(" ORDER BY ship_info_no DESC ");
+			sql.append(" LIMIT 1 ");
 			
 			results = jdbcTemplate.queryForObject(sql.toString(), new ShipInfoRowMapper());
 		}catch (Exception e) {

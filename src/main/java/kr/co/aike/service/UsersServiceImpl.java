@@ -182,7 +182,7 @@ public class UsersServiceImpl implements UsersService {
 	public ModelAndView findId(Users users) throws Exception {
 		ModelAndView mav=new ModelAndView();
 		Users findUsers = new Users();
-		findUsers=dao.selectUserForId(users);
+		findUsers=dao.selectUser(users);
 		if(findUsers==null) {
 			System.out.println("it's null");
 			mav.addObject("msg", "입력한 이름과 이메일에 해당하는 회원이 존재하지 않습니다. 입력한 내용을 다시 확인해 주세요.");

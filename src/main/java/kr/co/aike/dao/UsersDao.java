@@ -45,7 +45,7 @@ public class UsersDao {
 		Users results = null;
 		try {
 			sql=new StringBuilder();
-			sql.append(" SELECT id, name, email, phone, pw, zipcode, address1, address2, roles, join_date ");
+			sql.append(" SELECT user_no, id, name, email, phone, pw, zipcode, address1, address2, roles, join_date ");
 			sql.append(" FROM users ");
 			sql.append(" where name='"+user.getUserName()+"' and email='"+user.getUserEmail()+"' ");
 			
@@ -58,14 +58,14 @@ public class UsersDao {
 		return results;
 	}//selectUser() end
 	
-	// 상세 조회 - 아이디 찾기
-	public Users selectUserForId(Users user) throws Exception {
+	// 상세 조회 - 회원 번호로 찾기
+	public Users selectUserAsNo(Users user) throws Exception {
 		Users results = null;
 		try {
 			sql=new StringBuilder();
-			sql.append(" SELECT id, name, email, phone, pw, zipcode, address1, address2, roles, join_date ");
+			sql.append(" SELECT user_no, id, name, email, phone, pw, zipcode, address1, address2, roles, join_date ");
 			sql.append(" FROM users ");
-			sql.append(" where name='"+user.getUserName()+"' and email='"+user.getUserEmail()+"' ");
+			sql.append(" where user_no='"+user.getUserNo()+"' ");
 			
 			results = jdbcTemplate.queryForObject(sql.toString(), new UsersRowMapper());
 		}catch (Exception e) {
@@ -74,7 +74,7 @@ public class UsersDao {
 		}//end
 		
 		return results;
-	}//selectUser() end
+	}//selectUserAsNo() end
 	
 	// 상세 조회 - 비번 찾기
 	public Users selectUserForPw(Users user) throws Exception {
