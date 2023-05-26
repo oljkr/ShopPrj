@@ -52,6 +52,13 @@
                   </div>
                 </div>
                 <div class="form-group row">
+                  <label for="phone" class="col-md-2 col-form-label">핸드폰 번호</label>
+                  <div class="col-md-6">
+                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your cell phone number">
+                    <small class="form-text text-muted">예) 010-1234-4567</small>
+                  </div>
+                </div>
+                <div class="form-group row">
                   <label for="zipcode" class="col-md-2 col-form-label">우편번호</label>
                   <div class="col-md-4">
                     <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="주소 찾기 버튼을 눌러 입력" readonly>

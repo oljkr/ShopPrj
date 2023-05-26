@@ -170,23 +170,6 @@
             font-size: 19px;
             color: rgb(231, 80, 80);
           }
-
-
-          .hover-list {
-      display: none; /* Hide the list by default */
-      position: absolute;
-      background-color: #fff;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      list-style: none; /* Remove the list-style */
-      margin-top: 10px; /* Adjust the margin as needed */
-      width: 70px;
-    }
-    
-    .icon:hover + .hover-list {
-      display: block; /* Show the list on hover */
-    }
         </style>
 
         <script src="./../js/check.js"></script>
@@ -249,7 +232,7 @@
                 </div>
               </li>
               <!-- Search form start -->
-              <!-- <form class="form-inline my-4 my-lg-0 mx-2">
+              <form class="form-inline my-4 my-lg-0 mx-2">
                 <div class="input-group" style="width:250px">
                   <input id="search-input" class="form-control mr-sm-2 form-rounded" type="search" placeholder="Search"
                     aria-label="Search">
@@ -259,7 +242,7 @@
                     </button>
                   </div>
                 </div>
-              </form> -->
+              </form>
               <!-- Search form end-->
             </ul>
 
@@ -267,68 +250,23 @@
               <li class='nav-item m-1'>
                 <div class="d-flex align-items-center">
 
-                  <form class="form-inline my-4 my-lg-0 mx-3">
-                    <div class="input-group" style="width:250px">
-                      <input id="search-input" class="form-control mr-sm-2 form-rounded" type="search" placeholder="Search"
-                        aria-label="Search">
-                      <div class="input-group-append">
-                        <button class="btn btn-outline-dark my-2 my-sm-0 form-rounded" type="submit">
-                          <i class="fas fa-search"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-
                   <c:catch>
                     <c:choose>
                       <c:when test="${empty authInfo && empty cookie.cartCnt.value}">
-
-                      <div class="dropdown mr-3">
-                        <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button"
-                          id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-                          aria-expanded="false">
-                          <i class="fas fa-user icon"></i>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                          <a class="dropdown-item"
-                            href="${pageContext.request.contextPath}/users/login">로그인</a>
-                          <a class="dropdown-item"
-                            href="${pageContext.request.contextPath}/users/modifyuser">주문조회</a>
-                        </div>
-                      </div>
-
-
                       	<a href="${pageContext.request.contextPath}/cart/getlist" class="text-dark mr-2">
                           <i class="fas fa-shopping-cart fa-2x"></i>
                           <span class="badge badge-danger" id="cartIconNumber">0</span>
                         </a>
-
-
+                        <a type='button' class='btn btn-outline-dark'
+                          href='${pageContext.request.contextPath}/users/login'>Login</a>
                       </c:when>
                       <c:when test="${empty authInfo && not empty cookie.cartCnt.value}">
-
-                      <div class="dropdown mr-3">
-                        <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button"
-                          id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-                          aria-expanded="false">
-                          <i class="fas fa-user icon"></i>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                          <a class="dropdown-item"
-                            href="${pageContext.request.contextPath}/users/login">로그인</a>
-                          <a class="dropdown-item"
-                            href="${pageContext.request.contextPath}/users/modifyuser">주문조회</a>
-                        </div>
-                      </div>
-
-
                       	<a href="${pageContext.request.contextPath}/cart/getlist" class="text-dark mr-2">
                           <i class="fas fa-shopping-cart fa-2x"></i>
                           <span class="badge badge-danger" id="cartIconNumber">${cookie.cartCnt.value}</span>
                         </a>
-
-
-                        
+                        <a type='button' class='btn btn-outline-dark'
+                          href='${pageContext.request.contextPath}/users/login'>Login</a>
                       </c:when>
                       <c:otherwise>
                         <c:choose>

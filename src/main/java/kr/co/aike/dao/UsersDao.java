@@ -31,9 +31,9 @@ public class UsersDao {
 		int cnt=0;
 		try {
 			sql=new StringBuilder();
-			sql.append(" INSERT INTO users(id, name, email, pw, zipcode, address1, address2, roles, join_date) ");
-			sql.append(" VALUES(?, ?, ?, ?, ?, ?, ?, ?, now()) ");
-			cnt=jdbcTemplate.update(sql.toString(), users.getUserId(), users.getUserName(), users.getUserEmail(), users.getUserPw(), users.getZipcode(), users.getAddress1(), users.getAddress2(), "member");
+			sql.append(" INSERT INTO users(id, name, email, phone, pw, zipcode, address1, address2, roles, join_date) ");
+			sql.append(" VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, now()) ");
+			cnt=jdbcTemplate.update(sql.toString(), users.getUserId(), users.getUserName(), users.getUserEmail(), users.getPhone(), users.getUserPw(), users.getZipcode(), users.getAddress1(), users.getAddress2(), "member");
 		}catch (Exception e) {
 			System.out.println("회원 등록 실패:" + e);
 		}//end
@@ -45,7 +45,7 @@ public class UsersDao {
 		Users results = null;
 		try {
 			sql=new StringBuilder();
-			sql.append(" SELECT id, name, email, pw, zipcode, address1, address2, roles, join_date ");
+			sql.append(" SELECT id, name, email, phone, pw, zipcode, address1, address2, roles, join_date ");
 			sql.append(" FROM users ");
 			sql.append(" where name='"+user.getUserName()+"' and email='"+user.getUserEmail()+"' ");
 			
@@ -63,7 +63,7 @@ public class UsersDao {
 		Users results = null;
 		try {
 			sql=new StringBuilder();
-			sql.append(" SELECT id, name, email, pw, zipcode, address1, address2, roles, join_date ");
+			sql.append(" SELECT id, name, email, phone, pw, zipcode, address1, address2, roles, join_date ");
 			sql.append(" FROM users ");
 			sql.append(" where name='"+user.getUserName()+"' and email='"+user.getUserEmail()+"' ");
 			
@@ -81,7 +81,7 @@ public class UsersDao {
 		Users results = null;
 		try {
 			sql=new StringBuilder();
-			sql.append(" SELECT id, name, email, pw, zipcode, address1, address2, roles, join_date ");
+			sql.append(" SELECT id, name, email, phone, pw, zipcode, address1, address2, roles, join_date ");
 			sql.append(" FROM users ");
 			sql.append(" where id='"+user.getUserId()+"' and email='"+user.getUserEmail()+"' ");
 			
@@ -114,7 +114,7 @@ public class UsersDao {
 		Users results = null;
 		try {
 			sql=new StringBuilder();
-			sql.append(" SELECT user_no, id, name, email, pw, zipcode, address1, address2, roles, join_date ");
+			sql.append(" SELECT user_no, id, name, email, phone, pw, zipcode, address1, address2, roles, join_date ");
 			sql.append(" FROM users ");
 			sql.append(" where id='"+users.getUserId()+"' and pw='"+users.getUserPw()+"' ");
 			
@@ -147,7 +147,7 @@ public class UsersDao {
 		try {
 			sql=new StringBuilder();
 			sql.append(" UPDATE users ");
-			sql.append(" SET name = '"+users.getUserName()+"', email='"+users.getUserEmail()+"', pw='"+users.getUserPw()+"', ");
+			sql.append(" SET name = '"+users.getUserName()+"', email='"+users.getUserEmail()+"', phone='"+users.getPhone()+"', pw='"+users.getUserPw()+"', ");
 			sql.append(" zipcode = '"+users.getZipcode()+"', address1='"+users.getAddress1()+"', address2='"+users.getAddress2()+"' ");
 			sql.append(" WHERE user_no = "+users.getUserNo()+" ");
 			cnt=jdbcTemplate.update(sql.toString());
