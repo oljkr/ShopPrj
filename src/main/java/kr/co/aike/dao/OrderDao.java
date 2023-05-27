@@ -99,6 +99,39 @@ public class OrderDao {
 		return results;
 	}//selectBuyerInfoAsNo() end
 	
+	// 구매자 정보 상세 조회 - 구매자 번호로 같은 구매자 번호의 구매자 정보 번호들 조회
+	public List<BuyerInfo> selectBuyerInfoNumList(BuyerInfo buyerInfo) throws Exception {
+		List<BuyerInfo> results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT buyer_info_no, name, email, phone, buyer_no, buy_time ");
+			sql.append(" FROM buyer_info ");
+			sql.append(" WHERE buyer_no='"+buyerInfo.getBuyerNo()+"' ");
+			sql.append(" ORDER BY buyer_info_no DESC ");
+			
+			RowMapper<BuyerInfo> rowMapper=new RowMapper<BuyerInfo>() {
+				@Override
+				public BuyerInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+					BuyerInfo buyerInfo = new BuyerInfo();
+					buyerInfo.setBuyerInfoNo(rs.getLong("buyer_info_no"));
+					buyerInfo.setName(rs.getString("name"));
+					buyerInfo.setEmail(rs.getString("email"));
+					buyerInfo.setPhone(rs.getString("phone"));
+					buyerInfo.setBuyerNo(rs.getString("buyer_no"));
+					buyerInfo.setBuyTime(rs.getTimestamp("buy_time").toLocalDateTime());
+					return buyerInfo;
+				}//mapRow() end
+			};//rowMapper end
+			
+			results = jdbcTemplate.query(sql.toString(), rowMapper);
+		}catch (Exception e) {
+			System.out.println("구매자 정보 번호 자료읽기 실패:" +e);
+			return null;
+		}//end
+		
+		return results;
+	}//selectBuyerInfoNumList() end
+	
 	// 주문 등록 처리
 	public int insertOrder(Order order) throws Exception {
 		int cnt=0;
@@ -218,6 +251,20 @@ public class OrderDao {
 		return results;
 	}//selectOrderSheetAsNo() end
 	
+	//목록 조회 - 상품 분류에 따른 전체 갯수 조회
+	public int totalRowCount(OrderSheet orderSheet) {
+		int cnt=0;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT COUNT(distinct name) FROM order_sheet ");
+			sql.append(" where order_sheet_no='"+orderSheet.getOrderSheetNo()+"' ");
+			cnt=jdbcTemplate.queryForObject(sql.toString(), Integer.class);		
+		}catch (Exception e) {
+			System.out.println("카테고리의 전체 상품 갯수 조회 실패:" + e);
+		}//end
+		return cnt;
+	}//totalRowCountAsSort() end
+	
 	//주문서-주문 연결 등록 처리
 	public int insertOrderSheetConn(SheetOrderConn sheetOrderConn) throws Exception {
 		int cnt=0;
@@ -240,6 +287,7 @@ public class OrderDao {
 			sql.append(" SELECT order_no ");
 			sql.append(" FROM sheet_order_conn ");
 			sql.append(" WHERE order_sheet_no='"+sheetOrderConn.getOrderSheetNo()+"' ");
+			sql.append(" ORDER BY order_no DESC ");
 			
 			RowMapper<Long> rowMapper=new RowMapper<Long>() {
 				@Override

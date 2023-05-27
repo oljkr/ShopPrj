@@ -385,7 +385,7 @@
                                   </a>
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item"
-                                href="${pageContext.request.contextPath}/order/getlist">주문조회</a>
+                                href="${pageContext.request.contextPath}/order/getlist?userNo=${authInfo.userNo}">주문조회</a>
                                     <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
                                     <a class="dropdown-item"
@@ -412,7 +412,7 @@
                                   </a>
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item"
-                                href="${pageContext.request.contextPath}/order/getlist">주문조회</a>
+                                href="${pageContext.request.contextPath}/order/getlist?userNo=${authInfo.userNo}">주문조회</a>
                                     <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
                                     <a class="dropdown-item"
@@ -439,7 +439,7 @@
 
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item"
-                                href="${pageContext.request.contextPath}/order/getlist">주문조회</a>
+                                href="${pageContext.request.contextPath}/order/getlist?userNo=${authInfo.userNo}">주문조회</a>
                                     <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
                                     <a class="dropdown-item"
@@ -463,7 +463,7 @@
 
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item"
-                                href="${pageContext.request.contextPath}/order/getlist">주문조회</a>
+                                href="${pageContext.request.contextPath}/order/getlist?userNo=${authInfo.userNo}">주문조회</a>
                                     <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
                                     <a class="dropdown-item"

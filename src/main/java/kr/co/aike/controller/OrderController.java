@@ -57,9 +57,16 @@ public class OrderController {
 	}
 	
 	@GetMapping("/getlist")
-	public ModelAndView getList(HttpServletRequest request) throws Exception {
+	public ModelAndView getList(@ModelAttribute Users users, HttpServletRequest request) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		mav = service.getList(request);
+		mav = service.getList(users, request);
+		return mav;
+	}
+	
+	@GetMapping("/getdetail")
+	public ModelAndView getDetailFromList(HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = service.getDetail(request);
 		return mav;
 	}
 	

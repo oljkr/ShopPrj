@@ -2,6 +2,8 @@ package kr.co.aike.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +21,7 @@ import kr.co.aike.domain.BuyerInfo;
 import kr.co.aike.domain.CartItem;
 import kr.co.aike.domain.Order;
 import kr.co.aike.domain.OrderSheet;
+import kr.co.aike.domain.PrdImg;
 import kr.co.aike.domain.Products;
 import kr.co.aike.domain.SheetOrderConn;
 import kr.co.aike.domain.ShipInfo;
@@ -198,10 +201,192 @@ public class OrderServiceImpl implements OrderService {
 		return mav;
 	}
 	
+//	public ModelAndView pagingAsSort(Products products,String pageNum) throws Exception {
+//		ModelAndView mav=new ModelAndView();
+//		
+//		int totalRowCount=prdDao.totalRowCountAsSort(products); //총 상품 갯수 - 37개라고 가정
+//				
+//		//페이징
+//		int numPerPage = 6; //한 페이지당 레코드 갯수
+//		int pagePerBlock = 10; //페이지 리스트
+//		
+//		//String pageNum=req.getParameter("pageNum");
+//		if(pageNum==null) {
+//			pageNum="1";
+//		}
+//		
+//		//현재 페이지가 2페이지라고 하면, //12페이지라고 하면,
+//		int currentPage =Integer.parseInt(pageNum);		// 2	//12
+//		int startRow    =(currentPage-1)*numPerPage;  // 6 = (2-1)*5+1	//56=(12-1)*5+1
+//		int endRow      =currentPage*numPerPage;		// 10 = 2*5		//60=12*5
+//		
+//		//페이지 수
+//		double totcnt =(double)totalRowCount/numPerPage; // 7.4=37줄/5개씩
+//		int totalPage =(int)Math.ceil(totcnt);			 // 8 실제로 8페이지 끝....
+//		
+//		//현재 페이지가 2페이지라고 하면, 
+//		double d_page =(double)currentPage/pagePerBlock; //1.2 = 12/10		//1.2 = 12/10
+//		int Pages     =(int)Math.ceil(d_page)-1; // 0 = 1-1					//1 = 2-1
+//		int startPage =Pages*pagePerBlock+1;		 // 1 = 0*10+1			//11 = 1*10+1
+//		int endPage   =startPage+pagePerBlock-1; // 10 =  0 + 10 - 1		//20 = 11+10-1
+//		
+//		List<Products> list=null;
+//		List<PrdImg> imgList=new ArrayList<PrdImg>();
+//		PrdImg temp=null;
+//		if(totalRowCount>0) {
+//			list=prdDao.listAsSort(products, startRow, numPerPage);
+//			for(int x=0;x<list.size();++x) {
+//				System.out.println(list.get(x).toString());
+//				temp = prdImgDao.selectListImgPrdNo(list.get(x));
+//				System.out.println(temp);
+//				imgList.add(temp);
+//			}
+//		}else {
+//			list=Collections.EMPTY_LIST;
+//		}//if end
+//
+//		mav.addObject("pageNum", currentPage);
+//		mav.addObject("count", totalRowCount);
+//		mav.addObject("totalPage", totalPage);
+//		mav.addObject("startPage", startPage);
+//		mav.addObject("endPage", endPage);
+//		mav.addObject("list", list);
+//		mav.addObject("imgList", imgList);
+//		
+//		return mav;
+//		
+//	}
+	
 	@Override
-	public ModelAndView getList(HttpServletRequest request) throws Exception {
+	public ModelAndView getList(@ModelAttribute Users users, HttpServletRequest request) throws Exception {
 		log.info("getList");
 		ModelAndView mav = new ModelAndView();
+		//회원 번호로 구매자 정보 번호 리스트 가져오기
+		BuyerInfo buyerInfo = new BuyerInfo();
+		Long userno = users.getUserNo();
+		buyerInfo.setBuyerNo(Long.toString(userno));
+		
+		List<BuyerInfo> buyerInfoList = new ArrayList<BuyerInfo>();
+		buyerInfoList = orderDao.selectBuyerInfoNumList(buyerInfo);
+		System.out.println(buyerInfoList.toString());
+		
+		//주문서 번호 리스트 가져오기
+		List<OrderSheet> orderSheetNoList = new ArrayList<OrderSheet>();
+		OrderSheet orderSheet = new OrderSheet();
+		for(int x=0;x<buyerInfoList.size();++x) {
+			orderSheet.setBuyerInfoNo(buyerInfoList.get(x).getBuyerInfoNo());
+			orderSheet = orderDao.selectOrderSheet(orderSheet);
+			orderSheetNoList.add(orderSheet);
+		}
+		System.out.println(orderSheetNoList.toString());
+		
+		//주문서 번호로 주문 목록 가져오기
+		
+		//주문서 번호로 페이징하기
+		int totalRowCount=orderSheetNoList.size(); //총 주문서 갯수 - 37개라고 가정
+		
+		//페이징
+		int numPerPage = 5; //한 페이지당 레코드 갯수
+		int pagePerBlock = 10; //페이지 리스트
+		
+		String pageNum=request.getParameter("pageNum");
+		if(pageNum==null) {
+			pageNum="1";
+		}
+		
+		//현재 페이지가 2페이지라고 하면, //12페이지라고 하면,
+		int currentPage =Integer.parseInt(pageNum);		// 2	//12
+		int startRow    =(currentPage-1)*numPerPage+1;  // 6 = (2-1)*5+1	//56=(12-1)*5+1
+		int endRow      =currentPage*numPerPage;		// 10 = 2*5		//60=12*5
+		
+		//페이지 수
+		double totcnt =(double)totalRowCount/numPerPage; // 7.4=37줄/5개씩
+		int totalPage =(int)Math.ceil(totcnt);			 // 8 실제로 8페이지 끝....
+		
+		//현재 페이지가 2페이지라고 하면, 
+		double d_page =(double)currentPage/pagePerBlock; //1.2 = 12/10		//1.2 = 12/10
+		int Pages     =(int)Math.ceil(d_page)-1; // 0 = 1-1					//1 = 2-1
+		int startPage =Pages*pagePerBlock+1;		 // 1 = 0*10+1			//11 = 1*10+1
+		int endPage   =startPage+pagePerBlock-1; // 10 =  0 + 10 - 1		//20 = 11+10-1
+		
+		HashMap<String, BuyerInfo> buyerInfoListPaging = new HashMap<>();
+		HashMap<Long, OrderSheet> orderSheetListPaging = new HashMap<>();
+		HashMap<String, List<Order>> orderListPaging = new HashMap<>();
+		HashMap<String, List<Products>> productListPaging = new HashMap<>();
+		SheetOrderConn sheetOrderConn = new SheetOrderConn();
+		List<Long> orderNumList = new ArrayList<>();
+		
+		//Order order = new Order();
+		if(orderSheetNoList.size()<numPerPage) {
+			for(int y=0; y<orderSheetNoList.size(); ++y) {
+				
+				List<Order> orderList = new ArrayList<>();
+				List<Products> productList = new ArrayList<>();
+				System.out.println("ordersheetno"+orderSheetNoList.get(y).toString());
+				sheetOrderConn.setOrderSheetNo(orderSheetNoList.get(y).getOrderSheetNo());
+				System.out.println("conn"+sheetOrderConn.toString());
+				orderNumList = orderDao.selectOrderSheetConn(sheetOrderConn);
+				System.out.println("orderNumList"+orderNumList.toString());
+				for(int x=0;x<orderNumList.size();++x) {
+					Order order = new Order();
+					Products products = new Products();
+					order.setOrderNo(orderNumList.get(x));
+					order = orderDao.selectOrderAsNo(order);
+					System.out.println("order"+order.toString());
+					orderList.add(order);
+					products.setPrdNo(order.getPrdNo());
+					products = prdDao.selectProductPrdNo(products);
+					productList.add(products);
+				}
+				System.out.println("buyerInfoList"+buyerInfoList.toString());
+				buyerInfoListPaging.put(Integer.toString(y+1), buyerInfoList.get(y));
+				
+				System.out.println("orderSheetNoList"+orderSheetNoList.toString());
+				orderSheetListPaging.put((long) (y)+1, orderSheetNoList.get(y));
+				
+				System.out.println("orderList"+orderList.toString());
+				orderListPaging.put(Integer.toString(y+1), orderList);
+				
+				productListPaging.put(Integer.toString(y+1), productList);
+			}
+		}else {
+			for(int y=startRow-1; y<endRow-1; ++y) {
+				List<Order> orderList = new ArrayList<>();
+				List<Products> productList = new ArrayList<>();
+				System.out.println("ordersheetno"+orderSheetNoList.get(y).toString());
+				sheetOrderConn.setOrderSheetNo(orderSheetNoList.get(y).getOrderSheetNo());
+				System.out.println("conn"+sheetOrderConn.toString());
+				orderNumList = orderDao.selectOrderSheetConn(sheetOrderConn);
+				System.out.println("orderNumList"+orderNumList.toString());
+				for(int x=0;x<orderNumList.size();++x) {
+					Order order = new Order();
+					Products products = new Products();
+					order.setOrderNo(orderNumList.get(x));
+					order = orderDao.selectOrderAsNo(order);
+					orderList.add(order);
+					products.setPrdNo(order.getPrdNo());
+					products = prdDao.selectProductPrdNo(products);
+					productList.add(products);
+				}
+				orderListPaging.put(Integer.toString(y+1), orderList);
+				productListPaging.put(Integer.toString(y+1), productList);
+			}
+		}
+		
+		System.out.println(orderListPaging.toString());
+		
+		mav.addObject("pageNum", currentPage);
+		mav.addObject("count", totalRowCount);
+		mav.addObject("totalPage", totalPage);
+		mav.addObject("startPage", startPage);
+		mav.addObject("endPage", endPage);
+
+		mav.addObject("orderSheetNoList", orderSheetNoList);
+		mav.addObject("buyerInfoListPaging", buyerInfoListPaging);
+		mav.addObject("orderSheetListPaging", orderSheetListPaging);
+		mav.addObject("orderListPaging", orderListPaging);
+		mav.addObject("productListPaging", productListPaging);
+		
 		mav.setViewName("order/list");
 		return mav;
 	}

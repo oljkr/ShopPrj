@@ -4,7 +4,11 @@
     <div class="container mb-5">
       <h1 class="mt-4">Order Detail</h1>
       <hr>
-      <h6 class="mt-4">주문 일시 : ${buyerInfo.buyTime}&nbsp;&nbsp; / &nbsp;&nbsp;주문서 번호 : ${orderSheetNo}</h6>
+      <h6 class="mt-4">주문 일시 : 
+        <fmt:parseDate value="${buyerInfo.buyTime}" 
+              pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+            <fmt:formatDate pattern="yyyy. MM. dd HH:mm" value="${ parsedDateTime }" />
+        &nbsp;&nbsp; / &nbsp;&nbsp;주문서 번호 : ${orderSheetNo}</h6>
 
 
       <div class="text-center">
@@ -177,7 +181,10 @@
               <div class="form-group row">
                 <label for="name" class="col-md-2 col-form-label">결제 수단</label>
                 <div class="col-md-8">
-                  ${orderList[0].paymentMethod}
+                  <div class="d-flex align-items-center" style="height: 100%;">
+                    ${orderList[0].paymentMethod}
+                  </div>
+                 
                 </div>
               </div>
 

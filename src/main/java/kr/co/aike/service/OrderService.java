@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.aike.domain.Order;
@@ -21,7 +22,7 @@ public interface OrderService {
 	
 	ModelAndView guestGet(HttpServletRequest request) throws Exception;
 	
-	ModelAndView getList(HttpServletRequest request) throws Exception;
+	ModelAndView getList(@ModelAttribute Users users, HttpServletRequest request) throws Exception;
 
 	ModelAndView getDetail(HttpServletRequest request) throws Exception;
 
