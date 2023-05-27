@@ -2,7 +2,7 @@
   <%@ include file="header.jsp" %>
 
   <div class="container mb-5">
-    <h1 class="mt-4">Product List</h1>
+    <h1 class="mt-4">Order List</h1>
     <hr>
     <div class="row justify-content-center">
       <div class="col-lg-11">
@@ -194,11 +194,91 @@
           </ul>
         </div>
           </c:if>
-        
 
 
-        </ul>
       </div>
+
+
+      <div col="col-lg-11">
+              
+        <nav aria-label="Page navigation" class="text-center mt-3">
+          <ul class="pagination">
+
+            <c:choose> 
+              <c:when test="${pageNum eq 1}">
+              </c:when>
+              <c:otherwise>
+                <li class="page-item">
+                  <a class="page-link" href="${pageContext.request.contextPath}/order/getlist?userNo=${authInfo.userNo}&pageNum=${pageNum-1}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+              </c:otherwise> 
+            </c:choose> 
+
+            <c:choose> 
+              <c:when test="${totalPage <= endPage}">
+                <c:forEach var="index" begin="${startPage}" end="${totalPage}">
+
+                  <c:choose> 
+                    <c:when test="${pageNum eq index}">
+                      <li class="page-item active"><a class="page-link" href="${pageContext.request.contextPath}/order/getlist?userNo=${authInfo.userNo}&pageNum=${index}">
+                        <c:out value="${index}" /></a>
+                      </li>
+                    </c:when>
+                    <c:otherwise>
+                      <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/order/getlist?userNo=${authInfo.userNo}&pageNum=${index}">
+                        <c:out value="${index}" /></a>
+                      </li>
+                    </c:otherwise> 
+                  </c:choose> 
+
+                </c:forEach>
+              </c:when> 
+              <c:otherwise>
+                <c:forEach var="index" begin="${startPage}" end="${endPage}">
+
+                  <c:choose> 
+                    <c:when test="${pageNum eq index}">
+                      <li class="page-item active"><a class="page-link" href="${pageContext.request.contextPath}/order/getlist?userNo=${authInfo.userNo}&pageNum=${index}">
+                        <c:out value="${index}" /></a>
+                      </li>
+                    </c:when>
+                    <c:otherwise>
+                      <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/order/getlist?userNo=${authInfo.userNo}&pageNum=${index}">
+                        <c:out value="${index}" /></a>
+                      </li>
+                    </c:otherwise> 
+                  </c:choose> 
+
+                </c:forEach>
+              </c:otherwise>
+            </c:choose>
+
+            <c:choose> 
+              <c:when test="${pageNum eq totalPage}">
+              </c:when>
+              <c:otherwise>
+                <li class="page-item">
+                  <a class="page-link" href="${pageContext.request.contextPath}/order/getlist?userNo=${authInfo.userNo}&pageNum=${pageNum+1}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </li>
+              </c:otherwise> 
+            </c:choose> 
+
+            
+          </ul>
+        </nav>
+    </div>
+
+
+
+
+
+
     </div>
   </div>
   
