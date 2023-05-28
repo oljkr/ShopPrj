@@ -13,11 +13,11 @@
 
       <div class="text-center">
         <div class="row justify-content-center mt-4">
-          <div class="col-md-10">
+          <div class="col-md-11">
             <table class="table">
               <thead>
                 <tr>
-                  <th scope="col">Product Info</th>
+                  <th scope="col" colspan="2">Product Info</th>
                   <th scope="col">Quantity</th>
                   <th scope="col">Price</th>
                   <th scope="col">Status</th>
@@ -27,6 +27,7 @@
 
                 <c:set var="sum" value="0" />
                 <c:forEach var="productsList" items="${productsList}" varStatus="vs">
+                  <c:if test="${vs.count <= fn:length(prdImgList)}">
                   <c:set var="quan" value="${orderList[vs.index].quantity}" />
                   <c:set var="pri" value="${productsList.price}" />
                   <c:set var="onetotal" value="${quan * pri}" />
@@ -34,8 +35,13 @@
                   <tr>
                     <td class="text-left align-middle">
                       <div>
-                        ${productsList.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;옵션&nbsp;:&nbsp;&nbsp;${productsList.color}&nbsp;/&nbsp;${productsList.size}&nbsp;]
+                        <img src="./../storage/${prdImgList[vs.index].fileName}" alt="Product 2"
+                          style="width: 100px;">
                       </div>
+                    </td>
+                    <td class="text-left align-middle">
+                      <div>${productsList.name}</div>
+                      <div>[&nbsp;옵션&nbsp;:&nbsp;&nbsp;${productsList.color}&nbsp;/&nbsp;${productsList.size}&nbsp;]</div>
                     </td>
                     <td class="align-middle text-center">
                       <div class="d-inline-block">
@@ -47,11 +53,11 @@
                     <td class="align-middle" id="onetotal${vs.count}">₩ <c:out value="${onetotal}"></c:out>
                     </td>
                     <c:set var="sum" value="${sum + onetotal}" />
-                    <td class="align-middle">
+                    <td class="align-middle" style="width: 20%;">
                       ${orderList[vs.index].status}
                     </td>
                   </tr>
-
+                </c:if>
                 </c:forEach>
 
               </tbody>

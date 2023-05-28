@@ -270,6 +270,7 @@ public class OrderServiceImpl implements OrderService {
 				
 				List<Order> orderList = new ArrayList<>();
 				List<Products> productList = new ArrayList<>();
+				List<PrdImg> prdImgList = new ArrayList<>();
 				System.out.println("ordersheetno"+orderSheetNoList.get(y).toString());
 				sheetOrderConn.setOrderSheetNo(orderSheetNoList.get(y).getOrderSheetNo());
 				System.out.println("conn"+sheetOrderConn.toString());
@@ -278,6 +279,7 @@ public class OrderServiceImpl implements OrderService {
 				for(int x=0;x<orderNumList.size();++x) {
 					Order order = new Order();
 					Products products = new Products();
+					PrdImg prdImg = new PrdImg();
 					order.setOrderNo(orderNumList.get(x));
 					order = orderDao.selectOrderAsNo(order);
 					System.out.println("order"+order.toString());
@@ -285,6 +287,8 @@ public class OrderServiceImpl implements OrderService {
 					products.setPrdNo(order.getPrdNo());
 					products = prdDao.selectProductPrdNo(products);
 					productList.add(products);
+					prdImg = prdImgDao.selectImgFirstPrdNo(products);
+					prdImgList.add(prdImg);
 				}
 				System.out.println("buyerInfoList"+buyerInfoList.toString());
 				buyerInfoListPaging.put(Integer.toString(index), buyerInfoList.get(y));
@@ -294,6 +298,12 @@ public class OrderServiceImpl implements OrderService {
 				
 				System.out.println("orderList"+orderList.toString());
 				orderListPaging.put(Integer.toString(index), orderList);
+				
+				System.out.println("productList"+productList.toString());
+				productListPaging.put(Integer.toString(index), productList);
+				
+				System.out.println("prdImgList"+prdImgList.toString());
+				prdImgListPaging.put(Integer.toString(index), prdImgList);
 				
 				productListPaging.put(Integer.toString(index), productList);
 			}
@@ -301,6 +311,7 @@ public class OrderServiceImpl implements OrderService {
 			for(int y=startRow-1; y<orderSheetNoList.size(); ++y) {
 				List<Order> orderList = new ArrayList<>();
 				List<Products> productList = new ArrayList<>();
+				List<PrdImg> prdImgList = new ArrayList<>();
 				System.out.println("ordersheetno"+orderSheetNoList.get(y).toString());
 				sheetOrderConn.setOrderSheetNo(orderSheetNoList.get(y).getOrderSheetNo());
 				System.out.println("conn"+sheetOrderConn.toString());
@@ -309,6 +320,7 @@ public class OrderServiceImpl implements OrderService {
 				for(int x=0;x<orderNumList.size();++x) {
 					Order order = new Order();
 					Products products = new Products();
+					PrdImg prdImg = new PrdImg();
 					order.setOrderNo(orderNumList.get(x));
 					order = orderDao.selectOrderAsNo(order);
 					System.out.println("order"+order.toString());
@@ -316,6 +328,8 @@ public class OrderServiceImpl implements OrderService {
 					products.setPrdNo(order.getPrdNo());
 					products = prdDao.selectProductPrdNo(products);
 					productList.add(products);
+					prdImg = prdImgDao.selectImgFirstPrdNo(products);
+					prdImgList.add(prdImg);
 				}
 				System.out.println("buyerInfoList"+buyerInfoList.toString());
 				buyerInfoListPaging.put(Integer.toString(index), buyerInfoList.get(y));
@@ -325,6 +339,12 @@ public class OrderServiceImpl implements OrderService {
 				
 				System.out.println("orderList"+orderList.toString());
 				orderListPaging.put(Integer.toString(index), orderList);
+				
+				System.out.println("productList"+productList.toString());
+				productListPaging.put(Integer.toString(index), productList);
+				
+				System.out.println("prdImgList"+prdImgList.toString());
+				prdImgListPaging.put(Integer.toString(index), prdImgList);
 				
 				productListPaging.put(Integer.toString(index), productList);
 				index++;
@@ -362,7 +382,7 @@ public class OrderServiceImpl implements OrderService {
 				System.out.println("orderList"+orderList.toString());
 				orderListPaging.put(Integer.toString(index), orderList);
 				
-				System.out.println("productList"+orderList.toString());
+				System.out.println("productList"+productList.toString());
 				productListPaging.put(Integer.toString(index), productList);
 				
 				System.out.println("prdImgList"+prdImgList.toString());
@@ -427,17 +447,22 @@ public class OrderServiceImpl implements OrderService {
 		}
 		mav.addObject("orderList", orderList);
 		
-		//상품명 가져오기
+		//상품명, 상품 이미지 가져오기
 		List<Products> productsList = new ArrayList<Products>();
 		Products tempProducts = new Products();
+		List<PrdImg> prdImgList = new ArrayList<PrdImg>();
+		PrdImg tempPrdImg = new PrdImg();
 		Long prdNo = (long) 0;
 		for(int x=0;x<orderList.size();++x) {
 			prdNo = orderList.get(x).getPrdNo();
 			tempProducts.setPrdNo(prdNo);
 			tempProducts = prdDao.selectProductPrdNo(tempProducts);
 			productsList.add(tempProducts);
+			tempPrdImg = prdImgDao.selectImgFirstPrdNo(tempProducts);
+			prdImgList.add(tempPrdImg);
 		}
 		mav.addObject("productsList", productsList);
+		mav.addObject("prdImgList", prdImgList);
 		
 		//각 상품에 대한 배송 정보 가져오기
 		ShipInfo shipInfo = new ShipInfo();
