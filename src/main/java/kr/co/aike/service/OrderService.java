@@ -26,6 +26,10 @@ public interface OrderService {
 
 	ModelAndView getDetail(HttpServletRequest request) throws Exception;
 
+	ModelAndView orderManageList(HttpServletRequest request) throws Exception;
+
+	int statChange(HttpServletRequest request) throws Exception;
+
 	
 
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.aike.domain.Order;
@@ -75,6 +76,20 @@ public class OrderController {
 		ModelAndView mav = new ModelAndView();
 		mav = service.getDetail(request);
 		return mav;
+	}
+	
+	@GetMapping("/ordermanage")
+	public ModelAndView orderManageList(HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav = service.orderManageList(request);
+		return mav;
+	}
+	
+	@PostMapping("/statchange")
+	@ResponseBody
+	public int statChange(HttpServletRequest request) throws Exception {
+		int updateCnt = service.statChange(request);
+		return updateCnt;
 	}
 	
 

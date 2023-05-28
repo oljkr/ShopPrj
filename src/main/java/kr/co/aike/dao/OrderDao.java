@@ -13,6 +13,7 @@ import kr.co.aike.domain.Order;
 import kr.co.aike.domain.OrderSheet;
 import kr.co.aike.domain.Products;
 import kr.co.aike.domain.SheetOrderConn;
+import kr.co.aike.domain.Users;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -100,6 +101,38 @@ public class OrderDao {
 	}//selectBuyerInfoAsNo() end
 	
 	// 구매자 정보 상세 조회 - 구매자 번호로 같은 구매자 번호의 구매자 정보 번호들 조회
+	public List<BuyerInfo> selectAllBuyerInfoNumList() throws Exception {
+		List<BuyerInfo> results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT buyer_info_no, name, email, phone, buyer_no, buy_time ");
+			sql.append(" FROM buyer_info ");
+			sql.append(" ORDER BY buyer_info_no DESC ");
+			
+			RowMapper<BuyerInfo> rowMapper=new RowMapper<BuyerInfo>() {
+				@Override
+				public BuyerInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+					BuyerInfo buyerInfo = new BuyerInfo();
+					buyerInfo.setBuyerInfoNo(rs.getLong("buyer_info_no"));
+					buyerInfo.setName(rs.getString("name"));
+					buyerInfo.setEmail(rs.getString("email"));
+					buyerInfo.setPhone(rs.getString("phone"));
+					buyerInfo.setBuyerNo(rs.getString("buyer_no"));
+					buyerInfo.setBuyTime(rs.getTimestamp("buy_time").toLocalDateTime());
+					return buyerInfo;
+				}//mapRow() end
+			};//rowMapper end
+			
+			results = jdbcTemplate.query(sql.toString(), rowMapper);
+		}catch (Exception e) {
+			System.out.println("구매자 정보 번호 자료읽기 실패:" +e);
+			return null;
+		}//end
+		
+		return results;
+	}//selectAllBuyerInfoNumList() end
+	
+	// 구매자 정보 상세 조회 - 구매자 번호로 같은 구매자 번호의 구매자 정보 번호들 조회
 	public List<BuyerInfo> selectBuyerInfoNumList(BuyerInfo buyerInfo) throws Exception {
 		List<BuyerInfo> results = null;
 		try {
@@ -182,7 +215,21 @@ public class OrderDao {
 		return results;
 	}//selectOrderAsNo() end
 	
-
+	//운송 상태 변경
+	public int updateStatus(String orderNo, String newStat) {
+		int cnt=0;
+		try {
+			sql=new StringBuilder();
+			sql.append(" UPDATE aike.order ");
+			sql.append(" SET status = '"+newStat+"' ");
+			sql.append(" WHERE order_no = '"+orderNo+"' ");
+			cnt=jdbcTemplate.update(sql.toString());
+		}catch (Exception e) {
+			System.out.println("운송 상태 바꾸기 실패:" + e);
+		}//end
+		return cnt;		
+	}//updateStatus() end
+	
 	//주문서 등록 처리
 	public int insertOrderSheet(OrderSheet orderSheet) throws Exception {
 		int cnt=0;
