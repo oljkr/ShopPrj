@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.aike.dao.OrderDao;
+import kr.co.aike.dao.PrdImgDao;
 import kr.co.aike.dao.ProductsDao;
 import kr.co.aike.dao.ShipInfoDao;
 import kr.co.aike.dao.UsersDao;
@@ -38,6 +39,7 @@ public class OrderServiceImpl implements OrderService {
 	private final ShipInfoDao shipInfoDao;
 	private final OrderDao orderDao;
 	private final ProductsDao prdDao;
+	private final PrdImgDao prdImgDao;
 	private final UsersDao usersdao;
 	
 	public ModelAndView addMessages(int code, String imgText, String msg1Text, String msg2Text, String msg3Text, String link1Text, String link1Href , String link2Text, String link2Href) {
@@ -257,6 +259,7 @@ public class OrderServiceImpl implements OrderService {
 		HashMap<Long, OrderSheet> orderSheetListPaging = new HashMap<>();
 		HashMap<String, List<Order>> orderListPaging = new HashMap<>();
 		HashMap<String, List<Products>> productListPaging = new HashMap<>();
+		HashMap<String, List<PrdImg>> prdImgListPaging = new HashMap<>();
 		SheetOrderConn sheetOrderConn = new SheetOrderConn();
 		List<Long> orderNumList = new ArrayList<>();
 		
@@ -330,6 +333,7 @@ public class OrderServiceImpl implements OrderService {
 			for(int y=startRow-1; y<endRow; ++y) {
 				List<Order> orderList = new ArrayList<>();
 				List<Products> productList = new ArrayList<>();
+				List<PrdImg> prdImgList = new ArrayList<>();
 				System.out.println("ordersheetno"+orderSheetNoList.get(y).toString());
 				sheetOrderConn.setOrderSheetNo(orderSheetNoList.get(y).getOrderSheetNo());
 				System.out.println("conn"+sheetOrderConn.toString());
@@ -338,6 +342,7 @@ public class OrderServiceImpl implements OrderService {
 				for(int x=0;x<orderNumList.size();++x) {
 					Order order = new Order();
 					Products products = new Products();
+					PrdImg prdImg = new PrdImg();
 					order.setOrderNo(orderNumList.get(x));
 					order = orderDao.selectOrderAsNo(order);
 					System.out.println("order"+order.toString());
@@ -345,6 +350,8 @@ public class OrderServiceImpl implements OrderService {
 					products.setPrdNo(order.getPrdNo());
 					products = prdDao.selectProductPrdNo(products);
 					productList.add(products);
+					prdImg = prdImgDao.selectImgFirstPrdNo(products);
+					prdImgList.add(prdImg);
 				}
 				System.out.println("buyerInfoList"+buyerInfoList.toString());
 				buyerInfoListPaging.put(Integer.toString(index), buyerInfoList.get(y));
@@ -355,7 +362,12 @@ public class OrderServiceImpl implements OrderService {
 				System.out.println("orderList"+orderList.toString());
 				orderListPaging.put(Integer.toString(index), orderList);
 				
+				System.out.println("productList"+orderList.toString());
 				productListPaging.put(Integer.toString(index), productList);
+				
+				System.out.println("prdImgList"+prdImgList.toString());
+				prdImgListPaging.put(Integer.toString(index), prdImgList);
+				
 				index++;
 			}
 		}
@@ -374,6 +386,7 @@ public class OrderServiceImpl implements OrderService {
 		mav.addObject("orderSheetListPaging", orderSheetListPaging);
 		mav.addObject("orderListPaging", orderListPaging);
 		mav.addObject("productListPaging", productListPaging);
+		mav.addObject("prdImgListPaging", prdImgListPaging);
 		
 		mav.setViewName("order/list");
 		return mav;

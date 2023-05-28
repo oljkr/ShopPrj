@@ -171,6 +171,13 @@
             font-size: 19px;
             color: rgb(231, 80, 80);
           }
+
+          .buy-product-image {
+            width: 60%;
+            max-height: 80px;
+            /* Adjust the max-height as needed */
+            object-fit: cover;
+          }
         </style>
 
         <script src="./../js/check.js"></script>

@@ -22,12 +22,19 @@
 
             <c:set var="orderList" value="${orderListPaging['1']}" />
             <c:set var="productList" value="${productListPaging['1']}" />
+            <c:set var="prdImgList" value="${prdImgListPaging['1']}" />
             <ul class="list-group mt-3 mb-2">
             <c:forEach var="entry1" items="${orderList}" varStatus="status1">
               <c:if test="${status1.count <= fn:length(productList)}">
                 <li class="list-group-item">
                   <div class="row align-items-center">
-                    <div class="col-9">
+
+                    <div class="col-2  d-flex flex-column justify-content-center align-items-center">
+                      <img src="./../storage/${prdImgList[status1.index].fileName}" alt="Product 2"
+                          class="buy-product-image">
+                    </div>
+
+                    <div class="col-7">
                       <h5>${productList[status1.index].name}<span style="font-size: 20px;"> [ 옵션 : ${productList[status1.index].color} / ${productList[status1.index].size} ] </span></h5>
                       <p style="margin-bottom: 0;">${productList[status1.index].price} 원, ${entry1.quantity} 개</p>
                     </div>
@@ -59,13 +66,20 @@
 
             <c:set var="orderList" value="${orderListPaging['2']}" />
             <c:set var="productList" value="${productListPaging['2']}" />
+            <c:set var="prdImgList" value="${prdImgListPaging['2']}" />
             <ul class="list-group mt-3 mb-2">
             <c:forEach var="entry1" items="${orderList}" varStatus="status1">
               <c:if test="${status1.count <= fn:length(productList)}">
                 
                 <li class="list-group-item">
                   <div class="row align-items-center">
-                    <div class="col-9">
+
+                    <div class="col-2  d-flex flex-column justify-content-center align-items-center">
+                      <img src="./../storage/${prdImgList[status1.index].fileName}" alt="Product 2"
+                          class="buy-product-image">
+                    </div>
+
+                    <div class="col-7">
                       <h5>${productList[status1.index].name}<span style="font-size: 20px;"> [ 옵션 : ${productList[status1.index].color} / ${productList[status1.index].size} ] </span></h5>
                       <p style="margin-bottom: 0;">${productList[status1.index].price} 원, ${entry1.quantity} 개</p>
                     </div>
@@ -96,13 +110,20 @@
 
             <c:set var="orderList" value="${orderListPaging['3']}" />
             <c:set var="productList" value="${productListPaging['3']}" />
+            <c:set var="prdImgList" value="${prdImgListPaging['3']}" />
             <ul class="list-group mt-3 mb-2">
             <c:forEach var="entry1" items="${orderList}" varStatus="status1">
               <c:if test="${status1.count <= fn:length(productList)}">
 
                 <li class="list-group-item">
                   <div class="row align-items-center">
-                    <div class="col-9">
+
+                    <div class="col-2  d-flex flex-column justify-content-center align-items-center">
+                      <img src="./../storage/${prdImgList[status1.index].fileName}" alt="Product 2"
+                          class="buy-product-image">
+                    </div>
+
+                    <div class="col-7">
                       <h5>${productList[status1.index].name}<span style="font-size: 20px;"> [ 옵션 : ${productList[status1.index].color} / ${productList[status1.index].size} ] </span></h5>
                       <p style="margin-bottom: 0;">${productList[status1.index].price} 원, ${entry1.quantity} 개</p>
                     </div>
@@ -133,13 +154,20 @@
 
             <c:set var="orderList" value="${orderListPaging['4']}" />
             <c:set var="productList" value="${productListPaging['4']}" />
+            <c:set var="prdImgList" value="${prdImgListPaging['4']}" />
             <ul class="list-group mt-3 mb-2">
             <c:forEach var="entry1" items="${orderList}" varStatus="status1">
               <c:if test="${status1.count <= fn:length(productList)}">
 
                 <li class="list-group-item">
                   <div class="row align-items-center">
-                    <div class="col-9">
+                    
+                    <div class="col-2  d-flex flex-column justify-content-center align-items-center">
+                      <img src="./../storage/${prdImgList[status1.index].fileName}" alt="Product 2"
+                          class="buy-product-image">
+                    </div>
+
+                    <div class="col-7">
                       <h5>${productList[status1.index].name}<span style="font-size: 20px;"> [ 옵션 : ${productList[status1.index].color} / ${productList[status1.index].size} ] </span></h5>
                       <p style="margin-bottom: 0;">${productList[status1.index].price} 원, ${entry1.quantity} 개</p>
                     </div>
@@ -171,13 +199,18 @@
 
             <c:set var="orderList" value="${orderListPaging['5']}" />
             <c:set var="productList" value="${productListPaging['5']}" />
+            <c:set var="prdImgList" value="${prdImgListPaging['5']}" />
             <ul class="list-group mt-3 mb-2">
             <c:forEach var="entry1" items="${orderList}" varStatus="status1">
               <c:if test="${status1.count <= fn:length(productList)}">
 
                 <li class="list-group-item">
                   <div class="row align-items-center">
-                    <div class="col-9">
+                    <div class="col-2  d-flex flex-column justify-content-center align-items-center">
+                      <img src="./../storage/${prdImgList[status1.index].fileName}" alt="Product 2"
+                          class="buy-product-image">
+                    </div>
+                    <div class="col-7">                  
                       <h5>${productList[status1.index].name}<span style="font-size: 20px;"> [ 옵션 : ${productList[status1.index].color} / ${productList[status1.index].size} ] </span></h5>
                       <p style="margin-bottom: 0;">${productList[status1.index].price} 원, ${entry1.quantity} 개</p>
                     </div>
@@ -269,7 +302,7 @@
               </c:otherwise> 
             </c:choose> 
 
-            
+
           </ul>
         </nav>
     </div>
