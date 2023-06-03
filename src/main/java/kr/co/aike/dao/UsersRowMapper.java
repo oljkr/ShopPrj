@@ -16,6 +16,7 @@ public class UsersRowMapper implements RowMapper<Users>{
 		users.setUserId(rs.getString("id"));
 		users.setUserName(rs.getString("name"));
 		users.setUserEmail(rs.getString("email"));
+		users.setPhone(rs.getString("phone"));
 		users.setUserPw(rs.getString("pw"));
 		users.setZipcode(rs.getString("zipcode"));
 		users.setAddress1(rs.getString("address1"));

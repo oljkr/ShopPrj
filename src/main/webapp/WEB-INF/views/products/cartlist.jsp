@@ -79,9 +79,26 @@
           <div class="col-md-6 text-md-center">
             <a href="${pageContext.request.contextPath}/home"
                       class="btn btn-outline-dark rounded-pill py-3 px-5">계속 쇼핑하기</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="${pageContext.request.contextPath}/order/add"
-                      class="btn btn-dark rounded-pill py-3 px-5" style="width: 190px;">구매하기</a>
-            <!-- <button type="submit" class="btn btn-dark rounded-pill py-3 px-5" style="width: 190px;">구매하기</button> -->
+                      <c:catch>
+                        <c:choose>
+                          <c:when test="${empty authInfo}">
+                            <a href="${pageContext.request.contextPath}/order/add"
+                                        class="btn btn-dark rounded-pill py-3 px-5" style="width: 190px;">구매하기</a>
+                          </c:when>
+                          <c:when test="${authInfo.roles eq 'guest'}">
+                            <a href="${pageContext.request.contextPath}/order/add"
+                                        class="btn btn-dark rounded-pill py-3 px-5" style="width: 190px;">구매하기</a>
+                          </c:when>
+                          <c:when test="${authInfo.roles eq 'admin'}">
+                            <a href="${pageContext.request.contextPath}/order/useradd?userNo=${authInfo.userNo}"
+                                        class="btn btn-dark rounded-pill py-3 px-5" style="width: 190px;">구매하기</a>
+                          </c:when>
+                          <c:when test="${authInfo.roles eq 'member'}">
+                            <a href="${pageContext.request.contextPath}/order/useradd?userNo=${authInfo.userNo}"
+                                        class="btn btn-dark rounded-pill py-3 px-5" style="width: 190px;">구매하기</a>
+                          </c:when>
+                        </c:choose>
+                      </c:catch>
           </div>
         </div>
 

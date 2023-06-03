@@ -23,17 +23,174 @@
             height: 200px;
             background: #aaa;
           }
+
+          #shortDes {
+            height: 100px;
+          }
+
+          .ck-editor__editable {
+            min-height: 200px;
+          }
+
+          #scrollToTop {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #f8f9fa;
+            border-radius: 50%;
+            border: none;
+            color: #000;
+            font-size: 20px;
+            text-align: center;
+            cursor: pointer;
+            display: none;
+          }
+
+          #scrollToTop:hover {
+            background-color: #e9ecef;
+          }
+
+          .square {
+            width: 70px;
+            height: 70px;
+          }
+
+          .big-square {
+            width: 90%;
+            height: 90%;
+          }
+
+          .product {
+            margin-bottom: 20px;
+          }
+
+          .product img {
+            width: 100%;
+            height: auto;
+          }
+
+          .product-name {
+            font-weight: bold;
+            margin-top: 10px;
+          }
+
+          .product-price {
+            color: #888;
+          }
+
+          #justwrap {
+            position: relative;
+          }
+
+          #search-box {
+            display: none;
+            position: absolute;
+            /* Adjust the top position as needed */
+            left: 0;
+            width: 100%;
+            /* height: 300px; */
+            /* Adjust the height as needed */
+
+            /* background-color: #080707;
+            border: 1px solid #ccc; */
+            
+            padding: 10px;
+            z-index: 999;
+
+          }
+
+          .search-result {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 15%;
+            /* Adjust the width as needed */
+            margin: 10px;
+            position: absolute;
+            z-index: 999;
+          }
+
+          .search-result img {
+            width: 100%;
+            max-height: 150px;
+            /* Adjust the max-height as needed */
+            object-fit: cover;
+            /*이건 적용 안 되는 듯...ㅠ*/
+            margin-bottom: 10px;
+          }
+
+
+          /* Custom styling for modal content */
+          .modal-content {
+            border-radius: 0;
+          }
+
+          .product-image {
+            max-width: 100px;
+            max-height: 100px;
+          }
+
+          /* Center the box horizontally and vertically */
+          .total-amount-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          /* Style the box */
+          .total-amount-box {
+            width: 80%;
+            height: 100px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            /* background-color: #f8f8f8; */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          }
+          .total-amount-box p {
+            margin-bottom: 0;
+            font-size: 18px;
+            color: #333;
+          }
+
+          .total-amount-box div {
+            margin-bottom: 0;
+            font-size: 18px;
+            color: #333;
+          }
+
+          /* Style the colored text */
+          .colored-text {
+            font-size: 19px;
+            color: rgb(231, 80, 80);
+          }
+
+          .buy-product-image {
+            width: 60%;
+            max-height: 80px;
+            /* Adjust the max-height as needed */
+            object-fit: cover;
+          }
         </style>
 
-        <script src="./js/check.js"></script>
+        <script src="./../js/check.js"></script>
 
-        <link rel="stylesheet" href="./css/style.css" />
+        <link rel="stylesheet" href="./../css/style.css" />
         <link rel="stylesheet" as="style" crossorigin
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+        <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+        <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
+
       </head>
 
       <body>
-
 
         <!-- navbar start -->
         <nav class="navbar navbar-expand-sm navbar-light"
@@ -41,7 +198,7 @@
 
           <!-- <a class="navbar-brand" href="${pageContext.request.contextPath}/home">Navbar</a> -->
           <a href="${pageContext.request.contextPath}/home">
-            <img src="./storage/logo.png" width="70" alt="logo">
+            <img src="./../storage/logo.png" width="70" alt="logo">
           </a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
@@ -54,9 +211,9 @@
                   Men
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=m&sort2=sho">신발</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=m&sort2=clo">의류</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=m&sort2=acc">용품</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink1">신발</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
                 </div>
               </li>
               <li class="nav-item dropdown">
@@ -65,9 +222,9 @@
                   Women
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=w&sort2=sho">신발</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=w&sort2=clo">의류</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=w&sort2=acc">용품</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list">신발</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
                 </div>
               </li>
               <li class="nav-item dropdown">
@@ -76,9 +233,9 @@
                   Kids
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=k&sort2=sho">신발</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=k&sort2=clo">의류</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=k&sort2=acc">용품</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink1">신발</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
                 </div>
               </li>
             </ul>

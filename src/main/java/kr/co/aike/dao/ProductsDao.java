@@ -235,26 +235,6 @@ public class ProductsDao {
 		return list;
 	}//list() end
 	
-//	//목록 조회 - 카테고리 상품 페이징 조회
-//	public List<Products> listAsSort(Products products, int start, int end) {
-//		List<Products> list=null;
-//		try {
-//			sql=new StringBuilder();
-//			sql.append(" SELECT * ");
-//			sql.append(" FROM ( SELECT *, @ROWNUM :=@ROWNUM+1 AS ROWNUM ");
-//			sql.append("           FROM ( SELECT prd_no, sort1, sort2, name, color, size, short_des, full_des, stock, price, order_cnt ");
-//			sql.append("                      FROM ( SELECT min(AA.prd_no) as prd_no, AA.sort1, AA.sort2, AA.name, AA.color, AA.size, AA.short_des, AA.full_des, AA.stock, AA.price, AA.order_cnt ");
-//			sql.append("                                 FROM products AA where sort1='"+products.getSort1()+"' and sort2='"+products.getSort2()+"' group by name) BB, (SELECT @ROWNUM := 0) TMP ");
-//			sql.append("          ORDER BY prd_no DESC ) CC ) DD ");
-//			sql.append(" WHERE "+start+"<=ROWNUM AND ROWNUM<="+end+" ");
-//			
-//			list=jdbcTemplate.query(sql.toString(), new ProductsRowMapper());
-//		}catch (Exception e) {
-//			System.out.println("카테고리 상품 페이징실패:" +e);
-//		}//end
-//		return list;
-//	}//list() end
-	
 	//목록 조회 - 카테고리 상품 페이징 조회
 	public List<Products> listAsSort(Products products, int start, int numPerPage) {
 		List<Products> list=null;

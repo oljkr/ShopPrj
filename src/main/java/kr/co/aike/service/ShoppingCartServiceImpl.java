@@ -94,7 +94,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return cart;
     }
     
-    private void saveShoppingCart(ShoppingCart cart, HttpServletResponse response) throws JsonProcessingException, UnsupportedEncodingException {
+    public void saveShoppingCart(ShoppingCart cart, HttpServletResponse response) throws JsonProcessingException, UnsupportedEncodingException {
         String cartJson = serializeCart(cart);
         Cookie cartCookie = new Cookie(CART_COOKIE_NAME, cartJson);
         cartCookie.setMaxAge(3600); // Cookie expiration time in seconds (e.g., 1 hour)
@@ -120,7 +120,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return cartCnt;
     }
     
-    private void saveShoppingCartCnt(String cartCnt, HttpServletResponse response) throws JsonProcessingException, UnsupportedEncodingException {
+    public void saveShoppingCartCnt(String cartCnt, HttpServletResponse response) throws JsonProcessingException, UnsupportedEncodingException {
         Cookie cartCntCookie = new Cookie(CARTCNT_COOKIE_NAME, cartCnt);
         cartCntCookie.setMaxAge(3600); // Cookie expiration time in seconds (e.g., 1 hour)
         cartCntCookie.setPath("/"); // Set the cookie path to the root path ("/")

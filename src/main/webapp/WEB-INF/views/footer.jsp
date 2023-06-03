@@ -5,12 +5,12 @@
         <div class="container">
           <div class="row">
             <div class="col-md-6 mt-3">
-              <h5>도움말</h5>
-              <p>공지사항</p>
+              <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h5>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
             </div>
             <div class="col-md-6 mt-3">
-              <h5>Footer Content 2</h5>
-              <p>Footer content description</p>
+              <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h5>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
             </div>
           </div>
           <hr>

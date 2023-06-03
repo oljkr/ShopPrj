@@ -170,6 +170,23 @@
             font-size: 19px;
             color: rgb(231, 80, 80);
           }
+
+
+          .hover-list {
+      display: none; /* Hide the list by default */
+      position: absolute;
+      background-color: #fff;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      list-style: none; /* Remove the list-style */
+      margin-top: 10px; /* Adjust the margin as needed */
+      width: 70px;
+    }
+    
+    .icon:hover + .hover-list {
+      display: block; /* Show the list on hover */
+    }
         </style>
 
         <script src="./../js/check.js"></script>
@@ -204,9 +221,9 @@
                   Men
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink1">신발</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=m&sort2=sho">신발</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=m&sort2=clo">의류</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=m&sort2=acc">용품</a>
                 </div>
               </li>
               <li class="nav-item dropdown">
@@ -215,9 +232,9 @@
                   Women
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list">신발</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=w&sort2=sho">신발</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=w&sort2=clo">의류</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=w&sort2=acc">용품</a>
                 </div>
               </li>
               <li class="nav-item dropdown">
@@ -226,74 +243,138 @@
                   Kids
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink1">신발</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink2">의류</a>
-                  <a class="dropdown-item" href="${pageContext.request.contextPath}/navlink3">용품</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=k&sort2=sho">신발</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=k&sort2=clo">의류</a>
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/products/list?sort1=k&sort2=acc">용품</a>
                 </div>
               </li>
-              <!-- Search form start -->
-              <form class="form-inline my-4 my-lg-0 mx-2">
-                <div class="input-group" style="width:250px">
-                  <input id="search-input" class="form-control mr-sm-2 form-rounded" type="search" placeholder="Search"
-                    aria-label="Search">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-dark my-2 my-sm-0 form-rounded" type="submit">
-                      <i class="fas fa-search"></i>
-                    </button>
-                  </div>
-                </div>
-              </form>
-              <!-- Search form end-->
             </ul>
 
             <ul class='navbar-nav'>
               <li class='nav-item m-1'>
                 <div class="d-flex align-items-center">
 
+                  <form class="form-inline my-4 my-lg-0 mx-3">
+                    <div class="input-group" style="width:250px">
+                      <input id="search-input" class="form-control mr-sm-2 form-rounded" type="search" placeholder="Search"
+                        aria-label="Search">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-dark my-2 my-sm-0 form-rounded" type="submit">
+                          <i class="fas fa-search"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+
                   <c:catch>
                     <c:choose>
                       <c:when test="${empty authInfo && empty cookie.cartCnt.value}">
+
+                      <div class="dropdown mr-3">
+                        <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button"
+                          id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                          aria-expanded="false">
+                          <i class="fas fa-user icon"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          <a class="dropdown-item"
+                            href="${pageContext.request.contextPath}/users/login">로그인</a>
+                          <a class="dropdown-item"
+                            href="${pageContext.request.contextPath}/order/guest">주문조회</a>
+                        </div>
+                      </div>
+
+
                       	<a href="${pageContext.request.contextPath}/cart/getlist" class="text-dark mr-2">
                           <i class="fas fa-shopping-cart fa-2x"></i>
                           <span class="badge badge-danger" id="cartIconNumber">0</span>
                         </a>
-                        <a type='button' class='btn btn-outline-dark'
-                          href='${pageContext.request.contextPath}/users/login'>Login</a>
+
+
                       </c:when>
                       <c:when test="${empty authInfo && not empty cookie.cartCnt.value}">
+
+                      <div class="dropdown mr-3">
+                        <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button"
+                          id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                          aria-expanded="false">
+                          <i class="fas fa-user icon"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          <a class="dropdown-item"
+                            href="${pageContext.request.contextPath}/users/login">로그인</a>
+                          <a class="dropdown-item"
+                            href="${pageContext.request.contextPath}/order/guest">주문조회</a>
+                        </div>
+                      </div>
+
+
                       	<a href="${pageContext.request.contextPath}/cart/getlist" class="text-dark mr-2">
                           <i class="fas fa-shopping-cart fa-2x"></i>
                           <span class="badge badge-danger" id="cartIconNumber">${cookie.cartCnt.value}</span>
                         </a>
-                        <a type='button' class='btn btn-outline-dark'
-                          href='${pageContext.request.contextPath}/users/login'>Login</a>
+
+
+
                       </c:when>
                       <c:otherwise>
                         <c:choose>
                           <c:when test="${authInfo.roles eq 'guest' && empty cookie.cartCnt.value}">
+
+                          <div class="dropdown mr-3">
+                            <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button"
+                              id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                              aria-expanded="false">
+                              <i class="fas fa-user icon"></i>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                              <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/users/login">로그인</a>
+                              <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/order/guest">주문조회</a>
+                            </div>
+                          </div>
+    
+    
                             <a href="${pageContext.request.contextPath}/cart/getlist" class="text-dark mr-2">
                               <i class="fas fa-shopping-cart fa-2x"></i>
                               <span class="badge badge-danger" id="cartIconNumber">0</span>
                             </a>
-                            <a type='button' class='btn btn-outline-dark'
-                              href='${pageContext.request.contextPath}/users/login'>Login</a>
+
                           </c:when>
                           <c:when test="${authInfo.roles eq 'guest' && not empty cookie.cartCnt.value}">
+
+
+                          <div class="dropdown mr-3">
+                            <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button"
+                              id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                              aria-expanded="false">
+                              <i class="fas fa-user icon"></i>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                              <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/users/login">로그인</a>
+                              <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/order/guest">주문조회</a>
+                            </div>
+                          </div>
+    
+    
                             <a href="${pageContext.request.contextPath}/cart/getlist" class="text-dark mr-2">
                               <i class="fas fa-shopping-cart fa-2x"></i>
                               <span class="badge badge-danger" id="cartIconNumber">${cookie.cartCnt.value}</span>
                             </a>
-                            <a type='button' class='btn btn-outline-dark'
-                              href='${pageContext.request.contextPath}/users/login'>Login</a>
+
+
                           </c:when>
                           <c:otherwise>
                             <c:choose>
                               <c:when test="${authInfo.roles eq 'admin' && empty cookie.cartCnt.value}">
 
 
-                                <a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
+                                <a href="${pageContext.request.contextPath}/cart/getlist" class="text-dark mr-2">
                                   <i class="fas fa-shopping-cart fa-2x"></i>
-                                  <span class="badge badge-danger" id="cartIconNumber">8</span>
+                                  <span class="badge badge-danger" id="cartIconNumber">0</span>
                                 </a>
 
                                 <div class="dropdown">
@@ -303,6 +384,8 @@
                                     관리자 ${authInfo.userName }님, 환영합니다.
                                   </a>
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/order/ordermanage">주문관리</a>
                                     <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
                                     <a class="dropdown-item"
@@ -316,7 +399,7 @@
                               <c:when test="${authInfo.roles eq 'admin' && not empty cookie.cartCnt.value}">
 
 
-                                <a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
+                                <a href="${pageContext.request.contextPath}/cart/getlist" class="text-dark mr-2">
                                   <i class="fas fa-shopping-cart fa-2x"></i>
                                   <span class="badge badge-danger" id="cartIconNumber">${cookie.cartCnt.value}</span>
                                 </a>
@@ -328,6 +411,8 @@
                                     관리자 ${authInfo.userName }님, 환영합니다.
                                   </a>
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/order/ordermanage">주문관리</a>
                                     <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
                                     <a class="dropdown-item"
@@ -341,7 +426,7 @@
                               <c:when test="${authInfo.roles eq 'member' && empty cookie.cartCnt.value}">
 
 
-                                <a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
+                                <a href="${pageContext.request.contextPath}/cart/getlist" class="text-dark mr-2">
                                   <i class="fas fa-shopping-cart fa-2x"></i>
                                   <span class="badge badge-danger" id="cartIconNumber">0</span>
                                 </a>
@@ -354,6 +439,8 @@
 
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/order/getlist?userNo=${authInfo.userNo}">주문조회</a>
+                                    <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
                                     <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/modifyuser">회원정보수정</a>
@@ -364,11 +451,10 @@
 
                               </c:when>
                               <c:otherwise>
-                                <a href="${pageContext.request.contextPath}/cart/get" class="text-dark mr-2">
-                                  <i class="fas fa-shopping-cart fa-2x"></i>
-                                  <span class="badge badge-danger" id="cartIconNumber">${cookie.cartCnt.value}</span>
-                                </a>
-                                <div class="dropdown">
+                                
+
+
+                                <div class="dropdown mr-3">
                                   <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button"
                                     id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
@@ -377,6 +463,8 @@
 
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/order/getlist?userNo=${authInfo.userNo}">주문조회</a>
+                                    <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
                                     <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/modifyuser">회원정보수정</a>
@@ -384,6 +472,11 @@
                                       href="${pageContext.request.contextPath}/users/preunregister">회원탈퇴</a>
                                   </div>
                                 </div>
+
+                                <a href="${pageContext.request.contextPath}/cart/getlist" class="text-dark mr-2">
+                                  <i class="fas fa-shopping-cart fa-2x"></i>
+                                  <span class="badge badge-danger" id="cartIconNumber">${cookie.cartCnt.value}</span>
+                                </a>
                               </c:otherwise>
                             </c:choose>
                           </c:otherwise>

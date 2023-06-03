@@ -127,4 +127,28 @@ public class PrdImgDao {
 		return results;
 	}//selectListImgPrdNo() end
 	
+	// 상품 번호로 같은 상품 번호의 대표 상품의 대표 이미지 조회(upper 중 이미지 번호 최솟값 선택)
+	public PrdImg selectImgFirstPrdNo(Products products) throws Exception {
+		PrdImg results = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT min(prd_img_no) as prd_img_no, prd_no, file_name, location ");
+			sql.append(" FROM prd_img ");
+			sql.append(" where location = 'upper' and ");
+			sql.append(" prd_no = ( select prd_no ");
+			sql.append(" 		   from products ");
+			sql.append(" 		   where name = (select name from products where prd_no="+products.getPrdNo()+") ");
+			sql.append(" 					     order by prd_no ");
+			sql.append(" 					     LIMIT 1) ");
+			sql.append(" group by prd_no order by prd_img_no ");
+			
+			results = jdbcTemplate.queryForObject(sql.toString(), new PrdImgRowMapper());
+		}catch (Exception e) {
+			System.out.println("대표 상품 대표 이미지 자료읽기 실패:" +e);
+			return null;
+		}//end
+		
+		return results;
+	}//selectListImgPrdNo() end
+	
 }
