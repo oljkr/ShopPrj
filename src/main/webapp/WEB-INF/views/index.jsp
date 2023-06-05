@@ -3,46 +3,39 @@
 <%@ include file="header.jsp" %>
 
 <!-- contents start -->
-<div class="container content" style="margin-top:30px">
-  <div class="row">
-    <div class="col-sm-4">
-      <h2>About Me</h2>
-      <h5>Photo of me:</h5>
-      <div class="fakeimg">Fake Image</div>
-      <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
-      <h3>Some Links</h3>
-      <p>Lorem ipsum dolor sit ame.</p>
-      <ul class="nav nav-pills flex-column">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">Active</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
-      </ul>
-      <hr class="d-sm-none">
+<div id="slidingPictures" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#slidingPictures" data-slide-to="0" class="active"></li>
+    <li data-target="#slidingPictures" data-slide-to="1"></li>
+    <li data-target="#slidingPictures" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <a href="${pageContext.request.contextPath}/products/list?sort1=m&sort2=sho">
+        <img src="./storage/index1.jpg" class="d-block w-100" alt="Image 1">
+      </a>
     </div>
-    <div class="col-sm-8">
-      <h2>TITLE HEADING</h2>
-      <h5>Title description, Dec 7, 2017</h5>
-      <div class="fakeimg">Fake Image</div>
-      <p>Some text..</p>
-      <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-      <br>
-      <h2>TITLE HEADING</h2>
-      <h5>Title description, Sep 2, 2017</h5>
-      <div class="fakeimg">Fake Image</div>
-      <p>Some text..</p>
-      <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+    <div class="carousel-item">
+      <a href="${pageContext.request.contextPath}/products/list?sort1=m&sort2=sho">
+        <img src="./storage/index2.jpg" class="d-block w-100" alt="Image 2">
+      </a>
+    </div>
+    <div class="carousel-item">
+      <a href="${pageContext.request.contextPath}/products/list?sort1=m&sort2=sho">
+        <img src="./storage/index3.jpg" class="d-block w-100" alt="Image 3">
+      </a>
     </div>
   </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+    $('#slidingPictures').carousel({
+      interval: 3000 // Adjust the interval (in milliseconds) between slides
+    });
+  });
+</script>
+
 <!-- contents end -->
 
 <%@ include file="footer.jsp" %>
