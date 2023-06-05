@@ -81,7 +81,7 @@ public class UsersDao {
 		Users results = null;
 		try {
 			sql=new StringBuilder();
-			sql.append(" SELECT id, name, email, phone, pw, zipcode, address1, address2, roles, join_date ");
+			sql.append(" SELECT user_no, id, name, email, phone, pw, zipcode, address1, address2, roles, join_date ");
 			sql.append(" FROM users ");
 			sql.append(" where id='"+user.getUserId()+"' and email='"+user.getUserEmail()+"' ");
 			

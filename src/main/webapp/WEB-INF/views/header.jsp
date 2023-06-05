@@ -20,10 +20,10 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
         <style>
          .carousel-item {
-      height: 600px; /* Adjust the height as needed */
-      background-size: cover;
-      background-position: center;
-    }
+          height: 600px; /* Adjust the height as needed */
+          background-size: cover;
+          background-position: center;
+        }
         </style>
 
         <script src="./js/check.js"></script>
@@ -220,6 +220,8 @@
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item"
                                 href="${pageContext.request.contextPath}/order/ordermanage">주문관리</a>
+                                <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/products/add">상품등록</a>
                                     <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
                                     <a class="dropdown-item"
@@ -247,6 +249,8 @@
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item"
                                 href="${pageContext.request.contextPath}/order/ordermanage">주문관리</a>
+                                <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/products/add">상품등록</a>
                                     <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
                                     <a class="dropdown-item"

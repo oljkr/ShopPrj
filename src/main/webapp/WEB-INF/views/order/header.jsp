@@ -376,6 +376,8 @@
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item"
                                 href="${pageContext.request.contextPath}/order/ordermanage">주문관리</a>
+                                <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/products/add">상품등록</a>
                                     <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
                                     <a class="dropdown-item"
@@ -403,6 +405,8 @@
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item"
                                 href="${pageContext.request.contextPath}/order/ordermanage">주문관리</a>
+                                <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/products/add">상품등록</a>
                                     <a class="dropdown-item"
                                       href="${pageContext.request.contextPath}/users/logout">로그아웃</a>
                                     <a class="dropdown-item"
