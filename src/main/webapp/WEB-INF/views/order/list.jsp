@@ -5,7 +5,7 @@
     <h1 class="mt-4">Order List</h1>
     <hr>
     <div class="row justify-content-center">
-      <div class="col-lg-11">
+      <div class="col-lg-12">
         <!-- <ul class="list-group mt-4 mb-5"> -->
 
           
@@ -232,7 +232,7 @@
       </div>
 
 
-      <div col="col-lg-11">
+      <div col="col-lg-12">
               
         <nav aria-label="Page navigation" class="text-center mt-3">
           <ul class="pagination">
