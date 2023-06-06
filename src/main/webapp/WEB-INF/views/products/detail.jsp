@@ -85,7 +85,7 @@
             ${product.fullDes}
           </div>
           <div id="reviews" class="mt-4">
-            world<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
           </div>
         </div>
 

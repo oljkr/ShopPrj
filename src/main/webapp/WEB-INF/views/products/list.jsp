@@ -38,14 +38,13 @@
         if (flag) {
           var productContainer = document.getElementById('product-container');
 
-          var level = Math.floor(${ productCount } / 6);
+          var level = Math.floor(${ productCount } / 3);
 
           var productList = data.product;
           var imgList = data.img;
 
-          if (Math.floor(cnt / 6) == level) {
-            rest = ${ productCount }% 6;
-            //alert(rest);
+          if (Math.floor(cnt / 3) == level) {
+            rest = ${ productCount }% 3;
             var temp = 0;
             for (var i = cnt; i < cnt + rest; i++) { // Example: Adding 6 more products
               var colDiv = document.createElement('div');
@@ -81,23 +80,24 @@
             }
           } else {
             // Add more col-md-4 divs for other products
-            for (var i = 4; i <= 8; i++) { // Example: Adding 6 more products
+            for (var i = 0; i <= 2; i++) { // Example: Adding 6 more products
               var colDiv = document.createElement('div');
               colDiv.className = 'col-md-4';
               var productDiv = document.createElement('div');
               productDiv.className = 'product';
 
               var img = document.createElement('img');
-              img.src = 'product' + i + '.jpg';
+              img.src = "./../storage/"+imgList[i].fileName;
               img.alt = 'Product ' + i;
+              img.setAttribute('data-link', '${pageContext.request.contextPath}/products/detail?prdNo=' + productList[i].prdNo);
 
               var productName = document.createElement('h4');
               productName.className = 'product-name';
-              productName.textContent = 'Product ' + i;
+              productName.textContent = productList[i].name;
 
               var productPrice = document.createElement('p');
               productPrice.className = 'product-price';
-              productPrice.textContent = '$' + (10 + i) + '.99';
+              productPrice.textContent = productList[i].price+" 원";
 
               productDiv.appendChild(img);
               productDiv.appendChild(productName);
@@ -107,7 +107,7 @@
 
 
             }
-            cnt += 7;
+            cnt += 3;
           }
 
           // Check if the desired number of divs have been added and remove the event listener
@@ -121,6 +121,7 @@
 
       // Event handler for scroll event
       function scrollHandler() {
+        
         if (isBottomOfPage()) {
           $.ajax({
             url: "getlist"
@@ -131,16 +132,29 @@
               alert("에러:" + error);
               alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
             }//error callback함수
-            , success: addMoreProducts//success callback함수
+            , success: function(data) {
+              addMoreProducts(data);
+
+            }//success callback함수
           });
 
-          addMoreProducts(data);
+          //addMoreProducts(data);
 
         }
       }
 
       // Add the scroll event listener
-      window.addEventListener('scroll', scrollHandler);
+      $(window).scroll(function(){
+        var scrT = $(window).scrollTop();
+        console.log(scrT); //스크롤 값 확인용
+        if(scrT == $(document).height() - $(window).height()){
+          //스크롤이 끝에 도달했을때 실행될 이벤트
+          scrollHandler();
+        } else {
+          //아닐때 이벤트
+        }
+      })
+      
 
     </script>
 

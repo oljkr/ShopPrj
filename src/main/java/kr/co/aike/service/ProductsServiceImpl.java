@@ -115,9 +115,9 @@ public class ProductsServiceImpl implements ProductsService {
                 }//if end
 
                 //make server full path to save
-                String serverFullPath = basePath + "\\" + fileName;
+                //String serverFullPath = basePath + "\\" + fileName;
                 //ec2 서버
-                //String serverFullPath = basePath + "/" + fileName;
+                String serverFullPath = basePath + "/" + fileName;
 
                 System.out.println("fileName: " + fileName);
                 System.out.println("serverFullPath: " + serverFullPath);
@@ -376,9 +376,9 @@ public class ProductsServiceImpl implements ProductsService {
 		String basePath = request.getRealPath("/storage");
 	
 		//섬네일 파일 관련 코드
-		cnt = modifyImages(registerdProduct, upperImgNoList, file1, basePath, "upper");
+		modifyImages(registerdProduct, upperImgNoList, file1, basePath, "upper");
 		//본문 파일 관련 코드
-		cnt = modifyImages(registerdProduct, lowerImgNoList, file2, basePath, "lower");
+		modifyImages(registerdProduct, lowerImgNoList, file2, basePath, "lower");
 		
 		if(cnt==0){
 			mav=addMessages(0,"<div class=\"mb-3\"><i class=\"bi bi-exclamation-triangle display-1 text-primary\"></i></div>","","!! 상품 수정 실패 !!","다시시도","javascript:history.back()","메인으로","location.href=\"../home\"");
@@ -560,7 +560,7 @@ public class ProductsServiceImpl implements ProductsService {
         products.setSort1((String)map.get("sort1"));
         products.setSort2((String)map.get("sort2"));
         
-        int numPerPage = 6; //한 페이지당 레코드 갯수
+        int numPerPage = 3; //한 페이지당 레코드 갯수
 		list=prdDao.listAsSort(products, cnt, numPerPage);
 		PrdImg temp=null;
 		for(int x=0;x<list.size();++x) {
