@@ -53,9 +53,9 @@ public class OrderDao {
 					BuyerInfo buyerInfo = new BuyerInfo();
 					buyerInfo.setBuyerInfoNo(rs.getLong("buyer_info_no"));
 					buyerInfo.setName(rs.getString("name"));
-					buyerInfo.setEmail(rs.getString("name"));
-					buyerInfo.setPhone(rs.getString("name"));
-					buyerInfo.setBuyerNo(rs.getString("name"));
+					buyerInfo.setEmail(rs.getString("email"));
+					buyerInfo.setPhone(rs.getString("phone"));
+					buyerInfo.setBuyerNo(rs.getString("buyer_no"));
 					buyerInfo.setBuyTime(rs.getTimestamp("buy_time").toLocalDateTime());
 					return buyerInfo;
 				}//mapRow() end

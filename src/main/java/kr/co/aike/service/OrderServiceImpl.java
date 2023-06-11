@@ -190,7 +190,8 @@ public class OrderServiceImpl implements OrderService {
 		if(cnt==0){
 			mav=addMessages(0,"<div class=\"mb-3\"><i class=\"bi bi-exclamation-triangle display-1 text-primary\"></i></div>","","!! 상품 주문 실패 !!", "" ,"다시시도","javascript:history.back()","메인으로","location.href=\"../home\"");
 		}else {
-			mav=addMessages(3,"<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>","","* ~ 상품 주문 성공 ~ *", textOrderSheetNo,"주문 목록으로","location.href=\"./list\"","","");
+			System.out.println("buyeris"+buyerInfo.toString());
+			mav=addMessages(3,"<div class=\"mb-3\"><i class=\"bi bi-stars text-warning\" style=\"font-size: 80px;\"></i></div>","","* ~ 상품 주문 성공 ~ *", textOrderSheetNo,"주문 목록으로","location.href=\"./getlist?userNo="+buyerInfo.getBuyerNo()+"\"","","");
 		}//if end
 		mav.setViewName("order/msgView");
 		
@@ -268,7 +269,7 @@ public class OrderServiceImpl implements OrderService {
 		//Order order = new Order();
 		if(orderSheetNoList.size()<numPerPage) {
 			for(int y=0; y<orderSheetNoList.size(); ++y) {
-				
+				System.out.println("orderSheetNoListsize"+orderSheetNoList.size());
 				List<Order> orderList = new ArrayList<>();
 				List<Products> productList = new ArrayList<>();
 				List<PrdImg> prdImgList = new ArrayList<>();
@@ -307,6 +308,7 @@ public class OrderServiceImpl implements OrderService {
 				prdImgListPaging.put(Integer.toString(index), prdImgList);
 				
 				productListPaging.put(Integer.toString(index), productList);
+				index++;
 			}
 		}else if(orderSheetNoList.size()<endRow){
 			for(int y=startRow-1; y<orderSheetNoList.size(); ++y) {
@@ -688,10 +690,10 @@ public class OrderServiceImpl implements OrderService {
 		String status=request.getParameter("status");
 		System.out.println(status);
 		int num=0;
-		String first = status.substring(0, 2);
-		String middle = status.substring(3,7);
+		String first = status.substring(0, 1);
+		String middle = status.substring(2,6);
 		if(middle.equals("배송완료")) {
-			String last = status.substring(3);
+			String last = status.substring(2);
 			System.out.println(last);
 			num = orderDao.updateStatus(first, last);
 		}

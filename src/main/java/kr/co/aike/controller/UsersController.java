@@ -1,5 +1,9 @@
 package kr.co.aike.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -9,10 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.aike.domain.Users;
+import kr.co.aike.service.ProductsService;
 import kr.co.aike.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/users")
 public class UsersController {
 	private final UsersService service;
+	private final ProductsService prdservice;
 	
 	@GetMapping("/login")
 	public ModelAndView usersLogin(HttpSession session, HttpServletRequest request) throws Exception {
@@ -116,6 +123,14 @@ public class UsersController {
 		ModelAndView mav = new ModelAndView();
 		mav = service.modifyUser(users, session);
 		return mav;
+	}
+	
+	@ResponseBody
+	@PostMapping("/searchproduct")
+	public HashMap<String, List<?>> searchProduct(@RequestParam Map<String, Object> map) throws Exception {
+		HashMap<String, List<?>> list = new HashMap();
+		list = prdservice.searchProduct(map);
+		return list;
 	}
 
 }

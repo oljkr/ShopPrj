@@ -91,6 +91,10 @@
               img.alt = 'Product ' + i;
               img.setAttribute('data-link', '${pageContext.request.contextPath}/products/detail?prdNo=' + productList[i].prdNo);
 
+              // Attach a link to the image
+              var link = document.createElement('a');
+              link.href = '${pageContext.request.contextPath}/products/detail?prdNo=' + productList[i].prdNo;
+
               var productName = document.createElement('h4');
               productName.className = 'product-name';
               productName.textContent = productList[i].name;
@@ -99,7 +103,8 @@
               productPrice.className = 'product-price';
               productPrice.textContent = productList[i].price+" 원";
 
-              productDiv.appendChild(img);
+              link.appendChild(img);
+              productDiv.appendChild(link);
               productDiv.appendChild(productName);
               productDiv.appendChild(productPrice);
               colDiv.appendChild(productDiv);
@@ -121,12 +126,16 @@
 
       // Event handler for scroll event
       function scrollHandler() {
+
+      const urlParams = new URL(location.href).searchParams;
+      var sort1 = urlParams.get('sort1');
+      var sort2 = urlParams.get('sort2');
         
         if (isBottomOfPage()) {
           $.ajax({
             url: "getlist"
             , type: "post"
-            , data: { "cnt": cnt, sort1: "m", sort2: "sho" }
+            , data: { "cnt": cnt, "sort1": sort1, "sort2": sort2 }
             , dataType: "json"
             , error: function (request, status, error) {
               alert("에러:" + error);

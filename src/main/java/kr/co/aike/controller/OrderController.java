@@ -1,5 +1,9 @@
 package kr.co.aike.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/order")
 public class OrderController {
 	private final OrderService service;
+	private final ProductsService prdservice;
 	
 	@GetMapping("/add")
 	public ModelAndView preOrder(HttpServletRequest request) throws Exception {
@@ -90,6 +96,14 @@ public class OrderController {
 	public int statChange(HttpServletRequest request) throws Exception {
 		int updateCnt = service.statChange(request);
 		return updateCnt;
+	}
+	
+	@ResponseBody
+	@PostMapping("/searchproduct")
+	public HashMap<String, List<?>> searchProduct(@RequestParam Map<String, Object> map) throws Exception {
+		HashMap<String, List<?>> list = new HashMap();
+		list = prdservice.searchProduct(map);
+		return list;
 	}
 	
 

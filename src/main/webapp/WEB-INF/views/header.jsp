@@ -381,7 +381,7 @@
                   resultItem.className = 'search-result';
 
                   var image = document.createElement('img');
-                  image.src = "./../storage/" + searchResultsImg[temp].fileName;
+                  image.src = "./storage/" + searchResultsImg[temp].fileName;
                   image.alt = result.productName;
 
                   // Attach a link to the image

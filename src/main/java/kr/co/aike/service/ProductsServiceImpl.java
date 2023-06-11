@@ -541,6 +541,8 @@ public class ProductsServiceImpl implements ProductsService {
 		headPhrase+="("+productCount+")";
 		mav.addObject("productCount",productCount);
 		mav.addObject("headPhrase",headPhrase);
+		mav.addObject("sort1", products.getSort1());
+		mav.addObject("sort2", products.getSort1());
 		
 		mav.setViewName("products/list");
 		return mav;

@@ -186,7 +186,7 @@
                                   </div>
                                 </div>
                                 <div class="form-group row">
-                                  <label for="id" class="col-md-4 col-form-label">운송장 번호 입력:</label>
+                                  <label for="waybillnum" class="col-md-4 col-form-label">운송장 번호 입력:</label>
                                   <div class="col-md-8">
                                     <input type="text" id="waybillnum" name="waybillnum" maxlength="10" autofocus class="form-control">
                                   </div>

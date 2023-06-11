@@ -2,6 +2,9 @@ package kr.co.aike.controller;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.Cookie;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.aike.domain.CartItem;
 import kr.co.aike.domain.Products;
 import kr.co.aike.domain.ShoppingCart;
+import kr.co.aike.service.ProductsService;
 import kr.co.aike.service.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/cart")
 public class ShoppingCartController {
 	private final ShoppingCartService service;
+	private final ProductsService prdservice;
 
 	@ResponseBody
     @PostMapping("/add")
@@ -69,4 +75,12 @@ public class ShoppingCartController {
 //        saveShoppingCart(cart, response);
 //    }
 //
+    
+    @ResponseBody
+	@PostMapping("/searchproduct")
+	public HashMap<String, List<?>> searchProduct(@RequestParam Map<String, Object> map) throws Exception {
+		HashMap<String, List<?>> list = new HashMap();
+		list = prdservice.searchProduct(map);
+		return list;
+	}
 }
